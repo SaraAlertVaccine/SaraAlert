@@ -55,7 +55,7 @@ class PatientMailer < ApplicationMailer
     client = Twilio::REST::Client.new(account_sid, auth_token)
     client.messages.create(
       to: Phonelib.parse(patient.primary_telephone, 'US').full_e164,
-      body: contents
+      body: contents,
       messaging_service_sid: messaging_service_sid
     )
   rescue Twilio::REST::RestError => e
@@ -107,7 +107,7 @@ class PatientMailer < ApplicationMailer
     client = Twilio::REST::Client.new(account_sid, auth_token)
     client.messages.create(
       to: Phonelib.parse(patient.primary_telephone, 'US').full_e164,
-      body: contents
+      body: contents,
       messaging_service_sid: messaging_service_sid
     )
     add_success_history(patient, patient)
@@ -150,7 +150,7 @@ class PatientMailer < ApplicationMailer
                thanks: I18n.t('assessments.sms.prompt.thanks', locale: lang) }
     client.studio.v1.flows(ENV['TWILIO_STUDIO_FLOW']).executions.create(
       to: Phonelib.parse(patient.primary_telephone, 'US').full_e164,
-      parameters: params
+      parameters: params,
       messaging_service_sid: messaging_service_sid
     )
     add_success_history(patient, patient)
