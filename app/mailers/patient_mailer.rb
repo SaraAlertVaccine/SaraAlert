@@ -47,7 +47,6 @@ class PatientMailer < ApplicationMailer
   def assessment_sms_weblink(patient)
     add_fail_history_blank_field(patient, 'primary phone number') && return if patient&.primary_telephone.blank?
 
-    num = patient.primary_telephone
     # patient.dependents includes the patient themselves if patient.id = patient.responder_id (which should be the case)
     patient.active_dependents.uniq.each do |dependent|
       lang = dependent.select_language
@@ -66,7 +65,6 @@ class PatientMailer < ApplicationMailer
 
     end
     patient.update(last_assessment_reminder_sent: DateTime.now)
-
   end
 
   def assessment_sms_reminder(patient)
@@ -114,7 +112,6 @@ class PatientMailer < ApplicationMailer
 
     # Always update the last contact time so the system does not try and send emails again.
     patient.update(last_assessment_reminder_sent: DateTime.now)
-
   end
 
   def assessment_voice(patient)
@@ -156,7 +153,6 @@ class PatientMailer < ApplicationMailer
     end
     # Always update the last contact time so the system does not try and send emails again.
     patient.update(last_assessment_reminder_sent: DateTime.now)
-
   end
 
   def assessment_email(patient)
