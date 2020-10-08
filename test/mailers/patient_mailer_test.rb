@@ -133,7 +133,7 @@ class PatientMailerTest < ActionMailer::TestCase
     expect_any_instance_of(::Twilio::REST::Api::V2010::AccountContext::MessageList).to(receive(:create).with(
                                                                                          to: '+15555550111',
                                                                                          body: contents,
-                                                                                         messaging_service_sid: 'test_messaging_sid'
+                                                                                         from: 'test_messaging_sid'
                                                                                        ))
 
     PatientMailer.enrollment_sms_weblink(@patient).deliver_now
@@ -148,7 +148,7 @@ class PatientMailerTest < ActionMailer::TestCase
     expect_any_instance_of(::Twilio::REST::Api::V2010::AccountContext::MessageList).to(receive(:create).with(
                                                                                          to: '+15555550111',
                                                                                          body: contents,
-                                                                                         messaging_service_sid: 'test_messaging_sid'
+                                                                                         from: 'test_messaging_sid'
                                                                                        ))
 
     PatientMailer.enrollment_sms_text_based(@patient).deliver_now
@@ -167,7 +167,7 @@ class PatientMailerTest < ActionMailer::TestCase
     expect_any_instance_of(::Twilio::REST::Api::V2010::AccountContext::MessageList).to(receive(:create).with(
                                                                                          to: '+15555550111',
                                                                                          body: contents,
-                                                                                         messaging_service_sid: 'test_messaging_sid'
+                                                                                         from: 'test_messaging_sid'
                                                                                        ))
 
     PatientMailer.assessment_sms_weblink(@patient).deliver_now
@@ -200,7 +200,7 @@ class PatientMailerTest < ActionMailer::TestCase
     expect_any_instance_of(::Twilio::REST::Api::V2010::AccountContext::MessageList).to(receive(:create).with(
                                                                                          to: '+15555550111',
                                                                                          body: contents,
-                                                                                         messaging_service_sid: 'test_messaging_sid'
+                                                                                         from: 'test_messaging_sid'
                                                                                        ))
 
     PatientMailer.assessment_sms_reminder(@patient).deliver_now
@@ -294,7 +294,7 @@ class PatientMailerTest < ActionMailer::TestCase
     expect_any_instance_of(::Twilio::REST::Studio::V1::FlowContext::ExecutionList).to(receive(:create)).with({
                                                                                                                to: '+15555550111',
                                                                                                                parameters: params,
-                                                                                                               messaging_service_sid: 'test_messaging_sid'
+                                                                                                               from: 'test_messaging_sid'
                                                                                                              })
     PatientMailer.assessment_sms(@patient).deliver_now
   end
@@ -322,7 +322,7 @@ class PatientMailerTest < ActionMailer::TestCase
       true
     end)
     expect_any_instance_of(::Twilio::REST::Studio::V1::FlowContext::ExecutionList).to(receive(:create)).with({
-                                                                                                               from: 'test',
+                                                                                                               from: 'test_messaging_sid',
                                                                                                                to: '+15555550111',
                                                                                                                parameters: params
                                                                                                              })
