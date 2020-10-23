@@ -69,9 +69,10 @@ class LastDateExposure extends React.Component {
   }
 
   openContinuousExposureModal() {
+    const previousCE = this.state.continuous_exposure;
     this.setState({
       showContinuousExposureModal: true,
-      last_date_of_exposure: null,
+      last_date_of_exposure: previousCE ? this.props.patient.last_date_of_exposure : null,
       continuous_exposure: !this.props.patient.continuous_exposure,
       apply_to_group: false,
       apply_to_group_cm_only: false,
@@ -145,8 +146,8 @@ class LastDateExposure extends React.Component {
               />
             </Form.Group>
           )}
-          {!!this.props.patient.continuous_exposure && !this.state.continuous_exposure && (
-            <div className="mt-2">
+          {!!this.props.patient.continuous_exposure && !this.state.continuous_exposure && !this.props.patient.last_date_of_exposure && (
+            <div className="mt-3">
               <Form.Label className="nav-input-label">Update Last Date of Exposure to:</Form.Label>
               <DateInput
                 id="last_date_of_exposure"
@@ -189,9 +190,9 @@ class LastDateExposure extends React.Component {
             'Last Date of Exposure',
             `Are you sure you want to ${this.state.last_date_of_exposure ? 'modify' : 'clear'} the Last Date of Exposure to ${
               this.state.last_date_of_exposure ? moment(this.state.last_date_of_exposure).format('MM/DD/YYYY') : 'blank'
-            }? The Last Date of Exposure will be updated and Continuous Exposure will be turned ${
-              this.state.last_date_of_exposure ? 'OFF' : 'ON'
-            } for the selected record${this.props.has_group_members ? '(s):' : '.'}`,
+            }? The Last Date of Exposure will be updated and Continuous Exposure will ${
+              this.props.patient.continuous_exposure === this.state.continuous_exposure ? 'remain' : 'be turned'
+            } ${this.state.last_date_of_exposure ? 'OFF' : 'ON'} for the selected record${this.props.has_group_members ? '(s):' : '.'}`,
             this.closeModal,
             this.submit
           )}
@@ -199,7 +200,13 @@ class LastDateExposure extends React.Component {
           this.createModal(
             'Continuous Exposure',
             `Are you sure you want to turn ${this.state.continuous_exposure ? 'ON' : 'OFF'} Continuous Exposure? The Last Date of Exposure will ${
-              this.state.continuous_exposure ? 'be cleared' : 'need to be populated'
+              this.state.continuous_exposure
+                ? this.props.patient.last_date_of_exposure
+                  ? 'be cleared'
+                  : 'remain blank'
+                : this.props.patient.last_date_of_exposure
+                ? `remain as ${moment(this.state.last_date_of_exposure).format('MM/DD/YYYY')}`
+                : 'need to be populated'
             } and Continuous Exposure will be turned ${this.state.continuous_exposure ? 'ON' : 'OFF'} for the selected record${
               this.props.has_group_members ? '(s):' : '.'
             }`,
