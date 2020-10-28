@@ -63,3 +63,31 @@
 .clm-tooltip-container {
   width: 475px;
 }
+
+.analytics-table {
+  width: 100%;
+}
+
+.analytics-table tbody tr {
+  height: 50px; // the height of each row
+}
+
+.analytics-zebra-bg {
+  background-color: #0000000d;
+}
+
+.analytics-card-header {
+  position: absolute;
+  border-radius: 1px;
+  background-color: #e9ecef;
+  border: 1px solid #dedede;
+  font-weight: bold;
+  color: #333;
+  margin-top: -15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 2%;
+  margin-right: 2%;
+  min-width: 96%;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+}

@@ -59,6 +59,8 @@ class CacheAnalyticsJob < ApplicationJob
     counts.concat(monitoree_counts_by_age_group(analytic_id, monitorees, false))
     counts.concat(monitoree_counts_by_sex(analytic_id, monitorees, true))
     counts.concat(monitoree_counts_by_sex(analytic_id, monitorees, false))
+    counts.concat(monitoree_counts_by_reporting_method(analytic_id, monitorees, true))
+    counts.concat(monitoree_counts_by_reporting_method(analytic_id, monitorees, false))
     counts.concat(monitoree_counts_by_risk_factor(analytic_id, monitorees, true))
     counts.concat(monitoree_counts_by_risk_factor(analytic_id, monitorees, false))
     counts.concat(monitoree_counts_by_exposure_country(analytic_id, monitorees, true))
@@ -132,6 +134,16 @@ class CacheAnalyticsJob < ApplicationJob
               .size
               .map do |(sex, risk), total|
                 monitoree_count(analytic_id, active_monitoring, 'Sex', sex.nil? ? 'Missing' : sex, risk, total)
+              end
+  end
+
+  def self.monitoree_counts_by_reporting_method(analytic_id, monitorees, active_monitoring)
+    monitorees.monitoring_active(active_monitoring)
+              .group(:preferred_contact_method, :exposure_risk_assessment)
+              .order(:preferred_contact_method, :exposure_risk_assessment)
+              .size
+              .map do |(preferred_contact_method, risk), total|
+                monitoree_count(analytic_id, active_monitoring, 'Preferred Contact Method', preferred_contact_method.nil? ? 'Missing' : preferred_contact_method, risk, total)
               end
   end
 
