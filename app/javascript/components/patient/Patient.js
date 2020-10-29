@@ -208,6 +208,7 @@ class Patient extends React.Component {
                 <span className="font-weight-light">
                   {this.props.details.primary_telephone && `${this.formatPhoneNumber(this.props.details.primary_telephone)}`}
                 </span>
+                <span className="text-danger">{this.props.details.blocked_sms && ' This Phone Number Has Blocked SMS Communication With Sara Alert'}</span>
                 <br />
                 <span className="font-weight-normal">Preferred Contact Time:</span>{' '}
                 <span className="font-weight-light">{this.props.details.preferred_contact_time && `${this.props.details.preferred_contact_time}`}</span>
