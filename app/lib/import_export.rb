@@ -2,9 +2,8 @@
 
 # Helper methods for the import and export controllers
 module ImportExport # rubocop:todo Metrics/ModuleLength
-<<<<<<< HEAD
   include ValidationHelper
-=======
+
   PATIENT_FIELDS = {
     id: 'Patient ID',
     first_name: 'First Name',
@@ -112,7 +111,6 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
     transferred_to: 'Transferred To',
     expected_purge_date: 'Expected Purge Date'
   }.freeze
->>>>>>> begin refactoring export code
 
   LINELIST_HEADERS = ['Patient ID', 'Monitoree', 'Jurisdiction', 'Assigned User', 'State/Local ID', 'Sex', 'Date of Birth', 'End of Monitoring', 'Risk Level',
                       'Monitoring Plan', 'Latest Report', 'Transferred At', 'Reason For Closure', 'Latest Public Health Action', 'Status', 'Closed At',

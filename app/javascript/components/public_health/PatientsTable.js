@@ -84,7 +84,6 @@ class PatientsTable extends React.Component {
       },
       entryOptions: [10, 15, 25, 50, 100],
       cancelToken: axios.CancelToken.source(),
-      filter: null,
     };
     this.state.jurisdiction_paths[props.jurisdiction.id] = props.jurisdiction.path;
   }
@@ -147,7 +146,11 @@ class PatientsTable extends React.Component {
       localStorage.removeItem(`SaraEntries`);
       localStorage.removeItem(`SaraSearch`);
       location.reload();
-      this.setState({ filter: null });
+      this.setState(state => {
+        const query = state.query;
+        delete query.filter;
+        return { query };
+      });
     }
   };
 
@@ -287,10 +290,8 @@ class PatientsTable extends React.Component {
         .post('/public_health/patients', {
           workflow: this.props.workflow,
           ...query,
-          filter: this.state.filter,
           cancelToken: this.state.cancelToken.token,
         })
-
         .catch(error => {
           if (!axios.isCancel(error)) {
             this.setState(state => {
@@ -313,6 +314,9 @@ class PatientsTable extends React.Component {
                 actionsEnabled: false,
               };
             });
+
+            // update count for custom export
+            this.props.setFilteredMonitoreesCount(response.data.total);
           } else {
             this.setState({
               selectedPatients: [],
@@ -320,15 +324,26 @@ class PatientsTable extends React.Component {
               actionsEnabled: false,
               loading: false,
             });
+
+            // update count for custom export
+            this.props.setFilteredMonitoreesCount(0);
           }
         });
     });
+
+    // update query for custom export
+    this.props.setQuery(query);
   };
 
   advancedFilterUpdate(filter) {
     localStorage.removeItem(`SaraPage`);
     this.setState(
-      state => ({ filter: filter?.filter(field => field?.filterOption != null), query: { ...state.query, page: 0 } }),
+      state => {
+        const query = state.query;
+        query.filter = filter?.filter(field => field?.filterOption != null);
+        query.page = 0;
+        return { query };
+      },
       () => {
         this.updateTable(this.state.query);
       }
@@ -634,12 +649,14 @@ class PatientsTable extends React.Component {
 
 PatientsTable.propTypes = {
   authenticity_token: PropTypes.string,
+  workflow: PropTypes.oneOf(['exposure', 'isolation']),
   jurisdiction: PropTypes.exact({
     id: PropTypes.number,
     path: PropTypes.string,
   }),
-  workflow: PropTypes.oneOf(['exposure', 'isolation']),
   tabs: PropTypes.object,
+  setQuery: PropTypes.func,
+  setFilteredMonitoreesCount: PropTypes.func,
 };
 
 export default PatientsTable;

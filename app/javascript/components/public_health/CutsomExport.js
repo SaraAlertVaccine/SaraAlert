@@ -28,7 +28,7 @@ class CustomExport extends React.Component {
       url: `${window.BASE_PATH}/export/custom`,
       data: {
         format: this.state.format,
-        query: {},
+        query: this.state.filtered ? this.props.query : {},
         checked: this.state.checked,
         preset: this.state.preset,
       },
@@ -108,7 +108,7 @@ class CustomExport extends React.Component {
                 type="radio"
                 size="sm"
                 className="py-1"
-                label={`Current Filter (${this.props.currentFilterMonitoreesCount})`}
+                label={`Current Filter (${this.props.filteredMonitoreesCount})`}
                 checked={!!this.state.filter}
                 onChange={() => this.setState({ filter: true })}
               />
@@ -171,8 +171,9 @@ class CustomExport extends React.Component {
 CustomExport.propTypes = {
   authenticity_token: PropTypes.string,
   preset: PropTypes.string,
-  currentFilterMonitoreesCount: PropTypes.number,
+  query: PropTypes.object,
   allMonitoreesCount: PropTypes.number,
+  filteredMonitoreesCount: PropTypes.number,
   onClose: PropTypes.func,
 };
 

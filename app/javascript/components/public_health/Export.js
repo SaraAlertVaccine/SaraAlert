@@ -150,8 +150,9 @@ class Export extends React.Component {
           <CustomExport
             authenticity_token={this.props.authenticity_token}
             preset={null}
-            currentFilterMonitoreesCount={16}
-            allMonitoreesCount={427}
+            query={this.props.query}
+            filteredMonitoreesCount={this.props.filteredMonitoreesCount}
+            allMonitoreesCount={this.props.allMonitoreesCount}
             onClose={() => this.setState({ showCustomFormatModal: false })}
           />
         )}
@@ -163,6 +164,9 @@ class Export extends React.Component {
 Export.propTypes = {
   workflow: PropTypes.string,
   authenticity_token: PropTypes.string,
+  query: PropTypes.object,
+  allMonitoreesCount: PropTypes.number,
+  filteredMonitoreesCount: PropTypes.number,
 };
 
 export default Export;

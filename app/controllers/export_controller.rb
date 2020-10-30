@@ -139,8 +139,8 @@ class ExportController < ApplicationController
       # Spawn job to handle export
       ExportJob.perform_later(current_user.id, 'Custom', format, 'Monitorees', fields, filters)
 
-      respond_to do |format|
-        format.any { head :ok }
+      respond_to do |f|
+        f.any { head :ok }
       end
     end
   end
