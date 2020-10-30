@@ -1,6 +1,11 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import CheckboxTree from 'react-checkbox-tree';
+import axios from 'axios';
+
+import { customExportOptions } from '../../data/customExportOptions';
+import reportError from '../util/ReportError';
 
 class CustomExport extends React.Component {
   constructor(props) {
@@ -9,8 +14,31 @@ class CustomExport extends React.Component {
       preset: this.props.preset || '',
       format: 'xlsx',
       filter: true,
-      fields: {},
+      checked: [],
+      expanded: [],
     };
+    this.export = this.export.bind(this);
+  }
+
+  export() {
+    console.log(this.state);
+    axios.defaults.headers.common['X-CSRF-Token'] = this.props.authenticity_token;
+    axios({
+      method: 'post',
+      url: `${window.BASE_PATH}/export/custom`,
+      data: {
+        format: this.state.format,
+        query: {},
+        checked: this.state.checked,
+        preset: this.state.preset,
+      },
+    })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        reportError(err);
+      });
   }
 
   render() {
@@ -41,11 +69,13 @@ class CustomExport extends React.Component {
                 />
               )}
             </Col>
-            <Col md="6">
-              <Button size="sm" variant="secondary btn-square">
-                Remove
-              </Button>
-            </Col>
+            {this.props.preset && (
+              <Col md="6">
+                <Button size="sm" variant="secondary btn-square">
+                  Remove
+                </Button>
+              </Col>
+            )}
           </Row>
           <Row className="mx-3 py-2 g-border-bottom">
             <Col md="6" className="pl-1">
@@ -79,6 +109,7 @@ class CustomExport extends React.Component {
                 size="sm"
                 className="py-1"
                 label={`Current Filter (${this.props.currentFilterMonitoreesCount})`}
+                checked={!!this.state.filter}
                 onChange={() => this.setState({ filter: true })}
               />
               <Form.Check
@@ -87,6 +118,7 @@ class CustomExport extends React.Component {
                 size="sm"
                 className="py-1"
                 label={`All Monitorees (${this.props.allMonitoreesCount})`}
+                checked={!this.state.filter}
                 onChange={() => this.setState({ filter: false })}
               />
             </Col>
@@ -96,51 +128,40 @@ class CustomExport extends React.Component {
               <p className="pt-1 mb-1 font-weight-bold">Export Data:</p>
             </Col>
           </Row>
-          <Row className="mx-0 px-3 py-1" style={{ backgroundColor: '#ccc', borderTop: '1px solid #fff' }}>
-            <Col md="24">
-              <Form.Check size="md" label="Monitoree Details"></Form.Check>
-              <Form.Check size="sm" className="ml-4" label="Identification"></Form.Check>
-              <Form.Check size="sm" className="ml-4" label="Contact Information"></Form.Check>
-              <Form.Check size="sm" className="ml-4" label="Address"></Form.Check>
-              <Form.Check size="sm" className="ml-4" label="Arrival Information"></Form.Check>
-              <Form.Check size="sm" className="ml-4" label="Planned Travel"></Form.Check>
-              <Form.Check size="sm" className="ml-4" label="Case Information"></Form.Check>
-            </Col>
-          </Row>
-          <Row className="mx-0 px-3 py-1" style={{ backgroundColor: '#ccc', borderTop: '1px solid #fff' }}>
-            <Col md="24">
-              <Form.Check size="md" label="Monitoring Actions"></Form.Check>
-            </Col>
-          </Row>
-          <Row className="mx-0 px-3 py-1" style={{ backgroundColor: '#ccc', borderTop: '1px solid #fff' }}>
-            <Col md="24">
-              <Form.Check size="md" label="Report History"></Form.Check>
-            </Col>
-          </Row>
-          <Row className="mx-0 px-3 py-1" style={{ backgroundColor: '#ccc', borderTop: '1px solid #fff' }}>
-            <Col md="24">
-              <Form.Check size="md" label="Lab Results"></Form.Check>
-            </Col>
-          </Row>
-          <Row className="mx-0 px-3 py-1" style={{ backgroundColor: '#ccc', borderTop: '1px solid #fff' }}>
-            <Col md="24">
-              <Form.Check size="md" label="Close Contacts"></Form.Check>
-            </Col>
-          </Row>
-          <Row className="mx-0 px-3 py-1" style={{ backgroundColor: '#ccc', borderTop: '1px solid #fff' }}>
-            <Col md="24">
-              <Form.Check size="md" label="History"></Form.Check>
-            </Col>
-          </Row>
-          <Row className="mx-0 px-3 py-1" style={{ backgroundColor: '#ccc', borderTop: '1px solid #fff' }}>
-            <Col md="24">
-              <Form.Check size="md" label="Comments"></Form.Check>
-            </Col>
-          </Row>
+          <CheckboxTree
+            nodes={customExportOptions}
+            checked={this.state.checked}
+            expanded={this.state.expanded}
+            onCheck={checked => {
+              console.log(checked);
+              this.setState({ checked });
+            }}
+            onExpand={expanded => {
+              console.log(expanded);
+              this.setState({ expanded });
+            }}
+            className="py-2"
+            icons={{
+              check: <i className="far fa-check-square" />,
+              uncheck: <i className="far fa-square" />,
+              halfCheck: <i className="far fa-minus-square" />,
+              expandClose: <i className="fas fa-chevron-down" />,
+              expandOpen: <i className="fas fa-chevron-right" />,
+              // expandAll: <i className="fas fa-chevron-down" />,
+              // collapseAll: <i className="fas fa-chevron-right" />,
+              // parentClose: <i className="fal fa-chevron-down" />,
+              // parentOpen: <i className="fal fa-chevron-right" />,
+              // leaf: <i className="fas fa-leaf" />,
+            }}
+          />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary btn-square">Cancel</Button>
-          <Button variant="primary btn-square">Export</Button>
+          <Button variant="secondary btn-square" onClick={this.props.onClose}>
+            Cancel
+          </Button>
+          <Button variant="primary btn-square" onClick={this.export} disabled={this.state.checked.length === 0}>
+            Export
+          </Button>
         </Modal.Footer>
       </Modal>
     );
@@ -148,6 +169,7 @@ class CustomExport extends React.Component {
 }
 
 CustomExport.propTypes = {
+  authenticity_token: PropTypes.string,
   preset: PropTypes.string,
   currentFilterMonitoreesCount: PropTypes.number,
   allMonitoreesCount: PropTypes.number,

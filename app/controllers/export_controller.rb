@@ -105,7 +105,7 @@ class ExportController < ApplicationController
   end
 
   def custom_export
-    permitted_params = params.permit(:file_ext, :fields, :workflow, :tab, :jurisdiction, :scope, :user, :search, :order, :direction, :filter)
+    permitted_params = params.permit(:format, :fields, :workflow, :tab, :jurisdiction, :scope, :user, :search, :order, :direction, :filter)
 
     export_type = 'Sara-Alert-Custom-Export'
 
@@ -120,9 +120,9 @@ class ExportController < ApplicationController
         return head :bad_request
       end
 
-      # Validate file_ext param
-      file_ext = permitted_params.require(:file_ext)
-      return head :bad_request unless %w[csv xlsx].include?(file_ext)
+      # Validate format param
+      format = permitted_params.require(:format)
+      return head :bad_request unless %w[csv xlsx].include?(format)
 
       # Validate fields param
       fields = permitted_params.require(:fields)
@@ -137,7 +137,7 @@ class ExportController < ApplicationController
       ExportReceipt.create(user_id: current_user.id, export_type: export_type)
 
       # Spawn job to handle export
-      ExportJob.perform_later(current_user.id, 'Custom', file_ext, 'Monitorees', fields, filters)
+      ExportJob.perform_later(current_user.id, 'Custom', format, 'Monitorees', fields, filters)
 
       respond_to do |format|
         format.any { head :ok }

@@ -148,10 +148,11 @@ class Export extends React.Component {
         />
         {this.state.showCustomFormatModal && (
           <CustomExport
+            authenticity_token={this.props.authenticity_token}
             preset={null}
             currentFilterMonitoreesCount={16}
             allMonitoreesCount={427}
-            close={() => this.setState({ showCustomFormatModal: false })}
+            onClose={() => this.setState({ showCustomFormatModal: false })}
           />
         )}
       </React.Fragment>
