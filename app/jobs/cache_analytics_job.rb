@@ -28,6 +28,7 @@ class CacheAnalyticsJob < ApplicationJob
   end
 
   MONITORING_STATUSES ||= %w[Symptomatic Non-Reporting Asymptomatic].freeze
+  ANALYTICS_STATUSES = ['Exposure Symptomatic','Exposure Non-Reporting','Exposure Asymptomatic','Exposure PUI','Isolation Requiring Review','Isolation Non-Reporting','Isolation Reporting'].freeze
   RISK_FACTORS ||= {
     contact_of_known_case: 'Close Contact with Known Case',
     travel_to_affected_country_or_area: 'Travel from Affected Country or Area',
@@ -137,14 +138,61 @@ class CacheAnalyticsJob < ApplicationJob
               end
   end
 
+# Monitoree counts by monitoring status (symptomatic, non-reporting, asymptomatic)
   def self.monitoree_counts_by_reporting_method(analytic_id, monitorees, active_monitoring)
-    monitorees.monitoring_active(active_monitoring)
-              .group(:preferred_contact_method, :exposure_risk_assessment)
-              .order(:preferred_contact_method, :exposure_risk_assessment)
-              .size
-              .map do |(preferred_contact_method, risk), total|
-                monitoree_count(analytic_id, active_monitoring, 'Preferred Contact Method', preferred_contact_method.nil? ? 'Missing' : preferred_contact_method, risk, total)
-              end
+    ANALYTICS_STATUSES.each do |monitoring_status|
+      monitorees.monitoring_status(monitoring_status)
+      .group(:preferred_contact_method)
+      .order(:preferred_contact_method)
+      .size
+      .map do |risk_level, total|
+        # Why doesnt this work
+        # What `c` thing is undefined?
+        print risk_level
+        risk_level
+      end
+    end
+    # counts = []
+      #   # monitorees.monitoring_status(monitoring_status)
+      #   #   .group(:preferred_contact_method)
+      #   #   .order(:preferred_contact_method)
+      #   #   .size
+      #   #   .each do |preferred_contact_method, total|
+      #   #     print "\n---------\n"
+      #   #     print "\n---------\n"
+      #   #     print "preferred_contact_method"
+      #   #     print preferred_contact_method
+      #   #     # print "\n---------\n"
+      #   #     # print analytic_id
+      #   #     print "\n---------\n"
+      #   #     print 'total'
+      #   #     print total
+      #   #     # print "\n---------\n"
+      #   #     # print monitoring_status
+      #   #     print "\n---------\n"
+      #   #     print 'monitoree_count'
+      #   #     # print monitoree_count(analytic_id, true, 'Sex',                      'Missing here',     preferred_contact_method, total, nil).inspect
+      #   #     # print monitoree_count(analytic_id, true, 'Preferred Contact Method', preferred_contact_method.nil? ? 'Missing ' : preferred_contact_method, nil, total, monitoring_status).inspect
+      #   #     # analytic_id: analytic_id,
+      #   #     # active_monitoring: active_monitoring,
+      #   #     # category_type: category_type,
+      #   #     # category: category,
+      #   #     # risk_level: risk_level.nil? ? 'Missing' : risk_level,
+      #   #     # total: total,
+      #   #     # status: status
+      #   #     print "\n---------\n"
+      #   #     # print monitoree_count(analytic_id, true, 'Preferred Contact Method', preferred_contact_method.nil ? 'Missing': preferred_contact_method, nil, total, monitoring_status)
+      #   #     # print "\n---------\n"
+      #   #     # print "\n---------\n"
+      #   #     counts.append("random string")
+      #   #     print "\n---------\n"
+      #   #     print 'counts'
+      #   #     print counts
+      #   #     # counts.append(monitoree_count(analytic_id, true, 'Preferred Contact Method', preferred_contact_method.nil ? 'Missing': preferred_contact_method, nil, total, monitoring_status))
+      #   #     # counts.append(monitoree_count(analytic_id, true, 'Preferred Contact Method', preferred_contact_method.nil ? 'Missing': preferred_contact_method, nil, total, monitoring_status))
+      #   #   end
+      # end
+      # counts
   end
 
   # Monitoree counts by exposure risk factors
@@ -247,14 +295,15 @@ class CacheAnalyticsJob < ApplicationJob
   end
 
   # New monitoree count with given fields
-  def self.monitoree_count(analytic_id, active_monitoring, category_type, category, risk_level, total) # rubocop:todo Metrics/ParameterLists
+  def self.monitoree_count(analytic_id, active_monitoring, category_type, category, risk_level, total, status = "N/A") # rubocop:todo Metrics/ParameterLists
     MonitoreeCount.new(
       analytic_id: analytic_id,
       active_monitoring: active_monitoring,
       category_type: category_type,
       category: category,
       risk_level: risk_level.nil? ? 'Missing' : risk_level,
-      total: total
+      total: total,
+      status: status.nil? ? 'Missing' : status,
     )
   end
 

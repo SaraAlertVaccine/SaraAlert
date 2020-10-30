@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_12_173603) do
+ActiveRecord::Schema.define(version: 2020_11_16_134817) do
 
   create_table "analytics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "jurisdiction_id"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 2020_11_12_173603) do
     t.integer "total"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "status"
     t.index ["analytic_id"], name: "index_monitoree_counts_on_analytic_id"
   end
 

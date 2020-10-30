@@ -13,6 +13,7 @@ class RiskStratification extends React.Component {
   constructor(props) {
     super(props);
     console.log(props);
+    console.log(props.stats.monitoree_counts.find(x => x.category_type === 'Preferred Contact Method'));
     this.reportingData = {};
   }
 
@@ -20,7 +21,7 @@ class RiskStratification extends React.Component {
     return (
       <React.Fragment>
         <Card className="card-square text-center">
-          <div className="analytics-card-header">Actively Monitored Individuals by Reporting Method (as of X) ​</div>
+          <div className="analytics-card-header font-weight-bold h5">Actively Monitored Individuals by Reporting Method (as of X) ​</div>
           <Card.Body className="mt-4">
             <table className="analytics-table">
               <thead>
