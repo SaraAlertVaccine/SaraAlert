@@ -74,6 +74,7 @@ class PatientsTable extends React.Component {
         assigned_user: '',
       },
       query: {
+        workflow: props.workflow,
         tab: Object.keys(props.tabs)[0],
         jurisdiction: props.jurisdiction.id,
         scope: 'all',
@@ -85,7 +86,7 @@ class PatientsTable extends React.Component {
       entryOptions: [10, 15, 25, 50, 100],
       cancelToken: axios.CancelToken.source(),
     };
-    this.state.jurisdiction_paths[props.jurisdiction.id] = props.jurisdiction.path;
+    // this.props.jurisdiction_paths[props.jurisdiction.id] = props.jurisdiction.path;
   }
 
   componentDidMount() {
@@ -134,9 +135,6 @@ class PatientsTable extends React.Component {
         this.setState(count);
       });
     });
-
-    // fetch list of jurisdiction paths
-    this.updateJurisdictionPaths();
   }
 
   clearAllFilters = async () => {
@@ -215,7 +213,7 @@ class PatientsTable extends React.Component {
     const query = this.state.query;
     if (event.target.id === 'jurisdiction_path') {
       this.setState({ form: { ...form, jurisdiction_path: event.target.value } });
-      const jurisdictionId = Object.keys(this.state.jurisdiction_paths).find(id => this.state.jurisdiction_paths[parseInt(id)] === event.target.value);
+      const jurisdictionId = Object.keys(this.props.jurisdiction_paths).find(id => this.props.jurisdiction_paths[parseInt(id)] === event.target.value);
       if (jurisdictionId) {
         this.updateTable({ ...query, jurisdiction: jurisdictionId, page: 0 });
         this.updateAssignedUsers(jurisdictionId, this.state.query.scope, this.props.workflow, this.state.query.tab);
@@ -288,7 +286,6 @@ class PatientsTable extends React.Component {
     this.setState({ query, cancelToken, loading: true }, () => {
       axios
         .post('/public_health/patients', {
-          workflow: this.props.workflow,
           ...query,
           cancelToken: this.state.cancelToken.token,
         })
@@ -350,22 +347,11 @@ class PatientsTable extends React.Component {
     );
   }
 
-  updateJurisdictionPaths() {
-    axios.get('/jurisdictions/paths').then(response => {
-      this.setState({ jurisdiction_paths: response.data.jurisdiction_paths });
-    });
-  }
-
   updateAssignedUsers(jurisdiction_id, scope, workflow, tab) {
     if (tab !== 'transferred_out') {
       axios
         .get('/jurisdictions/assigned_users', {
-          params: {
-            jurisdiction_id,
-            scope,
-            workflow: workflow,
-            tab: tab,
-          },
+          params: { jurisdiction_id, scope, workflow, tab },
         })
         .then(response => {
           this.setState({ assigned_users: response.data.assigned_users });
@@ -474,7 +460,7 @@ class PatientsTable extends React.Component {
                             onChange={this.handleChange}
                           />
                           <datalist id="jurisdiction_paths">
-                            {Object.entries(this.state.jurisdiction_paths).map(([id, path]) => {
+                            {Object.entries(this.props.jurisdiction_paths).map(([id, path]) => {
                               return (
                                 <option value={path} key={id}>
                                   {path}
@@ -649,6 +635,7 @@ class PatientsTable extends React.Component {
 
 PatientsTable.propTypes = {
   authenticity_token: PropTypes.string,
+  jurisdiction_paths: PropTypes.object,
   workflow: PropTypes.oneOf(['exposure', 'isolation']),
   jurisdiction: PropTypes.exact({
     id: PropTypes.number,

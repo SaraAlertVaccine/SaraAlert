@@ -350,10 +350,10 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
               value: 'patients-monitoring-period',
               label: 'Monitoring Period',
               children: [
-                { value: 'symptom_onset', label: 'Symptom Onset' },
-                { value: 'user_defined_symptom_onset', label: 'User Defined Sympton Onset' },
                 { value: 'last_date_of_exposure', label: 'Last Date of Exposure' },
                 { value: 'continuous_exposure', label: 'Continuous Exposure' },
+                { value: 'symptom_onset', label: 'Symptom Onset' },
+                { value: 'user_defined_symptom_onset', label: 'User Defined Sympton Onset' },
                 { value: 'extended_isolation', label: 'Extended Isolation' },
                 { value: 'end_of_monitoring', label: 'End of Monitoring' },
                 { value: 'closed_at', label: 'Closed At' },
