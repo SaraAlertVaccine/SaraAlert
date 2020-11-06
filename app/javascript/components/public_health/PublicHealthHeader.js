@@ -167,8 +167,9 @@ class PublicHealthHeader extends React.Component {
               authenticity_token={this.props.authenticity_token}
               workflow={this.props.workflow}
               query={this.props.query}
-              allMonitoreesCount={this.state.counts.exposure + this.state.counts.isolation}
-              filteredMonitoreesCount={this.props.filteredMonitoreesCount}
+              all_monitorees_count={this.state.counts.exposure + this.state.counts.isolation}
+              filtered_monitorees_count={this.props.filtered_monitorees_count}
+              custom_export_options={this.props.custom_export_options}
             />
           )}
           {this.props.abilities.import && (
@@ -217,7 +218,8 @@ PublicHealthHeader.propTypes = {
     import: PropTypes.bool,
   }),
   query: PropTypes.object,
-  filteredMonitoreesCount: PropTypes.number,
+  filtered_monitorees_count: PropTypes.number,
+  custom_export_options: PropTypes.object,
 };
 
 export default PublicHealthHeader;

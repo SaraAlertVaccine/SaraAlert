@@ -151,8 +151,9 @@ class Export extends React.Component {
             authenticity_token={this.props.authenticity_token}
             preset={null}
             query={this.props.query}
-            filteredMonitoreesCount={this.props.filteredMonitoreesCount}
-            allMonitoreesCount={this.props.allMonitoreesCount}
+            filtered_monitorees_count={this.props.filtered_monitorees_count}
+            all_monitorees_count={this.props.all_monitorees_count}
+            custom_export_options={this.props.custom_export_options}
             onClose={() => this.setState({ showCustomFormatModal: false })}
           />
         )}
@@ -165,8 +166,9 @@ Export.propTypes = {
   workflow: PropTypes.string,
   authenticity_token: PropTypes.string,
   query: PropTypes.object,
-  allMonitoreesCount: PropTypes.number,
-  filteredMonitoreesCount: PropTypes.number,
+  all_monitorees_count: PropTypes.number,
+  filtered_monitorees_count: PropTypes.number,
+  custom_export_options: PropTypes.object,
 };
 
 export default Export;

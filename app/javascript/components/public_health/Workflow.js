@@ -7,9 +7,10 @@ import PatientsTable from './PatientsTable';
 class Workflow extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       query: {},
-      filteredMonitoreesCount: 0,
+      filtered_monitorees_count: 0,
     };
   }
 
@@ -21,7 +22,8 @@ class Workflow extends React.Component {
           workflow={this.props.workflow}
           abilities={this.props.abilities}
           query={this.state.query}
-          filteredMonitoreesCount={this.state.filteredMonitoreesCount}
+          filtered_monitorees_count={this.state.filtered_monitorees_count}
+          custom_export_options={this.props.custom_export_options}
         />
         <PatientsTable
           authenticity_token={this.props.authenticity_token}
@@ -29,7 +31,7 @@ class Workflow extends React.Component {
           jurisdiction={this.props.jurisdiction}
           tabs={this.props.tabs}
           setQuery={query => this.setState({ query })}
-          setFilteredMonitoreesCount={filteredMonitoreesCount => this.setState({ filteredMonitoreesCount })}
+          setFilteredMonitoreesCount={filtered_monitorees_count => this.setState({ filtered_monitorees_count })}
         />
       </React.Fragment>
     );
@@ -42,6 +44,7 @@ Workflow.propTypes = {
   jurisdiction: PropTypes.object,
   workflow: PropTypes.string,
   tabs: PropTypes.object,
+  custom_export_options: PropTypes.object,
 };
 
 export default Workflow;

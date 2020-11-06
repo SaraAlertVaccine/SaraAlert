@@ -1,14 +1,15 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CheckboxTree from 'react-checkbox-tree';
 import axios from 'axios';
 
-import { customExportOptions } from '../../data/customExportOptions';
 import reportError from '../util/ReportError';
 
 class CustomExport extends React.Component {
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       preset: this.props.preset || '',
@@ -108,7 +109,7 @@ class CustomExport extends React.Component {
                 type="radio"
                 size="sm"
                 className="py-1"
-                label={`Current Filter (${this.props.filteredMonitoreesCount})`}
+                label={`Current Filter (${this.props.filtered_monitorees_count})`}
                 checked={!!this.state.filter}
                 onChange={() => this.setState({ filter: true })}
               />
@@ -117,43 +118,42 @@ class CustomExport extends React.Component {
                 type="radio"
                 size="sm"
                 className="py-1"
-                label={`All Monitorees (${this.props.allMonitoreesCount})`}
+                label={`All Monitorees (${this.props.all_monitorees_count})`}
                 checked={!this.state.filter}
                 onChange={() => this.setState({ filter: false })}
               />
             </Col>
           </Row>
-          <Row className="mx-3 pt-2">
+          <Row className="mx-3 pt-2 pb-1">
             <Col md="24" className="pl-1">
               <p className="pt-1 mb-1 font-weight-bold">Export Data:</p>
             </Col>
           </Row>
-          <CheckboxTree
-            nodes={customExportOptions}
-            checked={this.state.checked}
-            expanded={this.state.expanded}
-            onCheck={checked => {
-              console.log(checked);
-              this.setState({ checked });
-            }}
-            onExpand={expanded => {
-              console.log(expanded);
-              this.setState({ expanded });
-            }}
-            className="py-2"
-            icons={{
-              check: <i className="far fa-check-square" />,
-              uncheck: <i className="far fa-square" />,
-              halfCheck: <i className="far fa-minus-square" />,
-              expandClose: <i className="fas fa-chevron-down" />,
-              expandOpen: <i className="fas fa-chevron-right" />,
-              // expandAll: <i className="fas fa-chevron-down" />,
-              // collapseAll: <i className="fas fa-chevron-right" />,
-              // parentClose: <i className="fal fa-chevron-down" />,
-              // parentOpen: <i className="fal fa-chevron-right" />,
-              // leaf: <i className="fas fa-leaf" />,
-            }}
-          />
+          <Row className="mx-0 px-3" style={{ backgroundColor: '#ddd' }}>
+            <CheckboxTree
+              nodes={this.props.custom_export_options}
+              checked={this.state.checked}
+              expanded={this.state.expanded}
+              checkModel="all"
+              onCheck={checked => {
+                console.log(checked);
+                this.setState({ checked });
+              }}
+              onExpand={expanded => {
+                console.log(expanded);
+                this.setState({ expanded });
+              }}
+              className="py-2"
+              showNodeIcon={false}
+              icons={{
+                check: <FontAwesomeIcon className="rct-icon rct-icon-check" icon="check-square" />,
+                uncheck: <FontAwesomeIcon className="rct-icon rct-icon-uncheck" icon={['fas', 'square']} />,
+                halfCheck: <FontAwesomeIcon className="rct-icon rct-icon-half-check" icon="check-square" />,
+                expandClose: <FontAwesomeIcon className="rct-icon rct-icon-expand-close" icon="chevron-right" />,
+                expandOpen: <FontAwesomeIcon className="rct-icon rct-icon-expand-open" icon="chevron-down" />,
+              }}
+            />
+          </Row>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary btn-square" onClick={this.props.onClose}>
@@ -172,8 +172,9 @@ CustomExport.propTypes = {
   authenticity_token: PropTypes.string,
   preset: PropTypes.string,
   query: PropTypes.object,
-  allMonitoreesCount: PropTypes.number,
-  filteredMonitoreesCount: PropTypes.number,
+  all_monitorees_count: PropTypes.number,
+  filtered_monitorees_count: PropTypes.number,
+  custom_export_options: PropTypes.object,
   onClose: PropTypes.func,
 };
 
