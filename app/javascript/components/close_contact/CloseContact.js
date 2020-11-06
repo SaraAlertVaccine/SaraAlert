@@ -10,6 +10,7 @@ const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 
 import reportError from '../util/ReportError';
 import confirmDialog from '../util/ConfirmDialog';
+import PhoneInput from '../util/PhoneInput';
 
 class CloseContact extends React.Component {
   constructor(props) {
@@ -31,6 +32,14 @@ class CloseContact extends React.Component {
       : 'enter additional information about monitoree’s potential exposure';
   }
 
+  formatPhoneNumber(phone) {
+    const match = phone
+      .replace('+1', '')
+      .replace(/\D/g, '')
+      .match(/^(\d{3})(\d{3})(\d{4})$/);
+    return match ? +match[1] + '-' + match[2] + '-' + match[3] : '';
+  }
+
   toggleModal = () => {
     let current = this.state.showModal;
     this.setState({
@@ -39,7 +48,7 @@ class CloseContact extends React.Component {
   };
 
   handleChange = event => {
-    this.setState({ [event.target.id]: event.target.value });
+    this.setState({ [event.target.id]: event.target.id === 'primary_telephone' ? event.target.value.replace(/-/g, '') : event.target.value });
   };
 
   contactAttempt = async () => {
@@ -116,12 +125,11 @@ class CloseContact extends React.Component {
             <Row>
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Phone Number</Form.Label>
-                <Form.Control
-                  size="lg"
+                <PhoneInput
                   id="primary_telephone"
-                  className="form-square"
-                  value={this.state.primary_telephone || ''}
+                  value={this.state.primary_telephone}
                   onChange={this.handleChange}
+                  isInvalid={!!this.state.errors['primary_telephone']}
                 />
                 <Form.Control.Feedback className="d-block" type="invalid">
                   {this.state.errors['primary_telephone']}
