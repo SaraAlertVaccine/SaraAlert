@@ -285,10 +285,7 @@ class PatientsTable extends React.Component {
 
     this.setState({ query, cancelToken, loading: true }, () => {
       axios
-        .post('/public_health/patients', {
-          ...query,
-          cancelToken: this.state.cancelToken.token,
-        })
+        .post('/public_health/patients', { query, cancelToken: this.state.cancelToken.token })
         .catch(error => {
           if (!axios.isCancel(error)) {
             this.setState(state => {
