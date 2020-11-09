@@ -8,6 +8,7 @@ import MoveToHousehold from '../subject/MoveToHousehold';
 import RemoveFromHousehold from '../subject/RemoveFromHousehold';
 import InfoTooltip from '../util/InfoTooltip';
 
+
 class Patient extends React.Component {
   constructor(props) {
     super(props);
@@ -211,7 +212,7 @@ class Patient extends React.Component {
                 </span>
                 {this.props.details.blocked_sms && (
                   <Form.Label className="nav-input-label text-danger">
-                    SMS Communication Blocked <InfoTooltip tooltipTextKey="blockedSMS" location="right"></InfoTooltip>
+                  SMS Communication Blocked <InfoTooltip tooltipTextKey="blockedSMS" location="right"></InfoTooltip>
                   </Form.Label>
                 )}
                 <br />
