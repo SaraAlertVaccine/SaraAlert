@@ -211,7 +211,7 @@ class Patient extends React.Component {
                 </span>
                 {this.props.details.blocked_sms && (
                   <Form.Label className="nav-input-label text-danger">
-                    SMS Communication Blocked <InfoTooltip tooltipTextKey="blockedSMS" location="right"></InfoTooltip>
+                    SMS Communication Blocked <InfoTooltip tooltipTextKey="blockedSMS" location="top"></InfoTooltip>
                   </Form.Label>
                 )}
                 <br />
