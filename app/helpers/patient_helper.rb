@@ -3,54 +3,54 @@
 # Helper methods for the patient model
 module PatientHelper # rubocop:todo Metrics/ModuleLength
   # Build a FHIR US Core Race Extension given Sara Alert race booleans.
-  def us_core_race(white, black_or_african_american, american_indian_or_alaska_native, asian, native_hawaiian_or_other_pacific_islander, race_unknown, race_other, race_refused_to_answer)
+  def us_core_race(race_array)
     # Don't return an extension if all race categories are false or nil
-    return nil unless [white, black_or_african_american, american_indian_or_alaska_native, asian, native_hawaiian_or_other_pacific_islander, race_unknown, race_other, race_refused_to_answer].include?(true)
-
+    return nil unless race_array.include?(true)
+     
     # Build out extension based on what race categories are true
     FHIR::Extension.new(url: 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-race', extension: [
-      white ? FHIR::Extension.new(
+      race_array[0] ? FHIR::Extension.new(
         url: 'ombCategory',
         valueCoding: FHIR::Coding.new(code: '2106-3', system: 'urn:oid:2.16.840.1.113883.6.238', display: 'White')
       ) : nil,
-      black_or_african_american ? FHIR::Extension.new(
+      race_array[1] ? FHIR::Extension.new(
         url: 'ombCategory',
         valueCoding: FHIR::Coding.new(code: '2054-5', system: 'urn:oid:2.16.840.1.113883.6.238', display: 'Black or African American')
       ) : nil,
-      american_indian_or_alaska_native ? FHIR::Extension.new(
+      race_array[2] ? FHIR::Extension.new(
         url: 'ombCategory',
         valueCoding: FHIR::Coding.new(code: '1002-5', system: 'urn:oid:2.16.840.1.113883.6.238', display: 'American Indian or Alaska Native')
       ) : nil,
-      asian ? FHIR::Extension.new(
+      race_array[3] ? FHIR::Extension.new(
         url: 'ombCategory',
         valueCoding: FHIR::Coding.new(code: '2028-9', system: 'urn:oid:2.16.840.1.113883.6.238', display: 'Asian')
       ) : nil,
-      native_hawaiian_or_other_pacific_islander ? FHIR::Extension.new(
+      race_array[4] ? FHIR::Extension.new(
         url: 'ombCategory',
         valueCoding: FHIR::Coding.new(code: '2076-8', system: 'urn:oid:2.16.840.1.113883.6.238', display: 'Native Hawaiian or Other Pacific Islander')
       ) : nil,
-      race_unknown ? FHIR::Extension.new(
+      race_array[5] ? FHIR::Extension.new(
         url: 'ombCategory',
         valueCoding: FHIR::Coding.new(code: 'UNK', system: 'urn:oid:2.16.840.1.113883.6.238', display: 'Unknown')
       ) : nil,
-      race_other ? FHIR::Extension.new(
+      race_array[6] ? FHIR::Extension.new(
         url: 'ombCategory',
         valueCoding: FHIR::Coding.new(code: 'OTH', system: 'urn:oid:2.16.840.1.113883.6.238', display: 'Other')
       ) : nil,
-      race_refused_to_answer ? FHIR::Extension.new(
+      race_array[7] ? FHIR::Extension.new(
         url: 'ombCategory',
         valueCoding: FHIR::Coding.new(code: 'ASKU', system: 'urn:oid:2.16.840.1.113883.6.238', display: 'Refused to Answer')
       ) : nil,
       FHIR::Extension.new(
         url: 'text',
-        valueString: [white ? 'White' : nil,
-                      black_or_african_american ? 'Black or African American' : nil,
-                      american_indian_or_alaska_native ? 'American Indian or Alaska Native' : nil,
-                      asian ? 'Asian' : nil,
-                      native_hawaiian_or_other_pacific_islander ? 'Native Hawaiian or Other Pacific Islander' : nil,
-                      race_unknown ? 'Unknown' : nil,
-                      race_other ? 'Other' : nil,
-                      race_refused_to_answer ? 'Refused to Answer' : nil].reject(&:nil?).join(', ')
+        valueString: [race_array[0] ? 'White' : nil,
+                      race_array[1] ? 'Black or African American' : nil,
+                      race_array[2] ? 'American Indian or Alaska Native' : nil,
+                      race_array[3] ? 'Asian' : nil,
+                      race_array[4] ? 'Native Hawaiian or Other Pacific Islander' : nil,
+                      race_array[5] ? 'Unknown' : nil,
+                      race_array[6] ? 'Other' : nil,
+                      race_array[7] ? 'Refused to Answer' : nil].reject(&:nil?).join(', ')
       )
     ].reject(&:nil?))
   end
