@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_28_204903) do
+ActiveRecord::Schema.define(version: 2020_11_10_042242) do
 
   create_table "analytics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "jurisdiction_id"
@@ -353,6 +353,7 @@ ActiveRecord::Schema.define(version: 2020_10_28_204903) do
     t.boolean "user_defined_symptom_onset"
     t.date "extended_isolation"
     t.boolean "head_of_household"
+    t.integer "contact_attempts", default: 0
     t.index ["assigned_user"], name: "index_patients_on_assigned_user"
     t.index ["creator_id"], name: "index_patients_on_creator_id"
     t.index ["date_of_birth"], name: "index_patients_on_date_of_birth"
@@ -429,6 +430,15 @@ ActiveRecord::Schema.define(version: 2020_10_28_204903) do
     t.index ["patient_id"], name: "index_transfers_on_patient_id"
     t.index ["to_jurisdiction_id"], name: "index_transfers_on_to_jurisdiction_id"
     t.index ["who_id"], name: "index_transfers_on_who_id"
+  end
+
+  create_table "user_export_presets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "name", null: false
+    t.json "config", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_export_presets_on_user_id"
   end
 
   create_table "user_filters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
