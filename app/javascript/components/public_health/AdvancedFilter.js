@@ -38,7 +38,7 @@ class AdvancedFilter extends React.Component {
           type: 'option',
           options: ['Unknown', 'E-mailed Web Link', 'SMS Texted Weblink', 'Telephone call', 'SMS Text-message', 'Opt-out', ''],
         },
-        { name: 'latest-report', title: 'Latest Report (Date picker)', description: 'Monitorees with latest report during specified date range', type: 'date' },
+        { name: 'latest-report', title: 'Latest Report (Date)', description: 'Monitorees with latest report during specified date range', type: 'date' },
         { name: 'hoh', title: 'Daily Reporters (Boolean)', description: 'Monitorees that are a Head of Household or self-reporter', type: 'boolean' },
         {
           name: 'household-member',
@@ -46,18 +46,24 @@ class AdvancedFilter extends React.Component {
           description: 'Monitorees that are in a household but not the Head of Household',
           type: 'boolean',
         },
-        { name: 'enrolled', title: 'Enrolled (Date picker)', description: 'Monitorees enrolled in system during specified date range', type: 'date' },
+        { name: 'enrolled', title: 'Enrolled (Date)', description: 'Monitorees enrolled in system during specified date range', type: 'date' },
         {
           name: 'last-date-exposure',
-          title: 'Last date of exposure (Date picker)',
+          title: 'Last date of exposure (Date)',
           description: 'Monitorees who have a last date of exposure during specified date range',
           type: 'date',
         },
         {
           name: 'symptom-onset',
-          title: 'Symptom onset (Date picker)',
+          title: 'Symptom Onset (Date)',
           description: 'Monitorees who have a symptom onset date during specified date range',
           type: 'date',
+        },
+        {
+          name: 'symptom-onset-relative',
+          title: 'Symptom Onset (Relative Date)',
+          description: 'Monitorees who have a symptom onset date during specified date range CHANGE ME',
+          type: 'relative',
         },
         { name: 'continous-exposure', title: 'Continuous Exposure (Boolean)', description: 'Monitorees who have continuous exposure enabled', type: 'boolean' },
         {
@@ -247,6 +253,8 @@ class AdvancedFilter extends React.Component {
     } else if (filterOption.type === 'date') {
       // Default to "within" type
       value = { start: moment().add(-72, 'hours'), end: moment() };
+    } else if (filterOption.type === 'relative') {
+      value = { days: 1, when: 'past' };
     } else if (filterOption.type === 'search') {
       value = '';
     }
@@ -256,11 +264,12 @@ class AdvancedFilter extends React.Component {
       value,
       dateOption: filterOption.type === 'date' ? 'within' : null,
       operatorOption: filterOption.type === 'number' ? 'equal' : null,
+      relativeOption: filterOption.type === 'relative' ? 'today' : null,
     };
     this.setState({ activeFilterOptions });
   };
 
-  // Change an index filter option for date
+  // Change an index filter option for type date
   changeFilterDateOption = (index, value) => {
     let activeFilterOptions = [...this.state.activeFilterOptions];
     let defaultValue = null;
@@ -273,10 +282,17 @@ class AdvancedFilter extends React.Component {
     this.setState({ activeFilterOptions });
   };
 
-  // Change an index filter option for number
+  // Change the operator filter option for type number
   changeFilterOperatorOption = (index, value, operatorOption) => {
     let activeFilterOptions = [...this.state.activeFilterOptions];
     activeFilterOptions[parseInt(index)] = { filterOption: activeFilterOptions[parseInt(index)].filterOption, value: value, operatorOption: operatorOption };
+    this.setState({ activeFilterOptions });
+  };
+
+  // Change an index filter option for number
+  changeFilterRelativeOption = (index, value, relativeOption) => {
+    let activeFilterOptions = [...this.state.activeFilterOptions];
+    activeFilterOptions[parseInt(index)] = { filterOption: activeFilterOptions[parseInt(index)].filterOption, value: value, relativeOption: relativeOption };
     this.setState({ activeFilterOptions });
   };
 
@@ -424,7 +440,7 @@ class AdvancedFilter extends React.Component {
     );
   };
 
-  // Render number specific options
+  // Render number specific operator options
   renderOperatorOptions = (current, index, value) => {
     return (
       <Form.Control
@@ -438,6 +454,23 @@ class AdvancedFilter extends React.Component {
         <option value="equal">{'equal to'}</option>
         <option value="greater-than-equal">{'greater than or equal to'}</option>
         <option value="greater-than">{'greater than'}</option>
+      </Form.Control>
+    );
+  };
+
+  // Render relative date specific options
+  renderRelativeOptions = (current, index, value) => {
+    return (
+      <Form.Control
+        as="select"
+        value={current}
+        onChange={event => {
+          this.changeFilterRelativeOption(index, value, event.target.value);
+        }}>
+        <option value="today">today</option>
+        <option value="tomorrow">tomorrow</option>
+        <option value="yesterday">yesterday</option>
+        <option value="custom">custom</option>
       </Form.Control>
     );
   };
@@ -488,7 +521,7 @@ class AdvancedFilter extends React.Component {
   };
 
   // Render a single line "statement"
-  renderStatement = (filterOption, value, index, total, dateOption, operatorOption) => {
+  renderStatement = (filterOption, value, index, total, dateOption, operatorOption, relativeOption) => {
     return (
       <React.Fragment key={'rowkey-filter-p' + index}>
         {index > 0 && index < total && (
@@ -505,6 +538,11 @@ class AdvancedFilter extends React.Component {
           {filterOption?.type === 'date' && (
             <Col className="py-0" md="3">
               {this.renderDateOptions(dateOption, index)}
+            </Col>
+          )}
+          {filterOption?.type === 'relative' && (
+            <Col className="py-0" md="4">
+              {this.renderRelativeOptions(relativeOption, index, value)}
             </Col>
           )}
           <Col className="py-0">
@@ -620,6 +658,35 @@ class AdvancedFilter extends React.Component {
                 </Row>
               </Form.Group>
             )}
+            {filterOption?.type === 'relative' && relativeOption === 'custom' && (
+              <Form.Group className="py-0 my-0">
+                <Row>
+                  <Col className="py-0 px-0 text-center my-auto">
+                    <b>IN THE</b>
+                  </Col>
+                  <Col>
+                    <Form.Control
+                      as="select"
+                      value={value.when}
+                      onChange={event => {
+                        this.changeValue(index, { days: value.days, when: event.target.value });
+                      }}>
+                      <option value="past">past</option>
+                      <option value="next">next</option>
+                    </Form.Control>
+                  </Col>
+                  <Col>
+                    <Form.Control
+                      value={value.days}
+                      type="number"
+                      min="1"
+                      onChange={event => this.changeValue(index, { days: event.target.value, when: value.when })}
+                    />
+                  </Col>
+                  <Col className="py-0 px-0 ml-2 my-auto">{value.days === 1 ? <b>DAY</b> : <b>DAYS</b>}</Col>
+                </Row>
+              </Form.Group>
+            )}
             {filterOption?.type === 'search' && (
               <Form.Group className="py-0 my-0">
                 <Form.Control
@@ -704,7 +771,8 @@ class AdvancedFilter extends React.Component {
                 index,
                 this.state.activeFilterOptions?.length,
                 statement.dateOption,
-                statement.operatorOption
+                statement.operatorOption,
+                statement.relativeOption
               );
             })}
             <Row className="pt-2 pb-1">
