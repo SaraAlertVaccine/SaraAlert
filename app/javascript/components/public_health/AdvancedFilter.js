@@ -307,7 +307,7 @@ class AdvancedFilter extends React.Component {
     this.setState({ activeFilterOptions });
   };
 
-  // Change an index filter option for number
+  // Change the relative filter option for type relative date
   changeFilterRelativeOption = (index, value, relativeOption) => {
     let activeFilterOptions = [...this.state.activeFilterOptions];
     activeFilterOptions[parseInt(index)] = { filterOption: activeFilterOptions[parseInt(index)].filterOption, value: value, relativeOption: relativeOption };
