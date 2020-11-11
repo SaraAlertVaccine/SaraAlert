@@ -281,8 +281,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
                                                                   crew_on_passenger_or_cargo_flight member_of_a_common_exposure_cohort
                                                                   member_of_a_common_exposure_cohort_type])
                 ]
-              },
-              rct_node(:patients, 'Metadata', %i[creator created_at updated_at])
+              }
             ]
           },
           {
@@ -297,7 +296,8 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
                                                           extended_isolation end_of_monitoring closed_at monitoring_reason expected_purge_date]),
               rct_node(:patients, 'Reporting Info', %i[responder_id head_of_household contact_attempts pause_notifications last_assessment_reminder_sent])
             ]
-          }
+          },
+          rct_node(:patients, 'Metadata', %i[id creator created_at updated_at])
         ]
       }
     ],
@@ -306,7 +306,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
   }.freeze
 
   ASSESSMENTS_EXPORT_OPTIONS = {
-    nodes: [rct_node(:assessments, 'Export Reports', %i[symptomatic who_reported created_at updated_at symptoms])],
+    nodes: [rct_node(:assessments, 'Export Reports', %i[id patient_id symptomatic who_reported created_at updated_at symptoms])],
     checked: [],
     expanded: %w[assessments],
     filters: {
@@ -327,7 +327,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
   }.freeze
 
   LABORATORIES_EXPORT_OPTIONS = {
-    nodes: [rct_node(:laboratories, 'Export Lab Results', %i[lab_type specimen_collection report result created_at updated_at])],
+    nodes: [rct_node(:laboratories, 'Export Lab Results', %i[id patient_id lab_type specimen_collection report result created_at updated_at])],
     checked: [],
     expanded: %w[laboratories],
     filters: {
@@ -358,7 +358,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
   }.freeze
 
   CLOSE_CONTACTS_EXPORT_OPTIONS = {
-    nodes: [rct_node(:close_contacts, 'Export Close Contacts', %i[first_name last_name primary_telephone email contact_attempts notes enrolled_id])],
+    nodes: [rct_node(:close_contacts, 'Export Close Contacts', %i[id patient_id first_name last_name primary_telephone email contact_attempts notes enrolled_id])],
     checked: [],
     expanded: %w[close_contacts],
     filters: {
@@ -373,14 +373,14 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
   }.freeze
 
   TRANSFERS_EXPORT_OPTIONS = {
-    nodes: [rct_node(:transfers, 'Export Transfers', %i[who from_jurisdiction to_jurisdiction created_at updated_at])],
+    nodes: [rct_node(:transfers, 'Export Transfers', %i[id patient_id who from_jurisdiction to_jurisdiction created_at updated_at])],
     checked: [],
     expanded: %w[transfers],
     filters: []
   }.freeze
 
   HISTORIES_EXPORT_OPTIONS = {
-    nodes: [rct_node(:histories, 'Export History', %i[created_by history_type comment created_at updated_at])],
+    nodes: [rct_node(:histories, 'Export History', %i[id patient_id created_by history_type comment created_at updated_at])],
     checked: [],
     expanded: %w[histories],
     filters: {

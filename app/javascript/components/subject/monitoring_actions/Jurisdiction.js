@@ -5,6 +5,7 @@ import _ from 'lodash';
 import axios from 'axios';
 
 import InfoTooltip from '../../util/InfoTooltip';
+import JurisdictionInput from '../../util/JurisdictionInput';
 import reportError from '../../util/ReportError';
 
 class Jurisdiction extends React.Component {
@@ -12,9 +13,7 @@ class Jurisdiction extends React.Component {
     super(props);
     this.state = {
       showJurisdictionModal: false,
-      jurisdiction_path: this.props.jurisdiction_paths[this.props.patient.jurisdiction_id],
-      original_jurisdiction_id: this.props.patient.jurisdiction_id,
-      validJurisdiction: true,
+      jurisdiction: { id: this.props.patient.jurisdiction_id, path: this.props.jurisdiction_paths[this.props.patient.jurisdiction_id] },
       apply_to_household: false,
       loading: false,
       reasoning: '',
@@ -22,11 +21,11 @@ class Jurisdiction extends React.Component {
     this.origState = Object.assign({}, this.state);
   }
 
-  handleJurisdictionChange = event => {
-    this.setState({
-      jurisdiction_path: event?.target?.value ? event.target.value : '',
-      validJurisdiction: Object.values(this.props.jurisdiction_paths).includes(event.target.value),
-    });
+  handleJurisdictionChange = jurisdiction => {
+    this.setState({ jurisdiction });
+    if (jurisdiction?.id !== this.props.patient.jurisdiction_id) {
+      this.toggleJurisdictionModal();
+    }
   };
 
   handleApplyHouseholdChange = event => {
@@ -39,25 +38,16 @@ class Jurisdiction extends React.Component {
     this.setState({ [event.target.id]: value || '' });
   };
 
-  // if user hits the Enter key after changing the jurisdiction value, shows the modal (in leu of clicking the button)
-  handleKeyPress = event => {
-    if (
-      event.which === 13 &&
-      this.state.validJurisdiction &&
-      this.state.jurisdiction_path !== this.props.jurisdiction_paths[this.state.original_jurisdiction_id]
-    ) {
-      event.preventDefault();
-      this.toggleJurisdictionModal();
-    }
-  };
-
   toggleJurisdictionModal = () => {
-    const current = this.state.showJurisdictionModal;
-    this.setState({
-      showJurisdictionModal: !current,
-      jurisdiction_path: current ? this.props.jurisdiction_paths[this.state.original_jurisdiction_id] : this.state.jurisdiction_path,
-      apply_to_household: false,
-      reasoning: '',
+    this.setState(state => {
+      return {
+        showJurisdictionModal: !state.showJurisdictionModal,
+        jurisdiction: state.showJurisdictionModal
+          ? { id: this.props.patient.jurisdiction_id, path: this.props.jurisdiction_paths[this.props.patient.jurisdiction_id] }
+          : state.jurisdiction,
+        apply_to_household: false,
+        reasoning: '',
+      };
     });
   };
 
@@ -68,7 +58,7 @@ class Jurisdiction extends React.Component {
       axios
         .post(window.BASE_PATH + '/patients/' + this.props.patient.id + '/status', {
           patient: this.props.patient,
-          jurisdiction: Object.keys(this.props.jurisdiction_paths).find(id => this.props.jurisdiction_paths[parseInt(id)] === this.state.jurisdiction_path),
+          jurisdiction: this.state.jurisdiction?.id,
           reasoning: this.state.reasoning,
           apply_to_household: this.state.apply_to_household,
           diffState: diffState,
@@ -77,7 +67,7 @@ class Jurisdiction extends React.Component {
           const currentUserJurisdictionString = this.props.current_user.jurisdiction_path.join(', ');
           // check if current_user has access to the changed jurisdiction
           // if so, reload the page, if not, redirect to exposure or isolation dashboard
-          if (!this.state.jurisdiction_path.startsWith(currentUserJurisdictionString)) {
+          if (!this.state.jurisdiction?.path.startsWith(currentUserJurisdictionString)) {
             const pathEnd = this.state.isolation ? '/isolation' : '';
             location.assign((window.BASE_PATH ? window.BASE_PATH : '') + '/public_health' + pathEnd);
           } else {
@@ -90,65 +80,6 @@ class Jurisdiction extends React.Component {
     });
   };
 
-  createModal(toggle, submit) {
-    return (
-      <Modal size="lg" show centered onHide={toggle}>
-        <Modal.Header>
-          <Modal.Title>Jurisdiction</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            Are you sure you want to change jurisdiction from &quot;{this.props.jurisdiction_paths[this.state.original_jurisdiction_id]}&quot; to &quot;
-            {this.state.jurisdiction_path}&quot;?
-            {this.state.assigned_user !== '' && <b> Please also consider removing or updating the assigned user if it is no longer applicable.</b>}
-          </p>
-          {this.props.has_dependents && (
-            <React.Fragment>
-              <p className="mb-2">Please select the records that you would like to apply this change to:</p>
-              <Form.Group className="px-4">
-                <Form.Check
-                  type="radio"
-                  className="mb-1"
-                  name="apply_to_household"
-                  id="apply_to_household_no"
-                  label="This monitoree only"
-                  onChange={this.handleApplyHouseholdChange}
-                  checked={!this.state.apply_to_household}
-                />
-                <Form.Check
-                  type="radio"
-                  className="mb-3"
-                  name="apply_to_household"
-                  id="apply_to_household_yes"
-                  label="This monitoree and all household members"
-                  onChange={this.handleApplyHouseholdChange}
-                  checked={this.state.apply_to_household}
-                />
-              </Form.Group>
-            </React.Fragment>
-          )}
-          <Form.Group>
-            <Form.Label>Please include any additional details:</Form.Label>
-            <Form.Control as="textarea" rows="2" id="reasoning" onChange={this.handleReasoningChange} />
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary btn-square" onClick={toggle}>
-            Cancel
-          </Button>
-          <Button variant="primary btn-square" onClick={submit} disabled={this.state.loading}>
-            {this.state.loading && (
-              <React.Fragment>
-                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>&nbsp;
-              </React.Fragment>
-            )}
-            Submit
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -160,34 +91,69 @@ class Jurisdiction extends React.Component {
               location="right"></InfoTooltip>
           </Form.Label>
           <Form.Group className="d-flex mb-0">
-            <Form.Control
-              as="input"
-              id="jurisdiction_id"
-              list="jurisdiction_paths"
-              autoComplete="off"
-              className="form-control-lg"
-              onChange={this.handleJurisdictionChange}
-              onKeyPress={this.handleKeyPress}
-              value={this.state.jurisdiction_path}
+            <JurisdictionInput
+              jurisdiction_paths={this.props.jurisdiction_paths}
+              jurisdiction={this.state.jurisdiction}
+              onJurisdictionChange={this.handleJurisdictionChange}
+              size="lg"
+              isFilter={false}
             />
-            <datalist id="jurisdiction_paths">
-              {Object.entries(this.props.jurisdiction_paths).map(([id, path]) => {
-                return (
-                  <option value={path} key={id}>
-                    {path}
-                  </option>
-                );
-              })}
-            </datalist>
-            <Button
-              className="btn-lg btn-square text-nowrap ml-2"
-              onClick={this.toggleJurisdictionModal}
-              disabled={!this.state.validJurisdiction || this.state.jurisdiction_path === this.props.jurisdiction_paths[this.state.original_jurisdiction_id]}>
-              <i className="fas fa-map-marked-alt"></i> Change Jurisdiction
-            </Button>
           </Form.Group>
         </div>
-        {this.state.showJurisdictionModal && this.createModal(this.toggleJurisdictionModal, this.submit)}
+        <Modal size="lg" show={this.state.showJurisdictionModal} centered onHide={this.toggleJurisdictionModal}>
+          <Modal.Header>
+            <Modal.Title>Jurisdiction</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              Are you sure you want to change jurisdiction from &quot;{this.props.jurisdiction_paths[this.props.patient?.jurisdiction_id]}&quot; to &quot;
+              {this.state.jurisdiction?.path}&quot;?
+              {this.props.patient?.assigned_user !== '' && <b> Please also consider removing or updating the assigned user if it is no longer applicable.</b>}
+            </p>
+            {this.props.has_dependents && (
+              <React.Fragment>
+                <p className="mb-2">Please select the records that you would like to apply this change to:</p>
+                <Form.Group className="px-4">
+                  <Form.Check
+                    type="radio"
+                    className="mb-1"
+                    name="apply_to_household"
+                    id="apply_to_household_no"
+                    label="This monitoree only"
+                    onChange={this.handleApplyHouseholdChange}
+                    checked={!this.state.apply_to_household}
+                  />
+                  <Form.Check
+                    type="radio"
+                    className="mb-3"
+                    name="apply_to_household"
+                    id="apply_to_household_yes"
+                    label="This monitoree and all household members"
+                    onChange={this.handleApplyHouseholdChange}
+                    checked={this.state.apply_to_household}
+                  />
+                </Form.Group>
+              </React.Fragment>
+            )}
+            <Form.Group>
+              <Form.Label>Please include any additional details:</Form.Label>
+              <Form.Control as="textarea" rows="2" id="reasoning" onChange={this.handleReasoningChange} />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary btn-square" onClick={this.toggleJurisdictionModal}>
+              Cancel
+            </Button>
+            <Button variant="primary btn-square" onClick={this.submit} disabled={this.state.loading}>
+              {this.state.loading && (
+                <React.Fragment>
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>&nbsp;
+                </React.Fragment>
+              )}
+              Submit
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </React.Fragment>
     );
   }
