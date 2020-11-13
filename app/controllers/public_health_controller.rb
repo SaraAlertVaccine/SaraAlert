@@ -453,7 +453,7 @@ class PublicHealthController < ApplicationController
       compare_date_end = Chronic.parse(filter[:value][:end])
       patients = patients.where("#{attribute}) > ?", compare_date_start).where("#{attribute} < ?", compare_date_end)
     end
-    return patients
+    patients
   end
 
   def advanced_filter_relative(patients, filter, attribute)
@@ -492,7 +492,7 @@ class PublicHealthController < ApplicationController
         end
       end
     end
-    return patients
+    patients
   end
 
   private
