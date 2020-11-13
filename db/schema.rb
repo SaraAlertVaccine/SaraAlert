@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 2020_11_12_214758) do
     t.bigint "patient_id"
     t.bigint "user_id"
     t.boolean "successful"
-    t.string "note"
+    t.text "note"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["patient_id"], name: "index_contact_attempts_on_patient_id"
