@@ -127,6 +127,7 @@ class Patient < ApplicationRecord
   has_many :transfers
   has_many :laboratories
   has_many :close_contacts
+  has_many :contact_attempts
 
   around_save :inform_responder, if: :responder_id_changed?
   around_destroy :inform_responder

@@ -64,6 +64,18 @@ ActiveRecord::Schema.define(version: 2020_11_12_214758) do
     t.index ["type", "threshold_condition_hash", "id"], name: "conditions_index_chain_2"
   end
 
+  create_table "contact_attempts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.bigint "user_id"
+    t.boolean "successful"
+    t.string "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["patient_id"], name: "index_contact_attempts_on_patient_id"
+    t.index ["successful"], name: "index_contact_attempts_on_successful"
+    t.index ["user_id"], name: "index_contact_attempts_on_user_id"
+  end
+
   create_table "downloads", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
     t.binary "contents", size: :long, null: false
@@ -353,9 +365,6 @@ ActiveRecord::Schema.define(version: 2020_11_12_214758) do
     t.boolean "user_defined_symptom_onset"
     t.date "extended_isolation"
     t.boolean "head_of_household"
-    t.integer "contact_attempts", default: 0
-    t.integer "contact_attempts_successful", default: 0
-    t.integer "contact_attempts_unsuccessful", default: 0
     t.index ["assigned_user"], name: "index_patients_on_assigned_user"
     t.index ["creator_id"], name: "index_patients_on_creator_id"
     t.index ["date_of_birth"], name: "index_patients_on_date_of_birth"
