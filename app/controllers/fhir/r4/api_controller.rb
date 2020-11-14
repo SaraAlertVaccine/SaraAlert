@@ -77,12 +77,19 @@ class Fhir::R4::ApiController < ActionController::API
   #
   # PUT /fhir/r4/[:resource_type]/[:id]
   def update
-    status_unsupported_media_type && return unless content_type_header?
+    if request.patch?
+      status_unsupported_media_type && return unless content_type_header?('application/json-patch+json')
 
-    # Parse in the FHIR::Patient
-    contents = FHIR.from_contents(request.body.string)
-    errors = contents&.validate
-    status_bad_request(format_fhir_validation_errors(errors)) && return if contents.nil? || !errors.empty?
+      # Parse in the JSON patch
+      patch = Hana::Patch.new(JSON.parse(request.body.string))
+    else
+      status_unsupported_media_type && return unless content_type_header?('application/fhir+json')
+
+      # Parse in the FHIR::Patient
+      contents = FHIR.from_contents(request.body.string)
+      errors = contents&.validate
+      status_bad_request(format_fhir_validation_errors(errors)) && return if contents.nil? || !errors.empty?
+    end
 
     resource_type = params.permit(:resource_type)[:resource_type]&.downcase
     case resource_type
@@ -94,9 +101,17 @@ class Fhir::R4::ApiController < ActionController::API
         :'system/Patient.*'
       )
 
-      updates = Patient.from_fhir(contents, default_patient_jurisdiction_id)
-
       resource = get_patient(params.permit(:id)[:id])
+
+      if request.patch? && !resource.nil?
+        begin
+          contents = apply_patch(resource, patch)
+        rescue StandardError => e
+          status_bad_request([['Unable to apply patch', e&.message].compact.join(': ')]) && return
+        end
+      end
+
+      updates = Patient.from_fhir(contents, default_patient_jurisdiction_id)
 
       # Grab patient before changes to construct diff
       patient_before = resource.dup
@@ -137,7 +152,7 @@ class Fhir::R4::ApiController < ActionController::API
   #
   # POST /fhir/r4/[:resource_type]
   def create
-    status_unsupported_media_type && return unless content_type_header?
+    status_unsupported_media_type && return unless content_type_header?('application/fhir+json')
 
     # Parse in the FHIR::Patient
     contents = FHIR.from_contents(request.body.string)
@@ -526,6 +541,11 @@ class Fhir::R4::ApiController < ActionController::API
     end
   end
 
+  # Apply a patch to a resource that can be represented as FHIR
+  def apply_patch(resource, patch)
+    FHIR.from_contents(patch.apply(resource.as_fhir.to_hash).to_json)
+  end
+
   # Check accept header for correct mime type (or allow fhir _format)
   def accept_header?
     return request.headers['Accept']&.include?('application/fhir+json') if params.permit(:_format)[:_format].nil?
@@ -534,8 +554,8 @@ class Fhir::R4::ApiController < ActionController::API
   end
 
   # Check content type header for correct mime type
-  def content_type_header?
-    request.headers['Content-Type']&.include?('application/fhir+json')
+  def content_type_header?(header)
+    request.headers['Content-Type']&.include?(header)
   end
 
   # Generic 406 not acceptable
