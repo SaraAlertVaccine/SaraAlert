@@ -12,7 +12,7 @@ class Patient extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showCaseInfo: props.details.isolation || (!props.details.isolation && props.details.exposure_notes),
+      showCaseInfo: props?.details?.isolation || (!props?.details?.isolation && props?.details?.exposure_notes),
       expandNotes: false,
     };
   }
@@ -319,7 +319,7 @@ class Patient extends React.Component {
                     <React.Fragment>
                       <Col>
                         <Row>
-                          <Col className="text-truncate">
+                          <Col className="text-truncate departed-col">
                             <Row className="py-1">
                               <Col>
                                 <b>DEPARTED</b>
@@ -339,7 +339,7 @@ class Patient extends React.Component {
                               </Col>
                             </Row>
                           </Col>
-                          <Col className="text-truncate">
+                          <Col className="text-truncate arrival-col">
                             <Row className="py-1">
                               <Col>
                                 <b>ARRIVAL</b>
@@ -361,7 +361,7 @@ class Patient extends React.Component {
                             </Row>
                           </Col>
                         </Row>
-                        <Row>
+                        <Row className="carrier-row">
                           <Col className="text-truncate pt-1">
                             <Row>
                               <Col>
@@ -438,12 +438,6 @@ class Patient extends React.Component {
                                 ? this.props.details.additional_planned_travel_port_of_departure
                                 : '--'
                             }`}</span>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <b>Flight or Vessel Number:</b>{' '}
-                            <span>{this.props.details.flight_or_vessel_number && `${this.props.details.flight_or_vessel_number}`}</span>
                           </Col>
                         </Row>
                         <Row>
