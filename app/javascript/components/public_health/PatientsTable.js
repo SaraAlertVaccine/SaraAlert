@@ -25,6 +25,7 @@ import AdvancedFilter from './AdvancedFilter';
 import BadgeHOH from '../util/BadgeHOH';
 import CloseRecords from './actions/CloseRecords';
 import UpdateCaseStatus from './actions/UpdateCaseStatus';
+import UpdateAssignedUser from './actions/UpdateAssignedUser';
 import InfoTooltip from '../util/InfoTooltip';
 import CustomTable from '../layout/CustomTable';
 import EligibilityTooltip from '../util/EligibilityTooltip';
@@ -578,6 +579,10 @@ class PatientsTable extends React.Component {
                         <i className="fas fa-clipboard-list text-center" style={{ width: '1em' }}></i>
                         <span className="ml-2">Update Case Status</span>
                       </Dropdown.Item>
+                      <Dropdown.Item className="px-3" onClick={() => this.setState({ action: 'Update Assigned User' })}>
+                        <i className="fas fa-user-edit text-center" style={{ width: '1em' }}></i>
+                        <span className="ml-2">Update Case Status</span>
+                      </Dropdown.Item>
                     </DropdownButton>
                   )}
                 </InputGroup>
@@ -614,6 +619,13 @@ class PatientsTable extends React.Component {
           )}
           {this.state.action === 'Update Case Status' && (
             <UpdateCaseStatus
+              authenticity_token={this.props.authenticity_token}
+              patients={this.state.table.rowData.filter((_, index) => this.state.selectedPatients.includes(index))}
+              close={() => this.setState({ action: undefined })}
+            />
+          )}
+          {this.state.action === 'Update Assigned User' && (
+            <UpdateAssignedUser
               authenticity_token={this.props.authenticity_token}
               patients={this.state.table.rowData.filter((_, index) => this.state.selectedPatients.includes(index))}
               close={() => this.setState({ action: undefined })}
