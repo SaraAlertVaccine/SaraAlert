@@ -19,6 +19,8 @@ class History < ApplicationRecord
     report_note: 'Report Note',
     lab_result: 'Lab Result',
     lab_result_edit: 'Lab Result Edit',
+    vaccine_dosage: 'Vaccine Dosage Administered',
+    vaccine_dosage_edit: 'Vaccine Dosage Edit',
     contact_attempt: 'Contact Attempt',
     welcome_message_sent: 'Welcome Message Sent',
     record_automatically_closed: 'Record Automatically Closed'
@@ -93,6 +95,14 @@ class History < ApplicationRecord
 
   def self.lab_result_edit(patient: nil, created_by: 'Sara Alert System', comment: 'User edited a lab result.')
     create_history(patient, created_by, HISTORY_TYPES[:lab_result_edit], comment)
+  end
+
+  def self.vaccine_dosage(patient: nil, created_by: 'Sara Alert System', comment: 'User added a vaccine dosage.')
+    create_history(patient, created_by, HISTORY_TYPES[:vaccine_dosage], comment)
+  end
+
+  def self.vaccine_dosage_edit(patient: nil, created_by: 'Sara Alert System', comment: 'User edited a vaccine dosage ')
+    create_history(patient, created_by, HISTORY_TYPES[:vaccine_dosage_edit], comment)
   end
 
   def self.contact_attempt(patient: nil, created_by: 'Sara Alert System', comment: 'The system attempted to make contact with the monitoree.')

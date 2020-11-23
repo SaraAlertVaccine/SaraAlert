@@ -127,6 +127,7 @@ class Patient < ApplicationRecord
   has_many :transfers
   has_many :laboratories
   has_many :close_contacts
+  has_many :dosages
 
   around_save :inform_responder, if: :responder_id_changed?
   around_destroy :inform_responder
@@ -141,6 +142,11 @@ class Patient < ApplicationRecord
   # Most recent transfer
   def latest_transfer
     transfers.order(created_at: :desc).first
+  end
+
+  # Most recent vaccine dosage
+  def latest_dosage
+    dosages.order(created_at: :desc).first
   end
 
   # Patients who are eligible for reminders
@@ -290,9 +296,10 @@ class Patient < ApplicationRecord
       .distinct
   }
 
-  # Any individual who has any assessments still considered symptomatic (exposure workflow only)
+  # TODO - Change this to be "vaccine" workflow 
+  # Any individual who has any "follow up" assessments(exposure workflow only)
   scope :exposure_followup, lambda {
-    where(isolation: false).symptomatic.distinct
+    where(isolation: false).followup.distinct
   }
 
   scope :exposure_symptomatic, lambda {

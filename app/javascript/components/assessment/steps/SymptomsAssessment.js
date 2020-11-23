@@ -146,18 +146,30 @@ class SymptomsAssessment extends React.Component {
               <Form.Group className="pt-1">
                 {this.state.current.symptoms
                   .filter(x => {
-                    return x.type === 'BoolSymptom';
+                    return x.type === 'BoolSymptom' && x.severity == 2;
                   })
                   .sort((a, b) => {
                     return a?.name?.localeCompare(b?.name);
                   })
                   .map(symp => this.boolSymptom(symp))}
                 {this.noSymptom()}
-                {this.state.current.symptoms
+
+                {/* {this.state.current.symptoms
                   .filter(x => {
                     return x.type === 'FloatSymptom';
                   })
-                  .map(symp => this.floatSymptom(symp))}
+                  .map(symp => this.floatSymptom(symp))} */}
+
+                <br></br>
+                <Form.Label className="nav-input-label">Did any of the symptoms you reported TODAY cause you to:</Form.Label>
+                {this.state.current.symptoms
+                  .filter(x => {
+                    return x.type === 'BoolSymptom' && x.severity == 1;
+                  })
+                  .sort((a, b) => {
+                    return a?.name?.localeCompare(b?.name);
+                  })
+                  .map(symp => this.boolSymptom(symp))}
               </Form.Group>
             </Form.Row>
             <Form.Row className="pt-4">

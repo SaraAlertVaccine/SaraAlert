@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_12_173603) do
+ActiveRecord::Schema.define(version: 2020_11_19_210433) do
 
   create_table "analytics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "jurisdiction_id"
@@ -62,6 +62,23 @@ ActiveRecord::Schema.define(version: 2020_11_12_173603) do
     t.index ["type", "assessment_id"], name: "conditions_index_chain_1"
     t.index ["type", "jurisdiction_id"], name: "conditions_index_chain_3"
     t.index ["type", "threshold_condition_hash", "id"], name: "conditions_index_chain_2"
+  end
+
+  create_table "dosages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.string "cvx"
+    t.string "manufacturer"
+    t.date "expiration_date"
+    t.string "lot_number"
+    t.date "date_given"
+    t.string "sending_org"
+    t.string "admin_route"
+    t.string "admin_suffix"
+    t.string "admin_site"
+    t.integer "dose_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["patient_id"], name: "index_dosages_on_patient_id"
   end
 
   create_table "downloads", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -414,6 +431,7 @@ ActiveRecord::Schema.define(version: 2020_11_12_173603) do
     t.boolean "required", default: true
     t.string "threshold_operator", default: "Less Than"
     t.integer "group", default: 1
+    t.integer "severity"
     t.index ["condition_id"], name: "index_symptoms_on_condition_id"
     t.index ["name", "bool_value", "condition_id"], name: "symptoms_index_chain_1"
   end

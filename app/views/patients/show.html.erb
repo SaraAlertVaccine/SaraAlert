@@ -180,6 +180,106 @@
 <% end %>
 
 
+<% if current_user.can_view_patient_dosages? %>
+<div class="card mx-2 mt-3 mb-4 card-square">
+  <h5 class="card-header">
+    Vaccine Dosages
+  </h5>
+  <div class="m-4">
+    <table class="dosage_table table table-sm table-striped table-bordered table-hover table-smaller-font" style="width:100%">
+      <thead>
+        <tr>
+          <th class="DataTable-table-header">ID</th>
+          <th class="DataTable-table-header">Dose Number</th>
+          <th class="DataTable-table-header">CVX</th>
+          <th class="DataTable-table-header">Manufacturer</th>
+          <th class="DataTable-table-header">Vaccine Expiration Date</th>
+          <th class="DataTable-table-header">Lot Number</th>
+          <th class="DataTable-table-header">Date Administered</th>
+          <th class="DataTable-table-header">Sending Organization</th>
+          <th class="DataTable-table-header">Route of Administration</th>
+          <th class="DataTable-table-header">Administrator Suffix</th>
+          <th class="DataTable-table-header">Vaccination Site on Body</th>
+          <th class="DataTable-table-header">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @patient.dosages.order('created_at').each do |d| -%>
+        <tr>
+          <td><%= d.id %></td>
+          <td><%= d.dose_number%></td>
+          <td><%= d.cvx %></td>
+          <td><%= d.manufacturer %></td>
+          <td><%= d.expiration_date %></td>
+          <td><%= d.lot_number %></td>
+          <td><%= d.date_given %></td>
+          <td><%= d.sending_org%></td>
+          <td><%= d.admin_route%></td>
+          <td><%= d.admin_suffix%></td>
+          <td><%= d.admin_site%></td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: d } ) %>
+            </div>
+          </td>
+        </tr>
+        <% end -%>
+      </tbody>
+    </table>
+    
+    <div class="pb-1">
+      <div class="btn-group" role="group">
+        <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: Dosage.new } ) %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<% if current_user.can_view_patient_laboratories? %>
+<div class="card mx-2 mt-3 mb-4 card-square">
+  <h5 class="card-header">
+    Lab Results
+    <%= react_component('util/InfoTooltip', { tooltipTextKey: 'labResults', location: 'right' }, { style: 'display:inline' }) %>
+  </h5>
+  <div class="m-4">
+    <table class="lab_table table table-sm table-striped table-bordered table-hover table-smaller-font" style="width:100%">
+      <thead>
+        <tr>
+          <th class="DataTable-table-header">ID</th>
+          <th class="DataTable-table-header">Type</th>
+          <th class="DataTable-table-header">Specimen Collected</th>
+          <th class="DataTable-table-header">Report</th>
+          <th class="DataTable-table-header">Result</th>
+          <th class="DataTable-table-header">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @patient.laboratories.order('created_at').each do |lab| -%>
+        <tr>
+          <td><%= lab.id %></td>
+          <td><%= lab.lab_type %></td>
+          <td><%= lab.specimen_collection %></td>
+          <td><%= lab.report %></td>
+          <td><%= lab.result %></td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <%= react_component('laboratory/Laboratory', { authenticity_token: form_authenticity_token, patient: @patient, lab: lab }) %>
+            </div>
+          </td>
+        </tr>
+        <% end -%>
+      </tbody>
+    </table>
+    <div class="pb-1">
+      <div class="btn-group" role="group">
+        <%= react_component('laboratory/Laboratory', { authenticity_token: form_authenticity_token, patient: @patient, lab: Laboratory.new }) %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
 
 <% if current_user.can_modify_subject_status? %>
   <%= react_component('history/HistoryComponent', { patient_id: @patient.id, histories: @patient.histories.order('created_at DESC'), authenticity_token: form_authenticity_token, history_types: @history_types }) %>
@@ -211,6 +311,16 @@
       "pageLength": 15,
       "oLanguage": {
         "sSearch": "Search Lab Results:"
+      },
+      "dom": "<'row'<'col-sm-24 col-md-12'l><'col-sm-24 col-md-12'f>>" + "<'row'<'col-sm-24'tr>>" + "<'row'<'col-sm-24 col-md-10'i><'col-sm-24 col-md-14'p>>"
+    });
+    $('.dosage_table').DataTable({
+      "search": false,
+      "info": false,
+      "lengthMenu": [10, 15, 25, 50],
+      "pageLength": 15,
+      "oLanguage": {
+        "sSearch": "Search Dosages:"
       },
       "dom": "<'row'<'col-sm-24 col-md-12'l><'col-sm-24 col-md-12'f>>" + "<'row'<'col-sm-24'tr>>" + "<'row'<'col-sm-24 col-md-10'i><'col-sm-24 col-md-14'p>>"
     });
