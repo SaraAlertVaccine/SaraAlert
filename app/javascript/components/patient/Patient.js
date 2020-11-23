@@ -4,7 +4,7 @@ import { Col, Row, Button, Collapse, Card, Table } from 'react-bootstrap';
 import moment from 'moment';
 
 import ChangeHOH from '../subject/ChangeHOH';
-import MoveToHousehold from '../subject/MoveToHousehold';
+// import MoveToHousehold from '../subject/MoveToHousehold';
 import RemoveFromHousehold from '../subject/RemoveFromHousehold';
 
 class Patient extends React.Component {
@@ -75,28 +75,7 @@ class Patient extends React.Component {
             </Col>
           </Row>
         )}
-        {this.props?.dependents &&
-          this.props?.dependents?.length == 0 &&
-          this.props?.details?.responder_id &&
-          this.props.details.responder_id == this.props.details.id && (
-            <Row id="no-household" className="pb-3 mx-3">
-              <Col>
-                <Row>This monitoree is not a member of a household:</Row>
-                {this.props?.dependents?.map((member, index) => {
-                  return (
-                    <Row key={'gm' + index}>
-                      <a href={'/patients/' + member.id}>
-                        {member.last_name}, {member.first_name} {member.middle_name || ''}
-                      </a>
-                    </Row>
-                  );
-                })}
-                <Row>
-                  <MoveToHousehold patient={this.props?.details} dependents={this.props?.dependents} authenticity_token={this.props.authenticity_token} />
-                </Row>
-              </Col>
-            </Row>
-          )}
+
         {this.props.jurisdiction_path && (
           <Row id="jurisdiction-path" className="mx-1">
             <Col className="text-truncate">

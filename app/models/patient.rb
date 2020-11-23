@@ -227,6 +227,15 @@ class Patient < ApplicationRecord
     where(monitoring_reason: 'Case confirmed')
   }
 
+  # Any individual needing a follow up 
+  scope :followup, lambda {
+    where(monitoring: true)
+      .where(purged: false)
+      .where(public_health_action: 'None')
+      .where.not(symptom_onset: nil)
+      .distinct
+  }
+
   # Any individual who has any assessments still considered symptomatic (includes patients in both exposure & isolation workflows)
   scope :symptomatic, lambda {
     where(monitoring: true)
@@ -282,6 +291,10 @@ class Patient < ApplicationRecord
   }
 
   # Any individual who has any assessments still considered symptomatic (exposure workflow only)
+  scope :exposure_followup, lambda {
+    where(isolation: false).symptomatic.distinct
+  }
+
   scope :exposure_symptomatic, lambda {
     where(isolation: false).symptomatic.distinct
   }

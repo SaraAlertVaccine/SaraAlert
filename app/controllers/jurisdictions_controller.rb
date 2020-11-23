@@ -40,6 +40,7 @@ class JurisdictionsController < ApplicationController
     # Filter by workflow and tab
     if workflow == :exposure
       patients = patients.where(isolation: false, purged: false)
+      patients = patients.exposure_followup if tab == :followup
       patients = patients.exposure_symptomatic if tab == :symptomatic
       patients = patients.exposure_non_reporting if tab == :non_reporting
       patients = patients.exposure_asymptomatic if tab == :asymptomatic

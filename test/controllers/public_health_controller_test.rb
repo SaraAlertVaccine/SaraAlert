@@ -379,6 +379,9 @@ class PublicHealthControllerTest < ActionController::TestCase
         get :tab_counts, params: { workflow: 'isolation', tab: 'pui' }
         assert_response :bad_request
 
+        get :tab_counts, params: { workflow: 'exposure', tab: 'followup' }
+        assert_equal user.viewable_patients.exposure_followup.size, JSON.parse(response.body)['total']
+
         get :tab_counts, params: { workflow: 'exposure', tab: 'symptomatic' }
         assert_equal user.viewable_patients.exposure_symptomatic.size, JSON.parse(response.body)['total']
 

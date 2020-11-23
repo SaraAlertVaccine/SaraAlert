@@ -64,7 +64,7 @@ class CurrentStatus extends React.Component {
     return (
       <React.Fragment>
         <h1 className="display-6 pb-3">
-          This monitoree is in the <u>{this.props.isolation ? 'isolation' : 'exposure'}</u> workflow, and their current status is{' '}
+          This monitoree is in the <u>{this.props.isolation ? 'isolation' : 'vaccine'}</u> workflow, and their current status is{' '}
           <b>{this.generateStatus(this.props.status)}</b>
           {this.generateInfoHover(this.props.status)}
           {this.generateReportEligibility()}
