@@ -449,7 +449,7 @@ class PatientsController < ApplicationController
     patient = current_user.get_patient(params.permit(:id)[:id])
     patient.assessments.each do |assessment|
       assessment.symptomatic = false
-      asessment.severe = false
+      assessment.severe = false
       assessment.save!
     end
     comment = 'User reviewed all reports.'

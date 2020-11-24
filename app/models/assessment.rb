@@ -217,5 +217,17 @@ class Assessment < ApplicationRecord
                                                  .maximum(:created_at)
       )
     end
+
+    if patient.severe_symptom_onset.nil?
+      new_severe_symptom_onset = patient.assessments.where.not(id: id).where(severe: true).minimum(:created_at)
+      unless new_severe_symptom_onset == patient[:severe_symptom_onset] || !new_severe_symptom_onset.nil?
+        comment = "System cleared severe symptom onset date from #{patient[:severe_symptom_onset].strftime('%m/%d/%Y')} to blank because a 'needs follow up' report was removed."
+        History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: comment)
+      end
+      patient.update(
+        severe_symptom_onset: new_severe_symptom_onset,
+        latest_assessment_at: patient.assessments.where.not(id: id).maximum(:created_at)
+      )
+    end
   end
 end
