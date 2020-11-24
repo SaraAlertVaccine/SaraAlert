@@ -24,7 +24,7 @@ class ImportController < ApplicationController
   def import
     redirect_to(root_url) && return unless current_user.can_import?
 
-    redirect_to(root_url) && return unless params.permit(:workflow)[:workflow] == 'exposure' || params.permit(:workflow)[:workflow] == 'isolation'
+    redirect_to(root_url) && return unless params.permit(:workflow)[:workflow] == 'vaccine' || params.permit(:workflow)[:workflow] == 'isolation'
 
     redirect_to(root_url) && return unless params.permit(:format)[:format] == 'epix' || params.permit(:format)[:format] == 'comprehensive_monitorees'
 

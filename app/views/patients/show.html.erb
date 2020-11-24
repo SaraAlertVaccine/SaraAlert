@@ -18,21 +18,7 @@
                       jurisdiction_path: @patient.jurisdiction[:path]
                     }) %>
 
-<% if current_user.can_modify_subject_status? %>
-<div class="card mx-2 mt-4 mb-4 card-square">
-  <h5 class="card-header">Monitoring Actions</h5>
-  <%= react_component('subject/monitoring_actions/MonitoringActions', {
-                        current_user: current_user,
-                        user_can_transfer: current_user.can_transfer_patients?,
-                        authenticity_token: form_authenticity_token,
-                        has_dependents: @dependents_exclude_hoh.exists?,
-                        in_household_with_member_with_ce_in_exposure: @household_members_with_ce_in_exposure_excludes_patient.count > 1,
-                        patient: @patient,
-                        jurisdiction_paths: @possible_jurisdiction_paths,
-                        assigned_users: @patient.jurisdiction.assigned_users
-                      }) %>
-</div>
-<% end %>
+
 
 <% if current_user.can_view_patient_assessments? %>
 <div class="modal fade" tabindex="-1" role="dialog" id="modal-new">

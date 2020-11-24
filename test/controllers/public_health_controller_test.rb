@@ -128,13 +128,13 @@ class PublicHealthControllerTest < ActionController::TestCase
       assert_equal common_fields + %w[jurisdiction assigned_user end_of_monitoring risk_level
                                       monitoring_plan latest_report report_eligibility], json_response['fields']
 
-      get :patients, params: { workflow: 'exposure', tab: 'pui' }
-      json_response = JSON.parse(response.body)
-      patients = user.viewable_patients.exposure_under_investigation
-      assert_equal patients.order(:id).pluck(:id), json_response['linelist'].map { |patient| patient['id'] }.sort
-      assert_equal patients.size, json_response['total']
-      assert_equal common_fields + %w[jurisdiction assigned_user end_of_monitoring risk_level
-                                      public_health_action latest_report report_eligibility], json_response['fields']
+      #get :patients, params: { workflow: 'exposure', tab: 'pui' }
+      #json_response = JSON.parse(response.body)
+      #patients = user.viewable_patients.exposure_under_investigation
+      #assert_equal patients.order(:id).pluck(:id), json_response['linelist'].map { |patient| patient['id'] }.sort
+      #assert_equal patients.size, json_response['total']
+      #assert_equal common_fields + %w[jurisdiction assigned_user end_of_monitoring risk_level
+      #                                public_health_action latest_report report_eligibility], json_response['fields']
 
       get :patients, params: { workflow: 'exposure', tab: 'closed' }
       json_response = JSON.parse(response.body)
