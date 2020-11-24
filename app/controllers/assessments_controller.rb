@@ -64,7 +64,7 @@ class AssessmentsController < ApplicationController
         assessment_placeholder = {}
         assessment_placeholder = assessment_placeholder.merge(params.permit(:response_status).to_h)
         assessment_placeholder = assessment_placeholder.merge(params.permit(:threshold_hash).to_h)
-        assessment_placeholder = assessment_placeholder.merge(params.permit({ symptoms: %i[name value type label notes required] }).to_h)
+        assessment_placeholder = assessment_placeholder.merge(params.permit({ symptoms: %i[name value type label notes severity required] }).to_h)
         assessment_placeholder['patient_submission_token'] = submission_token_from_params
         # The generic 'experiencing_symptoms' boolean is used in cases where a user does not specify _which_ symptoms they are experiencing,
         # a value of true will result in an assessment being marked as symptomatic regardless of if symptoms are specified
@@ -100,7 +100,7 @@ class AssessmentsController < ApplicationController
       threshold_condition = ThresholdCondition.find_by(threshold_condition_hash: threshold_condition_hash)
       redirect_to(root_url) && return unless threshold_condition
 
-      reported_symptoms_array = params.permit({ symptoms: %i[name value type label notes required] }).to_h['symptoms']
+      reported_symptoms_array = params.permit({ symptoms: %i[name value type label notes severity required] }).to_h['symptoms']
 
       typed_reported_symptoms = Condition.build_symptoms(reported_symptoms_array)
 
@@ -108,6 +108,7 @@ class AssessmentsController < ApplicationController
 
       @assessment = Assessment.new(reported_condition: reported_condition)
       @assessment.symptomatic = @assessment.symptomatic?
+      @assessment.severe = @assessment.severe?
 
       @assessment.patient = patient
 
@@ -139,7 +140,7 @@ class AssessmentsController < ApplicationController
     redirect_to root_url unless current_user&.can_edit_patient_assessments?
     patient = Patient.find_by(submission_token: params.permit(:patient_submission_token)[:patient_submission_token])
     assessment = Assessment.find_by(id: params.permit(:id)[:id])
-    reported_symptoms_array = params.permit({ symptoms: %i[name value type label notes required] }).to_h['symptoms']
+    reported_symptoms_array = params.permit({ symptoms: %i[name value type label notes severity required] }).to_h['symptoms']
 
     typed_reported_symptoms = Condition.build_symptoms(reported_symptoms_array)
 
@@ -155,6 +156,7 @@ class AssessmentsController < ApplicationController
 
     assessment.reported_condition.symptoms = typed_reported_symptoms
     assessment.symptomatic = assessment.symptomatic?
+    assessment.severe = assessment.severe?
     # Monitorees can't edit their own assessments, so the last person to touch this assessment was current_user
     assessment.who_reported = current_user.email
 

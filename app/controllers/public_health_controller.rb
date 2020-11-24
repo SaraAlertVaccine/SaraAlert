@@ -15,7 +15,7 @@ class PublicHealthController < ApplicationController
     # Validate tab param
     tab = permitted_params.require(:tab).to_sym
     if workflow == :exposure
-      return head :bad_request unless %i[all symptomatic non_reporting asymptomatic pui closed transferred_in transferred_out].include?(tab)
+      return head :bad_request unless %i[all followup symptomatic non_reporting asymptomatic pui closed transferred_in transferred_out].include?(tab)
     else
       return head :bad_request unless %i[all requiring_review non_reporting reporting closed transferred_in transferred_out].include?(tab)
     end
@@ -105,7 +105,7 @@ class PublicHealthController < ApplicationController
     # Validate tab param
     tab = params.require(:tab).to_sym
     if workflow == :exposure
-      return head :bad_request unless %i[all symptomatic non_reporting asymptomatic pui closed transferred_in transferred_out].include?(tab)
+      return head :bad_request unless %i[all followup symptomatic non_reporting asymptomatic pui closed transferred_in transferred_out].include?(tab)
     else
       return head :bad_request unless %i[all requiring_review non_reporting reporting closed transferred_in transferred_out].include?(tab)
     end
@@ -124,7 +124,9 @@ class PublicHealthController < ApplicationController
     return current_user.jurisdiction.transferred_in_patients.where(isolation: workflow == :isolation) if tab == :transferred_in
     return current_user.jurisdiction.transferred_out_patients.where(isolation: workflow == :isolation) if tab == :transferred_out
 
+
     if workflow == :exposure
+      return current_user.viewable_patients.exposure_followup if tab == :followup
       return current_user.viewable_patients.exposure_symptomatic if tab == :symptomatic
       return current_user.viewable_patients.exposure_non_reporting if tab == :non_reporting
       return current_user.viewable_patients.exposure_asymptomatic if tab == :asymptomatic

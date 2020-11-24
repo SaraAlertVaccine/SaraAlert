@@ -423,7 +423,8 @@ class PatientsTable extends React.Component {
               <Row>
                 <Col md="18">
                   <div className="lead mt-1 mb-3">
-                    {this.props.tabs[this.state.query.tab].description} You are currently in the <u>{this.props.workflow}</u> workflow.
+                    {/* {this.props.tabs[this.state.query.tab].description} You are currently in the <u>{this.props.workflow}</u> workflow. */}
+                    {this.props.tabs[this.state.query.tab].description} You are currently in the <u>vaccine</u> workflow.
                     {this.props.tabs[this.state.query.tab].tooltip && (
                       <InfoTooltip tooltipTextKey={this.props.tabs[this.state.query.tab].tooltip} location="right"></InfoTooltip>
                     )}

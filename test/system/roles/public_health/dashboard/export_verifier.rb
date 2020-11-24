@@ -155,20 +155,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
               end
             end
 
-    lab_results = xlsx_lab_results.sheet('Lab Results')
-    labs = Laboratory.where(patient_id: patient_ids)
-    assert_equal(labs.size, lab_results.last_row - 1, 'Number of results in Lab Results')
-    lab_headers = ['Patient ID', 'Lab Type', 'Specimen Collection Date', 'Report Date', 'Result Date', 'Created At', 'Updated At']
-    lab_headers.each_with_index do |header, col|
-      assert_equal(header, lab_results.cell(1, col + 1), "For header: #{header} in Lab Results")
-    end
-    labs.each_with_index do |lab, row|
-      details = lab.details
-      details.keys.each_with_index do |field, col|
-        cell_value = lab_results.cell(row + 2, col + 1)
-        assert_equal(details[field].to_s, cell_value || '', "For field: #{field} in Lab Results")
-      end
-    end
+
 
     edit_histories = xlsx_histories.sheet('Edit Histories')
     histories = History.where(patient_id: patient_ids)

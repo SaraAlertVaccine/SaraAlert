@@ -1,7 +1,7 @@
 <% content_for :assets do %>
 <%= javascript_packs_with_chunks_tag 'datatables', 'moment' %>
 <% end %>
-<%= render partial: 'layouts/breadcrumb', locals: { jurisdiction_path: current_user.jurisdiction_path, crumbs: [{ value: 'Return to Exposure Dashboard', href: '/' }, { value: 'Monitoree Details', href: nil }], isolation: @patient&.isolation || false } %>
+<%= render partial: 'layouts/breadcrumb', locals: { jurisdiction_path: current_user.jurisdiction_path, crumbs: [{ value: 'Return to Vaccine Dashboard', href: '/' }, { value: 'Monitoree Details', href: nil }], isolation: @patient&.isolation || false } %>
 
 <% if current_user.can_download_monitoree_data? %>
 <%= react_component('subject/DownloadMonitoreeExcel', { authenticity_token: form_authenticity_token, patient: @patient }) %>
@@ -18,21 +18,7 @@
                       jurisdiction_path: @patient.jurisdiction[:path]
                     }) %>
 
-<% if current_user.can_modify_subject_status? %>
-<div class="card mx-2 mt-4 mb-4 card-square">
-  <h5 class="card-header">Monitoring Actions</h5>
-  <%= react_component('subject/monitoring_actions/MonitoringActions', {
-                        current_user: current_user,
-                        user_can_transfer: current_user.can_transfer_patients?,
-                        authenticity_token: form_authenticity_token,
-                        has_dependents: @dependents_exclude_hoh.exists?,
-                        in_household_with_member_with_ce_in_exposure: @household_members_with_ce_in_exposure_excludes_patient.count > 1,
-                        patient: @patient,
-                        jurisdiction_paths: @possible_jurisdiction_paths,
-                        assigned_users: @patient.jurisdiction.assigned_users
-                      }) %>
-</div>
-<% end %>
+
 
 <% if current_user.can_view_patient_assessments? %>
 <div class="modal fade" tabindex="-1" role="dialog" id="modal-new">
@@ -145,7 +131,6 @@
         <% end -%>
       </tbody>
     </table>
-    <%= react_component('subject/LastDateExposure', { authenticity_token: form_authenticity_token, patient: @patient, is_household_member: @household_members.count > 1 }) %>
   </div>
 </div>
 <% @patient.assessments.order('created_at').each do |assessment| -%>
@@ -178,6 +163,63 @@
   </div>
 </div>
 <% end -%>
+<% end %>
+
+
+<% if current_user.can_view_patient_dosages? %>
+<div class="card mx-2 mt-3 mb-4 card-square">
+  <h5 class="card-header">
+    Vaccine Dosages
+  </h5>
+  <div class="m-4">
+    <table class="dosage_table table table-sm table-striped table-bordered table-hover table-smaller-font" style="width:100%">
+      <thead>
+        <tr>
+          <th class="DataTable-table-header">ID</th>
+          <th class="DataTable-table-header">Dose Number</th>
+          <th class="DataTable-table-header">CVX</th>
+          <th class="DataTable-table-header">Manufacturer</th>
+          <th class="DataTable-table-header">Vaccine Expiration Date</th>
+          <th class="DataTable-table-header">Lot Number</th>
+          <th class="DataTable-table-header">Date Administered</th>
+          <th class="DataTable-table-header">Sending Organization</th>
+          <th class="DataTable-table-header">Route of Administration</th>
+          <th class="DataTable-table-header">Administrator Suffix</th>
+          <th class="DataTable-table-header">Vaccination Site on Body</th>
+          <th class="DataTable-table-header">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @patient.dosages.order('created_at').each do |d| -%>
+        <tr>
+          <td><%= d.id %></td>
+          <td><%= d.dose_number%></td>
+          <td><%= d.cvx %></td>
+          <td><%= d.manufacturer %></td>
+          <td><%= d.expiration_date %></td>
+          <td><%= d.lot_number %></td>
+          <td><%= d.date_given %></td>
+          <td><%= d.sending_org%></td>
+          <td><%= d.admin_route%></td>
+          <td><%= d.admin_suffix%></td>
+          <td><%= d.admin_site%></td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: d } ) %>
+            </div>
+          </td>
+        </tr>
+        <% end -%>
+      </tbody>
+    </table>
+    
+    <div class="pb-1">
+      <div class="btn-group" role="group">
+        <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: Dosage.new } ) %>
+      </div>
+    </div>
+  </div>
+</div>
 <% end %>
 
 <% if current_user.can_view_patient_laboratories? %>
@@ -224,49 +266,6 @@
 </div>
 <% end %>
 
-<% if current_user.can_view_patient_close_contacts? %>
-<div class="card mx-2 mt-3 mb-4 card-square">
-  <h5 class="card-header">
-    Close Contacts
-    <%= react_component('util/InfoTooltip', { tooltipTextKey: 'closeContacts', location: 'right' }, { style: 'display:inline' }) %>
-  </h5>
-  <div class="m-4">
-    <table class="cc_table table table-sm table-striped table-bordered table-hover table-smaller-font" style="width:100%">
-      <thead>
-        <tr>
-          <th class="DataTable-table-header">First Name</th>
-          <th class="DataTable-table-header">Last Name</th>
-          <th class="DataTable-table-header">Phone Number</th>
-          <th class="DataTable-table-header">Email</th>
-          <th class="DataTable-table-header">Contact Attempts</th>
-          <th class="DataTable-table-header">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @patient.close_contacts.order('created_at').each do |cc| -%>
-        <tr>
-          <td><%= cc.first_name %></td>
-          <td><%= cc.last_name %></td>
-          <td><%= cc.primary_telephone %></td>
-          <td><%= cc.email %></td>
-          <td><%= cc.contact_attempts %></td>
-          <td>
-            <div class="btn-group btn-group-sm" role="group">
-              <%= react_component('close_contact/CloseContact', { authenticity_token: form_authenticity_token, patient: @patient, close_contact: cc, can_enroll_patient_close_contacts: current_user.can_enroll_patient_close_contacts? }) %>
-            </div>
-          </td>
-        </tr>
-        <% end -%>
-      </tbody>
-    </table>
-    <div class="pb-1">
-      <div class="btn-group" role="group">
-        <%= react_component('close_contact/CloseContact', { authenticity_token: form_authenticity_token, patient: @patient, close_contact: CloseContact.new, can_enroll_patient_close_contacts: current_user.can_enroll_patient_close_contacts? }) %>
-      </div>
-    </div>
-  </div>
-</div>
-<% end %>
 
 <% if current_user.can_modify_subject_status? %>
   <%= react_component('history/HistoryComponent', { patient_id: @patient.id, histories: @patient.histories.order('created_at DESC'), authenticity_token: form_authenticity_token, history_types: @history_types }) %>
@@ -298,6 +297,16 @@
       "pageLength": 15,
       "oLanguage": {
         "sSearch": "Search Lab Results:"
+      },
+      "dom": "<'row'<'col-sm-24 col-md-12'l><'col-sm-24 col-md-12'f>>" + "<'row'<'col-sm-24'tr>>" + "<'row'<'col-sm-24 col-md-10'i><'col-sm-24 col-md-14'p>>"
+    });
+    $('.dosage_table').DataTable({
+      "search": false,
+      "info": false,
+      "lengthMenu": [10, 15, 25, 50],
+      "pageLength": 15,
+      "oLanguage": {
+        "sSearch": "Search Dosages:"
       },
       "dom": "<'row'<'col-sm-24 col-md-12'l><'col-sm-24 col-md-12'f>>" + "<'row'<'col-sm-24'tr>>" + "<'row'<'col-sm-24 col-md-10'i><'col-sm-24 col-md-14'p>>"
     });

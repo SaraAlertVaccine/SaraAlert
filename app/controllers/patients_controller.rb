@@ -449,6 +449,7 @@ class PatientsController < ApplicationController
     patient = current_user.get_patient(params.permit(:id)[:id])
     patient.assessments.each do |assessment|
       assessment.symptomatic = false
+      assessment.severe = false
       assessment.save!
     end
     comment = 'User reviewed all reports.'
@@ -463,6 +464,7 @@ class PatientsController < ApplicationController
     assessment = patient.assessments.find_by(id: params.permit(:assessment_id)[:assessment_id])
 
     assessment.symptomatic = false
+    assessment.severe = false
     assessment.save!
 
     comment = 'User reviewed a report (ID: ' + assessment.id.to_s + ').'
@@ -608,6 +610,7 @@ class PatientsController < ApplicationController
       :jurisdiction_id,
       :assigned_user,
       :symptom_onset,
+      :severe_symptom_onset,
       :extended_isolation,
       :case_status,
       :continuous_exposure,
@@ -709,6 +712,7 @@ class PatientsController < ApplicationController
       isolation
       pause_notifications
       symptom_onset
+      severe_symptom_onset
       case_status
       assigned_user
       last_date_of_exposure

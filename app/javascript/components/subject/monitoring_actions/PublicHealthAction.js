@@ -165,9 +165,7 @@ class PublicHealthAction extends React.Component {
             onChange={this.handlePublicHealthActionChange}
             value={this.state.public_health_action}>
             <option>None</option>
-            <option>Recommended medical evaluation of symptoms</option>
-            <option>Document results of medical evaluation</option>
-            <option>Recommended laboratory testing</option>
+            <option>Needs Followup</option>
           </Form.Control>
         </div>
         {this.state.showPublicHealthActionModal && this.createModal(this.togglePublicHealthAction, this.submit)}

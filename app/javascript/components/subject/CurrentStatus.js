@@ -12,6 +12,8 @@ class CurrentStatus extends React.Component {
   generateStatus(status) {
     if (status === 'exposure_symptomatic') {
       return <span className="text-danger">symptomatic</span>;
+    } else if (status === 'exposure_followup') {
+      return <span className="text-danger">needs follow up</span>;
     } else if (status === 'exposure_asymptomatic') {
       return <span className="text-success">asymptomatic</span>;
     } else if (status === 'exposure_non_reporting') {
@@ -64,7 +66,7 @@ class CurrentStatus extends React.Component {
     return (
       <React.Fragment>
         <h1 className="display-6 pb-3">
-          This monitoree is in the <u>{this.props.isolation ? 'isolation' : 'exposure'}</u> workflow, and their current status is{' '}
+          This monitoree is in the <u>{this.props.isolation ? 'isolation' : 'vaccine'}</u> workflow, and their current status is{' '}
           <b>{this.generateStatus(this.props.status)}</b>
           {this.generateInfoHover(this.props.status)}
           {this.generateReportEligibility()}
