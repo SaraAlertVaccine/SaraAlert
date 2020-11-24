@@ -10,9 +10,6 @@ import libphonenumber from 'google-libphonenumber';
 import Identification from './steps/Identification';
 import Address from './steps/Address';
 import Contact from './steps/Contact';
-import Arrival from './steps/Arrival';
-import AdditionalPlannedTravel from './steps/AdditionalPlannedTravel';
-import Exposure from './steps/Exposure';
 import Review from './steps/Review';
 import confirmDialog from '../util/ConfirmDialog';
 import reportError from '../util/ReportError';
@@ -24,7 +21,7 @@ class Enrollment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      index: this.props.editMode ? 6 : 0,
+      index: this.props.editMode ? 3 : 0,
       direction: null,
       enrollmentState: {
         patient: pickBy(this.props.patient, identity),
@@ -206,30 +203,6 @@ class Enrollment extends React.Component {
           </Carousel.Item>
           <Carousel.Item>
             <Contact currentState={this.state.enrollmentState} setEnrollmentState={this.setEnrollmentState} previous={this.previous} next={this.next} />
-          </Carousel.Item>
-          <Carousel.Item>
-            <Arrival currentState={this.state.enrollmentState} setEnrollmentState={this.setEnrollmentState} previous={this.previous} next={this.next} />
-          </Carousel.Item>
-          <Carousel.Item>
-            <AdditionalPlannedTravel
-              currentState={this.state.enrollmentState}
-              setEnrollmentState={this.setEnrollmentState}
-              previous={this.previous}
-              next={this.next}
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <Exposure
-              currentState={this.state.enrollmentState}
-              setEnrollmentState={this.setEnrollmentState}
-              previous={this.previous}
-              next={this.next}
-              patient={this.props.patient}
-              has_dependents={this.props.has_dependents}
-              jurisdiction_paths={this.props.jurisdiction_paths}
-              assigned_users={this.props.assigned_users}
-              authenticity_token={this.props.authenticity_token}
-            />
           </Carousel.Item>
           <Carousel.Item>
             <Review
