@@ -50,6 +50,9 @@ Rails.application.routes.draw do
   post '/laboratories', to: 'laboratories#create'
   post '/laboratories/:id', to: 'laboratories#update'
 
+  post '/dosages', to: 'dosages#create'
+  post '/dosages/:id', to: 'dosages#update'
+
   get '/jurisdictions/paths', to: 'jurisdictions#jurisdiction_paths', as: :jurisdiction_paths
   get '/jurisdictions/assigned_users', to: 'jurisdictions#assigned_users_for_viewable_patients', as: :assigned_users_for_viewable_patients
 

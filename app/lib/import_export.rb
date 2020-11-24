@@ -309,6 +309,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
     tabs = {
       closed: patients.monitoring_closed.pluck(:id),
       purged: patients.purged.pluck(:id),
+      exposure_followup: patients.exposure_followup.pluck(:id),
       exposure_symptomatic: patients.exposure_symptomatic.pluck(:id),
       exposure_non_reporting: patients.exposure_non_reporting.pluck(:id),
       exposure_asymptomatic: patients.exposure_asymptomatic.pluck(:id),

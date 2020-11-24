@@ -68,6 +68,21 @@ en:
       congestion-or-runny-nose:
         name: 'Congestion or Runny Nose'
         notes: ''
+      rash:
+        name: 'Rash'
+        notes: 'Not including the area immediately around the injection site'
+      miss-work-due-to-illness:
+        name: 'Miss Work Due to Illness'
+        notes: ''
+      unable-to-do-normal-daily-activities:
+        name: 'Unable to do Normal Daily Activities'
+        notes: ''
+      receive-care-from-a-doctor-or-other-healthcare-professional:
+        name: 'Received Care from a Doctor or other Healthcare Professional'
+        notes: ''
+      issues-at-injection-site:
+        name: 'Issues at Injection Site'
+        notes: 'Such as pain, redness, swelling or itching'
     threshold-op:
       less-than: 'Less Than'
       less-than-or-equal: 'Less Than Or Equal to'
@@ -119,7 +134,7 @@ en:
         daily2-s: ' Is this person '
         daily3: 'experiencing any of the following symptoms: '
         daily4: ' Please reply with "Yes" or "No"'
-        try-again: "I'm sorry, I didn't quite get that. Please reply with \"Yes\" or \"No\". If you have any questions, please contact your local health department."
+        try-again: 'I''m sorry, I didn''t quite get that. Please reply with "Yes" or "No". If you have any questions, please contact your local health department.'
         thanks: 'Thank you for completing your daily report!'
       weblink:
         intro: 'Please complete the Sara Alert Daily Report for'

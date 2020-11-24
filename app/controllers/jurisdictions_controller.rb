@@ -31,7 +31,7 @@ class JurisdictionsController < ApplicationController
     # Validate tab param
     tab = permitted_params[:tab].to_sym unless params.permit(:tab)[:tab].nil?
     return head :bad_request if tab && workflow.nil? ||
-                                workflow == :exposure && !%i[all symptomatic non_reporting asymptomatic pui closed transferred_in].include?(tab) ||
+                                workflow == :exposure && !%i[all followup symptomatic non_reporting asymptomatic pui closed transferred_in].include?(tab) ||
                                 workflow == :isolation && !%i[all requiring_review non_reporting reporting closed transferred_in].include?(tab)
 
     # Start by getting all or immediate patients from jurisdiction
@@ -40,6 +40,7 @@ class JurisdictionsController < ApplicationController
     # Filter by workflow and tab
     if workflow == :exposure
       patients = patients.where(isolation: false, purged: false)
+      patients = patients.exposure_followup if tab == :followup
       patients = patients.exposure_symptomatic if tab == :symptomatic
       patients = patients.exposure_non_reporting if tab == :non_reporting
       patients = patients.exposure_asymptomatic if tab == :asymptomatic

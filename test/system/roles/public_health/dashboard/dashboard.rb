@@ -222,6 +222,6 @@ class PublicHealthDashboard < ApplicationSystemTestCase
   def go_to_other_workflow(workflow)
     click_on 'Isolation Monitoring' if workflow == :exposure
 
-    click_on 'Exposure Monitoring' if workflow == :isolation
+    click_on 'Vaccine Monitoring' if workflow == :isolation
   end
 end

@@ -1,127 +1,170 @@
 # For usage instructions see /config/sara/README.md
 'USA':
-    symptoms:
-        # Key is the symptom name as it will appear to the user
-        'Cough':
-            # The value specified here is the threshold value for the particular symptom
-            # values greater than or equal to this value are considered to be symptomatic
-            # Useable values for type are [FloatSymptom, IntegerSymptom, or BoolSymptom]
-            # The expected threshold value for bool_values should always be true
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 1
-        'Difficulty Breathing':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 1
-        'New Loss of Smell':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 1
-        'New Loss of Taste':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 1
-        'Shortness of Breath':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 1
-        'Fever':
-            value: true
-            type: 'BoolSymptom'
-            notes: 'Feeling feverish or have a measured temperature at or above 100.4°F/38°C'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-        'Used A Fever Reducer':
-            value: true
-            type: 'BoolSymptom'
-            notes: 'In the past 24 hours, have you used any medicine that reduces fevers?'
-            required: false
-            threshold_operator: 'Equal'
-            group: 2
-        'Chills':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-        'Repeated Shaking with Chills':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-        'Muscle Pain':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-        'Headache':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-        'Sore Throat':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-        'Nausea or Vomiting':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-        'Diarrhea':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-        'Fatigue':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-        'Congestion or Runny Nose':
-            value: true
-            type: 'BoolSymptom'
-            required: true
-            threshold_operator: 'Equal'
-            group: 2
-    # Jurisdictions follow a hierarchy, the hierarchy is defined by nesting jurisdictions
-    # in the children: field
-    children:
-        'State 1':
-            phone: '+13455555555'
-            webpage: 'www.example.com'
-            email: 'contact@example.com'
-            message: 'This Is a Custom Jurisdiction Message'
-            symptoms:
-                'Pulse Ox':
-                    value: 90
-                    threshold_operator: 'Less Than'
-                    type: 'FloatSymptom'
-                    required: true
-            children:
-                'County 1':
-                'County 2':
-        'State 2':
-            children:
-                'County 3':
-                'County 4':
+  symptoms:
+    # Key is the symptom name as it will appear to the user
+    # 'Cough':
+    #   # The value specified here is the threshold value for the particular symptom
+    #   # values greater than or equal to this value are considered to be symptomatic
+    #   # Useable values for type are [FloatSymptom, IntegerSymptom, or BoolSymptom]
+    #   # The expected threshold value for bool_values should always be true
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   required: true
+    #   threshold_operator: 'Equal'
+    #   group: 1
+    # 'Difficulty Breathing':
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   required: true
+    #   threshold_operator: 'Equal'
+    #   group: 1
+    # 'New Loss of Smell':
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   required: true
+    #   threshold_operator: 'Equal'
+    #   group: 1
+    # 'New Loss of Taste':
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   required: true
+    #   threshold_operator: 'Equal'
+    #   group: 1
+    # 'Shortness of Breath':
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   required: true
+    #   threshold_operator: 'Equal'
+    #   group: 1
+    # 'Fever':
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   notes: 'Feeling feverish or have a measured temperature at or above 100.4°F/38°C'
+    #   required: true
+    #   threshold_operator: 'Equal'
+    #   group: 2
+    # 'Used A Fever Reducer':
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   notes: 'In the past 24 hours, have you used any medicine that reduces fevers?'
+    #   required: false
+    #   threshold_operator: 'Equal'
+    #   group: 2
+    'Chills':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 2
+    # 'Repeated Shaking with Chills':
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   required: true
+    #   threshold_operator: 'Equal'
+    #   group: 2
+    'Muscle Pain':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 2
+    'Headache':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 2
+    # 'Sore Throat':
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   required: true
+    #   threshold_operator: 'Equal'
+    #   group: 2
+    'Nausea or Vomiting':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 2
+    'Diarrhea':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 2
+    'Fatigue':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 2
+    'Rash':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      notes: 'Not including the area immediately around the injection site'
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 2
+    'Issues at Injection Site':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      notes: 'Such as pain, redness, swelling or itching'
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 2
+    'Miss Work Due to Illness':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 1
+    'Unable to do Normal Daily Activities':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 1
+    'Receive Care from a Doctor or other Healthcare Professional':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 1
+    # 'Congestion or Runny Nose':
+    #   value: true
+    #   type: 'BoolSymptom'
+    #   required: true
+    #   threshold_operator: 'Equal'
+    #   group: 2
+  # Jurisdictions follow a hierarchy, the hierarchy is defined by nesting jurisdictions
+  # in the children: field
+  # children:
+  #   'State 1':
+  #     phone: '+13455555555'
+  #     webpage: 'www.example.com'
+  #     email: 'contact@example.com'
+  #     message: 'This Is a Custom Jurisdiction Message'
+  #     symptoms:
+  #       'Pulse Ox':
+  #         value: 90
+  #         threshold_operator: 'Less Than'
+  #         type: 'FloatSymptom'
+  #         required: true
+  #     children:
+  #       'County 1':
+  #       'County 2':
+  #   'State 2':
+  #     children:
+  #       'County 3':
+  #       'County 4':

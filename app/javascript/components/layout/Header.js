@@ -23,7 +23,7 @@ class Header extends React.Component {
       <React.Fragment>
         <Navbar bg={this.props.show_demo_warning ? 'danger' : 'primary'} variant="dark" expand="lg" className={this.props.show_demo_warning ? '' : 'mb-3'}>
           <Navbar.Brand className="header-brand-text" href={this.props.report_mode ? '/' : this.props.root}>
-            Sara Alert<small className="nav-version ml-1">{this.props.version}</small>
+            VACCS<small className="nav-version ml-1">{this.props.version}</small>
           </Navbar.Brand>
           {this.props.current_user && (
             <React.Fragment>

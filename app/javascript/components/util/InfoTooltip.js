@@ -266,6 +266,13 @@ const TOOLTIP_TEXT = {
     </div>
   ),
 
+  exposure_followup: (
+    <div>
+      Monitorees on this list require public health follow-up to determine if disease is suspected. Follow-up should be based on current guidelines and
+      available resources.
+    </div>
+  ),
+
   exposure_nonReporting: (
     <div>
       Monitorees on this list require public health follow-up to collect missing symptom report(s). Follow-up with these monitorees should be based on current

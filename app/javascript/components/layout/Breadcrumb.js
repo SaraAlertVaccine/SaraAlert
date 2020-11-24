@@ -61,7 +61,7 @@ class Breadcrumb extends React.Component {
                             // Public Health "Return to Isolation Dashboard"
                             location.assign((window.BASE_PATH ? window.BASE_PATH : '') + '/public_health/isolation');
                           } else if (this.renderWorkflowName(crumb['value']).includes('Exposure')) {
-                            // Public Health "Return to Exposure Dashboard"
+                            // Public Health "Return to Vaccine Dashboard"
                             location.assign((window.BASE_PATH ? window.BASE_PATH : '') + '/public_health');
                           } else if (this.renderWorkflowName(crumb['value']).includes('Vaccine')) {
                             // Public Health "Return to Vaccine Dashboard"
