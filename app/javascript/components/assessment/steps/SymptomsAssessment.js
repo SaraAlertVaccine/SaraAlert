@@ -16,7 +16,6 @@ class SymptomsAssessment extends React.Component {
     this.handleNoSymptomChange = this.handleNoSymptomChange.bind(this);
     this.updateBoolSymptomCount = this.updateBoolSymptomCount.bind(this);
     this.navigate = this.navigate.bind(this);
-    console.log(this.state.current);
   }
 
   handleChange(event) {
