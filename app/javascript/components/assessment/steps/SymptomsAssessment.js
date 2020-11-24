@@ -16,6 +16,7 @@ class SymptomsAssessment extends React.Component {
     this.handleNoSymptomChange = this.handleNoSymptomChange.bind(this);
     this.updateBoolSymptomCount = this.updateBoolSymptomCount.bind(this);
     this.navigate = this.navigate.bind(this);
+    console.log(this.state.current);
   }
 
   handleChange(event) {
@@ -158,7 +159,7 @@ class SymptomsAssessment extends React.Component {
                   .filter(x => {
                     return x.type === 'FloatSymptom';
                   })
-                  .map(symp => this.floatSymptom(symp))} */}
+                .map(symp => this.floatSymptom(symp))}*/}
 
                 <br></br>
                 <Form.Label className="nav-input-label">Did any of the symptoms you reported TODAY cause you to:</Form.Label>
