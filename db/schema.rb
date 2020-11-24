@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_19_210433) do
+ActiveRecord::Schema.define(version: 2020_11_24_022805) do
 
   create_table "analytics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "jurisdiction_id"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2020_11_19_210433) do
     t.bigint "patient_id"
     t.boolean "symptomatic"
     t.string "who_reported", default: "Monitoree"
+    t.boolean "severe"
     t.index ["created_at"], name: "assessments_index_chain_1"
     t.index ["patient_id", "created_at"], name: "assessments_index_chain_3"
     t.index ["symptomatic", "patient_id", "created_at"], name: "assessments_index_chain_2"
@@ -370,6 +371,7 @@ ActiveRecord::Schema.define(version: 2020_11_19_210433) do
     t.boolean "user_defined_symptom_onset"
     t.date "extended_isolation"
     t.boolean "head_of_household"
+    t.date "severe_symptom_onset"
     t.index ["assigned_user"], name: "index_patients_on_assigned_user"
     t.index ["creator_id"], name: "index_patients_on_creator_id"
     t.index ["date_of_birth"], name: "index_patients_on_date_of_birth"

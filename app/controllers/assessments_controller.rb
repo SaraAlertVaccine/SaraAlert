@@ -108,6 +108,7 @@ class AssessmentsController < ApplicationController
 
       @assessment = Assessment.new(reported_condition: reported_condition)
       @assessment.symptomatic = @assessment.symptomatic?
+      @assessment.severe = @assessment.severe?
 
       @assessment.patient = patient
 
@@ -155,6 +156,7 @@ class AssessmentsController < ApplicationController
 
     assessment.reported_condition.symptoms = typed_reported_symptoms
     assessment.symptomatic = assessment.symptomatic?
+    assessment.severe = assessment.severe?
     # Monitorees can't edit their own assessments, so the last person to touch this assessment was current_user
     assessment.who_reported = current_user.email
 

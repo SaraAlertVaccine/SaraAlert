@@ -238,7 +238,7 @@ class Patient < ApplicationRecord
     where(monitoring: true)
       .where(purged: false)
       .where(public_health_action: 'None')
-      .where.not(symptom_onset: nil)
+      .where.not(severe_symptom_onset: nil)
       .distinct
   }
 
@@ -247,6 +247,7 @@ class Patient < ApplicationRecord
     where(monitoring: true)
       .where(purged: false)
       .where(public_health_action: 'None')
+      .where(severe_symptom_onset: nil)
       .where.not(symptom_onset: nil)
       .distinct
   }

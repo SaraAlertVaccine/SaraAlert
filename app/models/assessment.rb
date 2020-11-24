@@ -33,6 +33,21 @@ class Assessment < ApplicationRecord
     symptomatic
   end
 
+  def severe?
+    # TODO: For now, we're just going to do this based on severity needs to be 1
+    follow_up_symptoms = 0
+    reported_condition.symptoms.each do |reported_symptom|
+      threshold_symptom = get_threshold_symptom(reported_symptom.name)
+      
+      # Default is less severe
+      symptom_severity = threshold_symptom&.severity || 2
+      symptom_passes = symptom_passes_threshold(reported_symptom.name, threshold_symptom)
+      follow_up_symptoms +=1 if symptom_severity == 1 && symptom_passes
+    end
+    followup = follow_up_symptoms > 0
+    followup
+  end
+
   # symptom_passes_threshold will return true if the REQUIRED symptom with the given name in the reported condition
   # meets the definition of symptomatic as defined in the assocated ThresholdCondition
   def symptom_passes_threshold(symptom_name, threshold_symptom = nil)
@@ -149,6 +164,31 @@ class Assessment < ApplicationRecord
         latest_assessment_at: patient.assessments.maximum(:created_at),
         symptom_onset: new_symptom_onset
       )
+    end
+
+    if patient.user_defined_symptom_onset.present? && !patient.severe_symptom_onset.nil?
+      patient.update(
+        latest_assessment_at: patient.assessments.maximum(:created_at)
+      )
+    else
+      new_severe_symptom_onset = patient.assessments.where(severe: true).minimum(:created_at)&.to_date
+      unless new_severe_symptom_onset == patient[:severe_symptom_onset]
+          comment = if !patient[:severe_symptom_onset].nil? && !new_severe_symptom_onset.nil?
+                      "System changed severe symptom onset date from #{patient[:severe_symptom_onset].strftime('%m/%d/%Y')} to #{new_severe_symptom_onset.strftime('%m/%d/%Y')}
+                      because a report meeting the 'needs follow up' logic was created or updated."
+                    elsif patient[:severe_symptom_onset].nil? && !new_severe_symptom_onset.nil?
+                      "System changed severe symptom onset date from blank to #{new_severe_symptom_onset.strftime('%m/%d/%Y')}
+                      because a report meeting the 'needs follow up' logic was created or updated."
+                    elsif !patient[:severe_symptom_onset].nil? && new_severe_symptom_onset.nil?
+                      "System cleared severe symptom onset date from #{patient[:severe_symptom_onset].strftime('%m/%d/%Y')} to blank
+                      because a report meeting the 'needs follow up' logic was created or updated."
+                    end
+          History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: comment)
+        end
+        patient.update(
+          latest_assessment_at: patient.assessments.maximum(:created_at),
+          severe_symptom_onset: new_severe_symptom_onset
+        )
     end
   end
 
