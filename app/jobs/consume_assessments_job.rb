@@ -113,6 +113,7 @@ class ConsumeAssessmentsJob < ApplicationJob
           reported_condition = ReportedCondition.new(symptoms: typed_reported_symptoms, threshold_condition_hash: message['threshold_condition_hash'])
           assessment = Assessment.new(reported_condition: reported_condition, patient: patient, who_reported: 'Monitoree')
           assessment.symptomatic = assessment.symptomatic? || message['experiencing_symptoms']
+          assessment.severe = assessment.severe?
           queue.commit if assessment.save
         else
           # If message['reported_symptoms_array'] is not populated then this assessment came in through
@@ -130,6 +131,7 @@ class ConsumeAssessmentsJob < ApplicationJob
             reported_condition = ReportedCondition.new(symptoms: typed_reported_symptoms, threshold_condition_hash: message['threshold_condition_hash'])
             assessment = Assessment.new(reported_condition: reported_condition, patient: dependent)
             assessment.symptomatic = assessment.symptomatic? || message['experiencing_symptoms']
+            assessment.severe = assessment.severe? 
             # If current user in the collection of patient + patient dependents is the patient, then that means
             # that they reported for themselves, else we are creating an assessment for the dependent and
             # that means that it was the proxy who reported for them
