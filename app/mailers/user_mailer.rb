@@ -4,7 +4,6 @@ require 'chronic'
 
 # UserMailer: mailers for users
 class UserMailer < ApplicationMailer
-  default from: 'notifications@saraalert.org'
 
   def assessment_job_email(sent, not_sent, eligible)
     @sent = sent

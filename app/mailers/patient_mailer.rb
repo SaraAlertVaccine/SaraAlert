@@ -2,7 +2,6 @@
 
 # PatientMailer: mailers for monitorees
 class PatientMailer < ApplicationMailer
-  default from: 'notifications@saraalert.org'
 
   def enrollment_email(patient)
     return if patient&.email.blank?
