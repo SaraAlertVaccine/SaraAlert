@@ -139,7 +139,7 @@ class ImportController < ApplicationController
         next if field == headers[col_num]
 
         err_msg = "Invalid header in column #{col_num} should be '#{field}' instead of '#{headers[col_num]}'. "\
-                  'Please make sure to use the latest format specified by the Sara Alert Format guidance doc.'
+                  "Please make sure to use the latest format specified by the #{ADMIN_OPTIONS['app_name']} Format guidance doc."
         raise ValidationError.new(err_msg, 1)
       end
     when :epix

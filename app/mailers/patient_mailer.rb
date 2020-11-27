@@ -203,7 +203,7 @@ class PatientMailer < ApplicationMailer
     patient.update(last_assessment_reminder_sent: DateTime.now)
   rescue Twilio::REST::RestError => e
     Rails.logger.warn e.error_message
-    History.report_reminder(patient: patient, comment: "Sara Alert failed to call monitoree at #{patient.primary_telephone}.")
+    History.report_reminder(patient: patient, comment: "#{ADMIN_OPTIONS['app_name']} failed to call monitoree at #{patient.primary_telephone}.")
     patient.update(last_assessment_reminder_sent: DateTime.now)
   end
 
@@ -238,21 +238,21 @@ class PatientMailer < ApplicationMailer
 
   def add_success_history(patient, parent)
     comment = if patient == parent
-                "Sara Alert sent a report reminder to this monitoree via #{parent.preferred_contact_method}."
+                "#{ADMIN_OPTIONS['app_name']} sent a report reminder to this monitoree via #{parent.preferred_contact_method}."
               else
-                "Sara Alert sent a report reminder to this monitoree's HoH via #{parent.preferred_contact_method}."
+                "#{ADMIN_OPTIONS['app_name']} sent a report reminder to this monitoree's HoH via #{parent.preferred_contact_method}."
               end
     History.report_reminder(patient: patient, comment: comment)
   end
 
   def add_fail_history_sms(patient)
-    comment = "Sara Alert attempted to send an SMS to #{patient.primary_telephone}, but the message could not be delivered."
+    comment = "#{ADMIN_OPTIONS['app_name']} attempted to send an SMS to #{patient.primary_telephone}, but the message could not be delivered."
     History.report_reminder(patient: patient, comment: comment)
   end
 
   def add_fail_history_blank_field(patient, type)
     History.report_reminder(patient: patient,
-                            comment: "Sara Alert could not send a report reminder to this monitoree via \
+                            comment: "#{ADMIN_OPTIONS['app_name']} could not send a report reminder to this monitoree via \
                                      #{patient.preferred_contact_method}, because the monitoree #{type} was blank.")
   end
 end
