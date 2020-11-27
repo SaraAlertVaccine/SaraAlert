@@ -72,6 +72,10 @@ class ExportJob < ApplicationJob
                             excel_export_histories(group),
                             build_filename('Sara-Alert-Full-Export-Histories', file_index, file_extension),
                             export_type)
+        lookups << get_file(user_id,
+                            excel_export_dosages(group),
+                            build_filename('Sara-Alert-Full-Export-Dosages', file_index, file_extension),
+                            export_type)
       end
     when 'full_history_purgeable'
       patients = user.viewable_patients.purge_eligible
@@ -93,6 +97,10 @@ class ExportJob < ApplicationJob
         lookups << get_file(user_id,
                             excel_export_histories(group),
                             build_filename('Sara-Alert-Purge-Eligible-Export-Histories', file_index, file_extension),
+                            export_type)
+        lookups << get_file(user_id,
+                            excel_export_dosages(group),
+                            build_filename('Sara-Alert-Purge-Eligible-Export-Dosages', file_index, file_extension),
                             export_type)
       end
     end
