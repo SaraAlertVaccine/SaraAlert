@@ -17,7 +17,7 @@ class Dosage extends React.Component {
       manufacturer: this.props.dosage.manufacturer || '',
       expiration_date: this.props.dosage.expiration_date,
       lot_number: this.props.dosage.lot_number || '',
-      date_given: this.props.dosage.date_given,
+      date_given: this.props.dosage.date_given || new Date().toISOString().slice(0, 10),
       sending_org: this.props.dosage.sending_org || '',
       admin_route: this.props.dosage.admin_route || '',
       admin_suffix: this.props.dosage.admin_suffix || '',
@@ -38,7 +38,7 @@ class Dosage extends React.Component {
         manufacturer: this.props.dosage.manufacturer || '',
         expiration_date: this.props.dosage.expiration_date,
         lot_number: this.props.dosage.lot_number || '',
-        date_given: this.props.dosage.date_given,
+        date_given: this.props.dosage.date_given || new Date().toISOString().slice(0, 10),
         sending_org: this.props.dosage.sending_org || '',
         admin_route: this.props.dosage.admin_route || '',
         admin_suffix: this.props.dosage.admin_suffix || '',
@@ -129,7 +129,11 @@ class Dosage extends React.Component {
             <Row>
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Manufacturer</Form.Label>
-                <Form.Control size="lg" id="manufacturer" className="form-square" value={this.state.manufacturer || ''} onChange={this.handleChange} />
+                <Form.Control as="select" className="form-control-lg" id="manufacturer" onChange={this.handleChange} value={this.state.manufacturer}>
+                  <option disabled></option>
+                  <option>Pfizer</option>
+                  <option>FIXME</option>
+                </Form.Control>
               </Form.Group>
             </Row>
             <Row>
