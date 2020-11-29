@@ -1,46 +1,35 @@
----
-stages:
-  - create-image-1
-  - create-image-2
+include:
+  - template: Auto-DevOps.gitlab-ci.yml
 
-build-push-development-test-image:
-  stage: create-image-1
-  only:
-    refs:
-      - master
-  tags:
-    - shell-exec-required
-  except:
-    - schedules
+  
+build:
+  stage: build
+  image: "registry.gitlab.com/gitlab-org/cluster-integration/auto-build-image:v0.4.0"
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:19.03.12-dind
+  before_script:
+    - cp Production.Dockerfile Dockerfile
   script:
-    - docker build -f DevelopmentTest.Dockerfile --tag $ARTIFACTORY_HOST/$ARTIFACTORY_NAMESPACE_1/$ARTIFACTORY_NAMESPACE_2:development-test --build-arg cert="$(cat $MITRE_CERT_PATH)" .
-    - docker push $ARTIFACTORY_HOST/$ARTIFACTORY_NAMESPACE_1/$ARTIFACTORY_NAMESPACE_2:development-test
-  allow_failure: true
+    - |
+      if [[ -z "$CI_COMMIT_TAG" ]]; then
+        export CI_APPLICATION_REPOSITORY=${CI_APPLICATION_REPOSITORY:-$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG}
+        export CI_APPLICATION_TAG=dev-$CI_COMMIT_SHA
+      else
+        export CI_APPLICATION_REPOSITORY=${CI_APPLICATION_REPOSITORY:-$CI_REGISTRY_IMAGE}
+        export CI_APPLICATION_TAG=${CI_APPLICATION_TAG:-$CI_COMMIT_TAG}
+      fi
+    - /build/build.sh
+  rules:
+    - if: '$AUTO_DEVOPS_PLATFORM_TARGET == "EC2"'
+      when: never
+    - if: '$CI_COMMIT_TAG || $CI_COMMIT_BRANCH'
 
-build-push-staging-image:
-  stage: create-image-1
-  tags:
-    - shell-exec-required
-  only:
-    refs:
-      - master
-  except:
-    - schedules
+build_artifact:
+  stage: build
   script:
-    - docker build -f Production.Dockerfile --tag $ARTIFACTORY_HOST/$ARTIFACTORY_NAMESPACE_1/$ARTIFACTORY_NAMESPACE_2:latest --build-arg cert="$(cat $MITRE_CERT_PATH)" .
-    - docker push $ARTIFACTORY_HOST/$ARTIFACTORY_NAMESPACE_1/$ARTIFACTORY_NAMESPACE_2:latest
-  allow_failure: false
-
-build-push-staging-nginx-image:
-  stage: create-image-2
-  tags:
-    - shell-exec-required
-  only:
-    refs:
-      - master
-  except:
-    - schedules
-  script:
-    - docker build -f Nginx.Dockerfile --tag $ARTIFACTORY_HOST/$ARTIFACTORY_NAMESPACE_1/$ARTIFACTORY_NAMESPACE_3:latest --build-arg sara_alert_image="$ARTIFACTORY_HOST/$ARTIFACTORY_NAMESPACE_1/$ARTIFACTORY_NAMESPACE_2:latest" .
-    - docker push $ARTIFACTORY_HOST/$ARTIFACTORY_NAMESPACE_1/$ARTIFACTORY_NAMESPACE_3:latest
-  allow_failure: false
+    - printf "To build your project, please create a build_artifact job into your .gitlab-ci.yml file.\nMore information at https://docs.gitlab.com/ee/ci/cloud_deployment\n"
+    - exit 1
+  rules:
+    - if: '$AUTO_DEVOPS_PLATFORM_TARGET == "EC2"'
