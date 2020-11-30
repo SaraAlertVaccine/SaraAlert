@@ -150,13 +150,16 @@ class Patient < ApplicationRecord
   end
 
   # Patients who are eligible for reminders
+  # TODO: Right now we're going to just assume that you just need a dosage. So we'll do a simple join
   scope :reminder_eligible, lambda {
     where(purged: false)
+      .joins(:dosages)
       .where(pause_notifications: false)
       .where('patients.id = patients.responder_id')
       .where.not('latest_assessment_at >= ?', Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day)
       .or(
         where(purged: false)
+          .joins(:dosages)
           .where(pause_notifications: false)
           .where('patients.id = patients.responder_id')
           .where(latest_assessment_at: nil)
