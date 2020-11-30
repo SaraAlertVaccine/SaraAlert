@@ -80,6 +80,14 @@
       threshold_operator: 'Equal'
       group: 1
       severity: 1
+    'Additional Symptoms not Mentioned Here':
+      value: ''
+      type: 'TextSymptom'
+      required: true
+      threshold_operator: 'Not Equal'
+      group: 1
+      severity: 1
+
   # Jurisdictions follow a hierarchy, the hierarchy is defined by nesting jurisdictions
   # in the children: field
   children:

@@ -38,7 +38,7 @@ class Assessment < ApplicationRecord
     follow_up_symptoms = 0
     reported_condition.symptoms.each do |reported_symptom|
       threshold_symptom = get_threshold_symptom(reported_symptom.name)
-      
+
       # Default is less severe
       symptom_severity = threshold_symptom&.severity || 2
       symptom_passes = symptom_passes_threshold(reported_symptom.name, threshold_symptom)
@@ -75,6 +75,10 @@ class Assessment < ApplicationRecord
       return reported_symptom.value != threshold_symptom.value if threshold_operator == 'not equal'
       # Bool symptom threshold_operator will fall back to equal
       return true if reported_symptom.value == threshold_symptom.value
+    when 'TextSymptom'
+      return reported_symptom.value.strip != threshold_symptom.value if threshold_operator == 'not equal'
+      # Text symptom threshold_operator will fall back to equal
+      return true if reported_symptom.value.strip == threshold_symptom.value
     end
     false
   end

@@ -112,7 +112,21 @@
           <% if assessment.get_reported_symptom_by_name(column)&.type == "FloatSymptom" || assessment.get_reported_symptom_by_name(column)&.type == "IntegerSymptom"%>
           <td><% if passes_threshold==true -%><span class="concern"><%=symptom_value%></span><% elsif passes_threshold==false -%><%=symptom_value%><%else -%><% end -%></td>
           <% end %>
+
+          <% if assessment.get_reported_symptom_by_name(column)&.type == "TextSymptom"%>
+          <td>
+            <% if passes_threshold==true -%>
+              <span class="concern"><%=symptom_value%></span>
+            <% elsif passes_threshold==false -%>
+              <%=symptom_value%>
+            <%else -%>
+            <% end -%>
+          </td>
           <% end -%>
+          <% end -%>
+
+
+
           <td>
             <div class="dropdown">
               <button class="btn btn-sm btn-outline-primary dropdown-toggle btn-block a-dropdown" type="button" id="actionsButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

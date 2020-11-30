@@ -124,6 +124,28 @@ class SymptomsAssessment extends React.Component {
     );
   };
 
+  textSymptom = symp => {
+    return (
+      <Form.Row className="pt-3" key={`label_key_${symp.name}${this.props.idPre ? '_idpre' + this.props.idPre : ''}`}>
+        <Form.Label className="nav-input-label" key={`label_key_${symp.name}${this.props.idPre ? '_idpre' + this.props.idPre : ''}`}>
+          <b>{this.props.translations[this.props.lang]['symptoms'][symp.name]['name']}</b>{' '}
+          {this.props.translations[this.props.lang]['symptoms'][symp.name]['notes']
+            ? ' ' + this.props.translations[this.props.lang]['symptoms'][symp.name]['notes']
+            : ''}
+        </Form.Label>
+        <Form.Control
+          size="lg"
+          id={`${symp.name}${this.props.idPre ? '_idpre' + this.props.idPre : ''}`}
+          key={`key_${symp.name}${this.props.idPre ? '_idpre' + this.props.idPre : ''}`}
+          className="form-square"
+          value={symp.value || ''}
+          type="text"
+          onChange={this.handleChange}
+        />
+      </Form.Row>
+    );
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -170,6 +192,14 @@ class SymptomsAssessment extends React.Component {
                     return a?.name?.localeCompare(b?.name);
                   })
                   .map(symp => this.boolSymptom(symp))}
+                {this.state.current.symptoms
+                  .filter(x => {
+                    return x.type === 'TextSymptom' && x.severity == 1;
+                  })
+                  .sort((a, b) => {
+                    return a?.name?.localeCompare(b?.name);
+                  })
+                  .map(symp => this.textSymptom(symp))}
               </Form.Group>
             </Form.Row>
             <Form.Row className="pt-4">
