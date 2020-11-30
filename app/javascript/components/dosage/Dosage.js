@@ -169,7 +169,12 @@ class Dosage extends React.Component {
             <Row>
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Sending Organization</Form.Label>
-                <Form.Control size="lg" id="sending_org" className="form-square" value={this.state.sending_org || ''} onChange={this.handleChange} />
+                <Form.Control as="select" className="form-control-lg" id="sending_org" onChange={this.handleChange} value={this.state.sending_org}>
+                  <option disabled></option>
+                  <option>VA</option>
+                  <option>DHS</option>
+                  <option>TSA</option>
+                </Form.Control>
               </Form.Group>
             </Row>
             <Row>
