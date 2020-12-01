@@ -560,6 +560,7 @@ class PatientsTable extends React.Component {
                     onKeyPress={this.handleKeyPress}
                   />
                   <AdvancedFilter
+                    appName={this.props.appName}
                     advancedFilterUpdate={this.advancedFilterUpdate}
                     authenticity_token={this.props.authenticity_token}
                     workflow={this.props.workflow}
@@ -634,6 +635,7 @@ class PatientsTable extends React.Component {
 }
 
 PatientsTable.propTypes = {
+  appName: PropTypes.string,
   authenticity_token: PropTypes.string,
   jurisdiction: PropTypes.exact({
     id: PropTypes.number,

@@ -159,7 +159,7 @@ class Identification extends React.Component {
         if (!fullySupported) {
           let message = languageJson.name;
           if (!sms && !email && !phone) {
-            message += ' is not currently supported by Sara Alert. Any messages sent to this monitoree will be in English.';
+            message += ' is not currently supported by ' + this.props.appName + '. Any messages sent to this monitoree will be in English.';
           } else if (!sms && !email && phone) {
             message +=
               ' is supported for the telephone call method only. If email or SMS texted weblink is selected as the preferred reporting method, messages will be in English.';
@@ -593,6 +593,7 @@ const schema = yup.object().shape({
 });
 
 Identification.propTypes = {
+  appName: PropTypes.string,
   currentState: PropTypes.object,
   next: PropTypes.func,
 };

@@ -122,7 +122,7 @@ class PublicHealthAnalytics extends React.Component {
             </Col>
           </Row>
           <Row className="mb-5 pb-3 mx-2 px-0 pt-4">
-            <GeographicSummary stats={this.props.stats} />
+            <GeographicSummary appName={this.props.appName} stats={this.props.stats} />
           </Row>
         </React.Fragment>
       );
@@ -131,6 +131,7 @@ class PublicHealthAnalytics extends React.Component {
 }
 
 PublicHealthAnalytics.propTypes = {
+  appName: PropTypes.string,
   stats: PropTypes.object,
   current_user: PropTypes.object,
 };
