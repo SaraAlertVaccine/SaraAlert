@@ -681,7 +681,7 @@ class Patient < ApplicationRecord
       when 1
         return unless (dose_date > 7.days.ago.to_date) || (difference % 7 == 0)
       when 2
-        return unless (dose_date > 7.days.ago.to_date) || (difference % 7 == 0 && difference / 7 < 6 && difference / 7 > 0 ) || ((difference % 30 == 0 && (difference / 30 == 6 || difference / 30 == 12 ))
+        return unless (dose_date > 7.days.ago.to_date) || (difference % 7 == 0 && difference / 7 < 6 && difference / 7 > 0 ) || ((difference % 30 == 0 && (difference / 30 == 6 || difference / 30 == 12 )))
       else
         return
       end
