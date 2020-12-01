@@ -536,6 +536,7 @@ class PatientsController < ApplicationController
       :american_indian_or_alaska_native,
       :asian,
       :native_hawaiian_or_other_pacific_islander,
+      :other_race,
       :ethnicity,
       :primary_language,
       :secondary_language,
