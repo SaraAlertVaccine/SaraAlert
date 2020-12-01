@@ -95,7 +95,7 @@ class CountyLevelMaps extends React.Component {
 
     this.usaPolygonNotInUse = this.usaSeriesNotInUse.mapPolygons.template;
     this.usaPolygonNotInUse.tooltipPosition = 'fixed';
-    this.usaPolygonNotInUse.tooltipText = 'Sara Alert Not In Use';
+    this.usaPolygonNotInUse.tooltipText = this.props.appName + ' Not In Use';
     this.usaPolygonNotInUse.nonScalingStroke = true;
     this.usaPolygonNotInUse.fill = am4core.color('#a5a5a5');
 
@@ -170,7 +170,7 @@ class CountyLevelMaps extends React.Component {
 
     this.territoryPolygonNotInUse = this.territorySeriesNotInUse.mapPolygons.template;
     this.territoryPolygonNotInUse.tooltipPosition = 'fixed';
-    this.territoryPolygonNotInUse.tooltipText = '{name} : Sara Alert Not In Use';
+    this.territoryPolygonNotInUse.tooltipText = '{name} : ' + this.props.appName + ' Not In Use';
     this.territoryPolygonNotInUse.nonScalingStroke = true;
     this.territoryPolygonNotInUse.strokeWidth = 1;
     this.territoryPolygonNotInUse.stroke = am4core.color('#333');
@@ -445,6 +445,7 @@ class CountyLevelMaps extends React.Component {
 }
 
 CountyLevelMaps.propTypes = {
+  appName: PropTypes.string,
   id: PropTypes.number,
   jurisdictionToShow: PropTypes.object,
   jurisdictionData: PropTypes.object,

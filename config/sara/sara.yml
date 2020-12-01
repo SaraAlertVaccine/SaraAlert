@@ -42,3 +42,6 @@ sentry_url: <%= ENV["SENTRY_URL"] || '' %>
 
 # Address to send job run results
 job_run_email: <%= ENV["JOB_RUN_EMAIL"] || '' %>
+
+# What the application should reference itself as
+app_name: <%= ENV["APP_NAME"] || 'VACCS' %>

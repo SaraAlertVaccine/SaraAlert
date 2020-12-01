@@ -54,9 +54,9 @@ class Export extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <p>
-            After clicking <b>Start Export</b>, Sara Alert will gather all of the monitoree data that comprises your request and generate an export file. Sara
-            Alert will then send your user account an email with a one-time download link. This process may take several minutes to complete, based on the
-            amount of data present.
+            After clicking <b>Start Export</b>, {this.props.appName} will gather all of the monitoree data that comprises your request and generate an export
+            file. {this.props.appName} will then send your user account an email with a one-time download link. This process may take several minutes to
+            complete, based on the amount of data present.
           </p>
           <p>
             NOTE: The system will store one of each type of export file. If you initiate another export of this file type, any old files will be overwritten and
@@ -92,7 +92,9 @@ class Export extends React.Component {
             </React.Fragment>
           }>
           <Dropdown.Item onClick={() => this.setState({ showCSVModal: true })}>Line list CSV ({this.props.workflow})</Dropdown.Item>
-          <Dropdown.Item onClick={() => this.setState({ showSaraFormatModal: true })}>Sara Alert Format ({this.props.workflow})</Dropdown.Item>
+          <Dropdown.Item onClick={() => this.setState({ showSaraFormatModal: true })}>
+            {this.props.appName} Format ({this.props.workflow})
+          </Dropdown.Item>
           <Dropdown.Item onClick={() => this.setState({ showAllPurgeEligibleModal: true })}>Excel Export For Purge-Eligible Monitorees</Dropdown.Item>
           <Dropdown.Item onClick={() => this.setState({ showAllModal: true })}>Excel Export For All Monitorees</Dropdown.Item>
         </DropdownButton>
@@ -107,7 +109,7 @@ class Export extends React.Component {
           )}
         {this.state.showSaraFormatModal &&
           this.createModal(
-            `Sara Alert Format (${this.props.workflow})`,
+            `${this.props.appName} Format (${this.props.workflow})`,
             () => {
               this.setState({ showSaraFormatModal: false });
             },
@@ -148,6 +150,7 @@ class Export extends React.Component {
 }
 
 Export.propTypes = {
+  appName: PropTypes.string,
   workflow: PropTypes.string,
   authenticity_token: PropTypes.string,
 };

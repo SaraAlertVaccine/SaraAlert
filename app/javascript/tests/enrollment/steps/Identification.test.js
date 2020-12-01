@@ -31,14 +31,14 @@ const requiredStrings = [
 
 describe('Identification', () => {
   it('Properly renders all main components', () => {
-    const wrapper = mount(<Identification goto={() => {}} next={() => {}} setEnrollmentState={() => {}} currentState={newEnrollmentState} />);
+    const wrapper = mount(<Identification appName='Sara Alert' goto={() => {}} next={() => {}} setEnrollmentState={() => {}} currentState={newEnrollmentState} />);
     requiredStrings.forEach(requiredString => {
       expect(wrapper.text().includes(requiredString)).toBe(true);
     })
   });
 
   it('Properly allows setting of all identification information', () => {
-    const wrapper = mount(<Identification goto={() => {}} next={() => {}} setEnrollmentState={() => {}} currentState={newEnrollmentState} />);
+    const wrapper = mount(<Identification appName='Sara Alert' goto={() => {}} next={() => {}} setEnrollmentState={() => {}} currentState={newEnrollmentState} />);
     expect(wrapper.find('#first_name').instance().value).toEqual('')
     expect(wrapper.find('#middle_name').instance().value).toEqual('')
     expect(wrapper.find('#last_name').instance().value).toEqual('')

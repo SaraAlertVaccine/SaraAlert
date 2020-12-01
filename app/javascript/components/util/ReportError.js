@@ -39,13 +39,13 @@ export default function reportError(error, reportToSentry = true) {
         errorExplanationString += 'Invalid permission (Error 403).';
         break;
       case 404:
-        errorExplanationString += 'Failed to communicate with the Sara Alert Server (Error 404).';
+        errorExplanationString += 'Failed to communicate with the Server (Error 404).';
         break;
       case 422:
         errorExplanationString += 'Unprocessable entity (Error 422).';
         break;
       case 500:
-        errorExplanationString += 'An error occurred on the Sara Alert Server (Error 500).';
+        errorExplanationString += 'An error occurred on the Server (Error 500).';
         break;
       case 504:
         errorExplanationString += 'The server timed out (Error 504).';
