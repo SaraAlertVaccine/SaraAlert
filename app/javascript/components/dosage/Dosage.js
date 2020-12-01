@@ -23,6 +23,9 @@ class Dosage extends React.Component {
       admin_suffix: this.props.dosage.admin_suffix || '',
       admin_site: this.props.dosage.admin_site || '',
       dose_number: this.props.dosage.dose_number || '',
+      facility_name: this.props.dosage.facility_name || '',
+      facility_type: this.props.dosage.facility_type || '',
+      facility_address: this.props.dosage.facility_address || '',
     };
     this.toggleModal = this.toggleModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -44,6 +47,9 @@ class Dosage extends React.Component {
         admin_suffix: this.props.dosage.admin_suffix || '',
         admin_site: this.props.dosage.admin_site || '',
         dose_number: this.props.dosage.dose_number || '',
+        facility_name: this.props.dosage.facility_name || '',
+        facility_type: this.props.dosage.facility_type || '',
+        facility_address: this.props.dosage.facility_address || '',
       };
     });
   }
@@ -51,16 +57,6 @@ class Dosage extends React.Component {
   handleChange(event) {
     this.setState({ [event.target.id]: event.target.value });
   }
-
-  // handleDateChange(field, date) {
-  //   // this.setState({ [field]: date }, () => {
-  //   //   this.setState(state => {
-  //   //     return {
-  //   //       reportInvalid: moment(state.report).isBefore(state.specimen_collection, 'day'),
-  //   //     };
-  //   //   });
-  //   // });
-  // }
 
   submit() {
     this.setState({ loading: true }, () => {
@@ -110,6 +106,35 @@ class Dosage extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form>
+            <Row>
+              <Form.Group as={Col}>
+                <Form.Label className="nav-input-label">Facility Name</Form.Label>
+                <Form.Control as="select" className="form-control-lg" id="facility_name" onChange={this.handleChange} value={this.state.facility_name}>
+                  <option>Washington DC VA Medical Center</option>
+                </Form.Control>
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group as={Col}>
+                <Form.Label className="nav-input-label">Facility Type</Form.Label>
+                <Form.Control as="select" className="form-control-lg" id="facility_type" onChange={this.handleChange} value={this.state.facility_type}>
+                  <option disabled></option>
+                  <option>Hospital</option>
+                  <option>CBOC</option>
+                  <option>Mobile Clinic</option>
+                  <option>Other</option>
+                </Form.Control>
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group as={Col}>
+                <Form.Label className="nav-input-label">Facility Address</Form.Label>
+                <Form.Control as="select" className="form-control-lg" id="facility_address" onChange={this.handleChange} value={this.state.facility_address}>
+                  <option disabled>50 Irving St. NW Washington, DC 20422 District of Columbia</option>
+                </Form.Control>
+              </Form.Group>
+            </Row>
+
             <Row>
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Dose Number</Form.Label>

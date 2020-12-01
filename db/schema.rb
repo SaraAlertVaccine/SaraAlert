@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_01_152332) do
+ActiveRecord::Schema.define(version: 2020_12_01_170307) do
 
   create_table "analytics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "jurisdiction_id"
@@ -79,6 +79,9 @@ ActiveRecord::Schema.define(version: 2020_12_01_152332) do
     t.integer "dose_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "facilty_name"
+    t.string "facility_type"
+    t.string "facility_address"
     t.index ["patient_id"], name: "index_dosages_on_patient_id"
   end
 
