@@ -328,8 +328,8 @@ const TOOLTIP_TEXT = {
   purgeDate: (
     <div>
       {' '}
-      In order to minimize the amount of identifiable information stored on the production servers, Sara Alert will purge identifiers in records for which there
-      have been no updates for a defined time period, provided that monitoree is no longer being actively monitored. An update includes any action on the
+      In order to minimize the amount of identifiable information stored on the production servers, the application will purge identifiers in records for which
+      there have been no updates for a defined time period, provided that monitoree is no longer being actively monitored. An update includes any action on the
       record, including adding comments or updating any fields. Local administrators are sent weekly email reminders about records that meet this definition.
       See User Guide for list of fields that are not purged for use in the analytics summary.{' '}
     </div>

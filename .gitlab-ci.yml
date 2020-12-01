@@ -7,7 +7,7 @@ build-push-development-test-image:
   stage: create-image-1
   only:
     refs:
-      - master
+      - develop
   tags:
     - shell-exec-required
   except:
@@ -23,7 +23,7 @@ build-push-staging-image:
     - shell-exec-required
   only:
     refs:
-      - master
+      - develop
   except:
     - schedules
   script:
@@ -37,7 +37,7 @@ build-push-staging-nginx-image:
     - shell-exec-required
   only:
     refs:
-      - master
+      - develop
   except:
     - schedules
   script:
