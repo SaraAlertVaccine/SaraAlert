@@ -72,6 +72,9 @@ class Dosage extends React.Component {
         admin_suffix: this.state.admin_suffix,
         admin_site: this.state.admin_site,
         dose_number: this.state.dose_number,
+        facility_name: this.state.facility_name,
+        facility_type: this.state.facility_type,
+        facility_address: this.state.facility_address,
       };
       console.log('Submission', test);
       axios.defaults.headers.common['X-CSRF-Token'] = this.props.authenticity_token;
@@ -88,6 +91,9 @@ class Dosage extends React.Component {
           admin_suffix: this.state.admin_suffix,
           admin_site: this.state.admin_site,
           dose_number: this.state.dose_number,
+          facility_name: this.state.facility_name,
+          facility_type: this.state.facility_type,
+          facility_address: this.state.facility_address,
         })
         .then(() => {
           location.reload(true);
@@ -110,6 +116,7 @@ class Dosage extends React.Component {
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Facility Name</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="facility_name" onChange={this.handleChange} value={this.state.facility_name}>
+                  <option disabled></option>
                   <option>Washington DC VA Medical Center</option>
                 </Form.Control>
               </Form.Group>
@@ -129,9 +136,7 @@ class Dosage extends React.Component {
             <Row>
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Facility Address</Form.Label>
-                <Form.Control as="select" className="form-control-lg" id="facility_address" onChange={this.handleChange} value={this.state.facility_address}>
-                  <option disabled>50 Irving St. NW Washington, DC 20422 District of Columbia</option>
-                </Form.Control>
+                <Form.Control size="lg" id="facility_address" className="form-square" value={this.state.facility_address} onChange={this.handleChange} />
               </Form.Group>
             </Row>
 

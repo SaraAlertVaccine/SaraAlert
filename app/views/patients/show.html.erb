@@ -186,6 +186,9 @@
           <th class="DataTable-table-header">Route of Administration</th>
           <th class="DataTable-table-header">Administrator Suffix</th>
           <th class="DataTable-table-header">Vaccination Site on Body</th>
+          <th class="DataTable-table-header">Facility Name</th>
+          <th class="DataTable-table-header">Facility Type</th>
+          <th class="DataTable-table-header">Facility Location</th>
           <th class="DataTable-table-header">Actions</th>
         </tr>
       </thead>
@@ -203,6 +206,9 @@
           <td><%= d.admin_route%></td>
           <td><%= d.admin_suffix%></td>
           <td><%= d.admin_site%></td>
+          <td><%= d.facility_name%></td>
+          <td><%= d.facility_type%></td>
+          <td><%= d.facility_address%></td>
           <td>
             <div class="btn-group btn-group-sm" role="group">
               <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: d } ) %>
@@ -215,7 +221,7 @@
 
     <div class="pb-1">
       <div class="btn-group" role="group">
-        <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: Dosage.new } ) %>
+        <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: @new_dosage } ) %>
       </div>
     </div>
   </div>
