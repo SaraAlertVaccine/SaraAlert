@@ -919,6 +919,7 @@ class Patient < ApplicationRecord
       american_indian_or_alaska_native: PatientHelper.race_code?(patient, '1002-5'),
       asian: PatientHelper.race_code?(patient, '2028-9'),
       native_hawaiian_or_other_pacific_islander: PatientHelper.race_code?(patient, '2076-8'),
+      other_race: patient&.other_race.nil? ? false : patient.other_race,
       ethnicity: PatientHelper.ethnicity(patient),
       sex: PatientHelper.birthsex(patient),
       preferred_contact_method: PatientHelper.from_preferred_contact_method_extension(patient),
