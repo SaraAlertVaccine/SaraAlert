@@ -162,7 +162,8 @@ class Dosage extends React.Component {
                 <Form.Control as="select" className="form-control-lg" id="manufacturer" onChange={this.handleChange} value={this.state.manufacturer}>
                   <option disabled></option>
                   <option>Pfizer</option>
-                  <option>FIXME</option>
+                  <option>Moderna</option>
+                  <option>AstraZeneca</option>
                 </Form.Control>
               </Form.Group>
             </Row>
