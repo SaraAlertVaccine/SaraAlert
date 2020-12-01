@@ -679,9 +679,9 @@ class Patient < ApplicationRecord
       # Questionnaires will be sent to Recipient once at the 6 and 12 months marks.
       case latest_dosage&.dose_number
       when 1
-        return unless (dose_date > 7.days.ago.to_date) || (difference % 7 == 0)
+        return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7 == 0)
       when 2
-        return unless (dose_date > 7.days.ago.to_date) || (difference % 7 == 0 && difference / 7 < 6 && difference / 7 > 0 ) || ((difference % 30 == 0 && (difference / 30 == 6 || difference / 30 == 12 )))
+        return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7 == 0 && difference / 7 < 6 && difference / 7 > 0 ) || ((difference % 30 == 0 && (difference / 30 == 6 || difference / 30 == 12 )))
       else
         return
       end
