@@ -76,7 +76,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @num_purgeable_records = num_purgeable_records
     @expiration_date = Chronic.parse(ADMIN_OPTIONS['weekly_purge_date']).strftime('%A %B %d, at %l:%M %p %Z')
-    subject = @num_purgeable_records.zero? ? "#{ADMIN_OPTIONS['app_name']} Notification' : '#{ADMIN_OPTIONS['app_name']} User Records Expiring Soon"
+    subject = @num_purgeable_records.zero? ? "#{ADMIN_OPTIONS['app_name']} Notification" : "#{ADMIN_OPTIONS['app_name']} User Records Expiring Soon"
 
     mail(to: user.email.strip, subject: subject) do |format|
       format.html { render layout: 'main_mailer' }
