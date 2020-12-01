@@ -51,7 +51,7 @@ class PurgeJob < ApplicationJob
        laboratory_personnel was_in_health_care_facility_with_known_cases
        healthcare_personnel crew_on_passenger_or_cargo_flight white
        black_or_african_american american_indian_or_alaska_native asian
-       native_hawaiian_or_other_pacific_islander ethnicity purged
+       native_hawaiian_or_other_pacific_islander other_race ethnicity purged
        continuous_exposure]
   end
 end
