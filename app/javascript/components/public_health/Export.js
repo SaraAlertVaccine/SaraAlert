@@ -55,8 +55,8 @@ class Export extends React.Component {
         <Modal.Body>
           <p>
             After clicking <b>Start Export</b>, {this.props.appName} will gather all of the monitoree data that comprises your request and generate an export
-            file. Sara Alert will then send your user account an email with a one-time download link. This process may take several minutes to complete, based
-            on the amount of data present.
+            file. {this.props.appName} will then send your user account an email with a one-time download link. This process may take several minutes to
+            complete, based on the amount of data present.
           </p>
           <p>
             NOTE: The system will store one of each type of export file. If you initiate another export of this file type, any old files will be overwritten and
