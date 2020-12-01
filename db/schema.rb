@@ -73,12 +73,15 @@ ActiveRecord::Schema.define(version: 2020_12_01_172200) do
     t.string "lot_number"
     t.date "date_given"
     t.string "sending_org"
-    t.string "admin_route"
+    t.string "admin_route", default: "IM"
     t.string "admin_suffix"
     t.string "admin_site"
     t.integer "dose_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "facility_name"
+    t.string "facility_type"
+    t.string "facility_address"
     t.index ["patient_id"], name: "index_dosages_on_patient_id"
   end
 

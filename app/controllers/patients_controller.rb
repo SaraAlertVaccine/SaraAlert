@@ -43,6 +43,12 @@ class PatientsController < ApplicationController
 
     @history_types = History::HISTORY_TYPES
 
+    @new_dosage = Dosage.new(
+      facility_name: 'Washington DC VA Medical Center',
+      facility_type: 'CBOC',
+      facility_address: '50 Irving St. NW Washington, DC 20422 District of Columbia'
+    )
+
     # If we failed to find a subject given the id, redirect to index
     redirect_to(root_url) && return if @patient.nil?
   end

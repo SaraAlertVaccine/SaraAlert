@@ -233,7 +233,7 @@ class Patient < ApplicationRecord
     where(monitoring_reason: 'Case confirmed')
   }
 
-  # Any individual needing a follow up 
+  # Any individual needing a follow up
   scope :followup, lambda {
     where(monitoring: true)
       .where(purged: false)
@@ -297,7 +297,7 @@ class Patient < ApplicationRecord
       .distinct
   }
 
-  # TODO - Change this to be "vaccine" workflow 
+  # TODO - Change this to be "vaccine" workflow
   # Any individual who has any "follow up" assessments(exposure workflow only)
   scope :exposure_followup, lambda {
     where(isolation: false).followup.distinct
@@ -466,6 +466,12 @@ class Patient < ApplicationRecord
       none
     end
   }
+
+  def second_dose_eligible?
+    dosage = latest_dosage
+    return false if dosage.nil?
+    (dosage.dose_number == 1) && ((Time.now.getlocal(address_timezone_offset) - 21.days).to_date >= dosage.date_given)
+  end
 
   # Gets the current date in the patient's timezone
   def curr_date_in_timezone
