@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Form, Row, Col, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
-// import moment from 'moment';
+import moment from 'moment';
 
 import DateInput from '../util/DateInput';
 import reportError from '../util/ReportError';
@@ -23,6 +23,7 @@ class Dosage extends React.Component {
       admin_suffix: this.props.dosage.admin_suffix || '',
       admin_site: this.props.dosage.admin_site || '',
       dose_number: this.props.dosage.dose_number || '',
+      dosageInvalid: false,
     };
     this.toggleModal = this.toggleModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -44,6 +45,7 @@ class Dosage extends React.Component {
         admin_suffix: this.props.dosage.admin_suffix || '',
         admin_site: this.props.dosage.admin_site || '',
         dose_number: this.props.dosage.dose_number || '',
+        dosageInvalid: false,
       };
     });
   }
@@ -52,32 +54,18 @@ class Dosage extends React.Component {
     this.setState({ [event.target.id]: event.target.value });
   }
 
-  // handleDateChange(field, date) {
-  //   // this.setState({ [field]: date }, () => {
-  //   //   this.setState(state => {
-  //   //     return {
-  //   //       reportInvalid: moment(state.report).isBefore(state.specimen_collection, 'day'),
-  //   //     };
-  //   //   });
-  //   // });
-  // }
+  handleDateChange(field, date) {
+    this.setState({ [field]: date }, () => {
+      this.setState(state => {
+        return {
+          dosageInvalid: moment(state.expiration_date).isBefore(state.date_given, 'day'),
+        };
+      });
+    });
+  }
 
   submit() {
     this.setState({ loading: true }, () => {
-      let test = {
-        patient_id: this.props.patient.id,
-        cvx: this.state.cvx,
-        manufacturer: this.state.manufacturer,
-        expiration_date: this.state.expiration_date,
-        lot_number: this.state.lot_number,
-        date_given: this.state.date_given,
-        sending_org: this.state.sending_org,
-        admin_route: this.state.admin_route,
-        admin_suffix: this.state.admin_suffix,
-        admin_site: this.state.admin_site,
-        dose_number: this.state.dose_number,
-      };
-      console.log('Submission', test);
       axios.defaults.headers.common['X-CSRF-Token'] = this.props.authenticity_token;
       axios
         .post(window.BASE_PATH + '/dosages' + (this.props.dosage.id ? '/' + this.props.dosage.id : ''), {
@@ -138,7 +126,7 @@ class Dosage extends React.Component {
                 <DateInput
                   id="expiration_date"
                   date={this.state.expiration_date}
-                  onChange={date => this.setState({ expiration_date: date })}
+                  onChange={date => this.handleDateChange('expiration_date', date)}
                   placement="bottom"
                   customClass="form-control-lg"
                 />
@@ -156,7 +144,7 @@ class Dosage extends React.Component {
                 <DateInput
                   id="date_given"
                   date={this.state.date_given}
-                  onChange={date => this.setState({ date_given: date })}
+                  onChange={date => this.handleDateChange('date_given', date)}
                   placement="bottom"
                   customClass="form-control-lg"
                 />
@@ -212,7 +200,7 @@ class Dosage extends React.Component {
           <Button variant="secondary btn-square" onClick={toggle}>
             Cancel
           </Button>
-          <Button variant="primary btn-square" disabled={this.state.loading} onClick={submit}>
+          <Button variant="primary btn-square" disabled={this.state.loading || this.state.dosageInvalid} onClick={submit}>
             Create
           </Button>
         </Modal.Footer>
