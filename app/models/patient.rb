@@ -146,7 +146,8 @@ class Patient < ApplicationRecord
 
   # Most recent vaccine dosage
   def latest_dosage
-    dosages.order(created_at: :desc).first
+    # dosages.order(created_at: :desc).first
+    dosages.order(date_given: :desc).first
   end
 
   # Patients who are eligible for reminders
@@ -659,24 +660,40 @@ class Patient < ApplicationRecord
     # Stop execution if in CI
     return if Rails.env.test?
 
-    # Return UNLESS:
-    # - in exposure: NOT closed AND within monitoring period OR
-    # - in isolation: NOT closed (as patients on RRR linelist should receive notifications) OR
-    # - in continuous exposure OR
-    # - is a HoH with actively monitored dependents
-    # NOTE: We do not close out folks on the non-reporting line list in exposure (therefore monitoring will still be true for them),
-    # so we also have to check that someone receiving messages is not past they're monitoring period unless they're  in isolation,
-    # continuous exposure, or have active dependents.
-    start_of_exposure = last_date_of_exposure || created_at
-    return unless (monitoring && start_of_exposure >= ADMIN_OPTIONS['monitoring_period_days'].days.ago.beginning_of_day) ||
-                  (monitoring && isolation) ||
-                  (monitoring && continuous_exposure) ||
-                  active_dependents_exclude_self.exists?
+    # Don't send assessments until the user has at least one dose
+    return if latest_dosage.nil?
+
+
+    # start_of_exposure = last_date_of_exposure || created_at
+    # return unless (monitoring && start_of_exposure >= ADMIN_OPTIONS['monitoring_period_days'].days.ago.beginning_of_day) ||
+    #               (monitoring && isolation) ||
+    #               (monitoring && continuous_exposure) ||
+    #               active_dependents_exclude_self.exists?
 
     # Determine if it is yet an appropriate time to send this person a message.
     unless send_now
       # Local "hour" (defaults to eastern if timezone cannot be determined)
       hour = Time.now.getlocal(address_timezone_offset).hour
+
+      now_date = Time.now.getlocal(address_timezone_offset).to_date
+      dose_date = latest_dosage&.date_given&.to_date || latest_dosage&.created_at.to_date
+      difference = (now_date - dose_date).to_i
+      # Determine if this is an appropriate day to send
+      # Daily questionnaire sent daily for 7 days after administration of Dose 1;
+      # Questionnaires will be sent to Recipient weekly until Dose 2 is administered
+      # Dose 2 is administered between 21 and 28 days after Dose 1 has been administered.
+      # Daily questionnaires sent daily for 7 days after dose 2
+      # Questionnaire sent Weekly for 6 weeks after daily Dose 2 questionnaires completed.
+      # Questionnaires will be sent to Recipient once at the 6 and 12 months marks.
+      case latest_dosage&.dose_number
+      when 1
+        return unless (dose_date > 7.days.ago.to_date) || (difference % 7 == 0)
+      when 2
+        return unless (dose_date > 7.days.ago.to_date) || (difference % 7 == 0 && difference / 7 < 6 && difference / 7 > 0 ) || ((difference % 30 == 0 && (difference / 30 == 6 || difference / 30 == 12 ))
+      else
+        return
+      end
+
 
       # These are the hours that we consider to be morning, afternoon and evening
       morning = (8..12)
