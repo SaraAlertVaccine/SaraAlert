@@ -211,7 +211,7 @@
           <td><%= d.facility_address%></td>
           <td>
             <div class="btn-group btn-group-sm" role="group">
-              <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: d } ) %>
+              <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: d, secondDoseEligible: false } ) %>
             </div>
           </td>
         </tr>
@@ -221,7 +221,7 @@
 
     <div class="pb-1">
       <div class="btn-group" role="group">
-        <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: @new_dosage } ) %>
+        <%= react_component("dosage/Dosage", { authenticity_token: form_authenticity_token, patient: @patient, dosage: @new_dosage, secondDoseEligible: @patient.second_dose_eligible? } ) %>
       </div>
     </div>
   </div>

@@ -146,7 +146,7 @@ class Dosage extends React.Component {
                 <Form.Control as="select" className="form-control-lg" id="dose_number" onChange={this.handleChange} value={this.state.dose_number}>
                   <option disabled></option>
                   <option>1</option>
-                  <option>2</option>
+                  <option disabled={this.props.secondDoseEligible ? null : true}>2</option>
                 </Form.Control>
               </Form.Group>
             </Row>
@@ -283,6 +283,7 @@ Dosage.propTypes = {
   dosage: PropTypes.object,
   patient: PropTypes.object,
   authenticity_token: PropTypes.string,
+  secondDoseEligible: PropTypes.bool,
 };
 
 export default Dosage;
