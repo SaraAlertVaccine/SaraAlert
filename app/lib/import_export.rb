@@ -174,6 +174,17 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
           sheet.add_row history.details.values, { types: Array.new(history_headers.length, :string) }
         end
       end
+      p.workbook.add_worksheet(name: 'Dosages') do |sheet|
+        dosages = Dosage.where(patient_id: patients.pluck(:id))
+        dosages_headers = [
+          'Patient ID', 'Dose Number', 'CVX', 'Manufacturer', 'Expriation Date', 'Lot Number', 'Date Administered', 'Sending Organization',
+          'Route of Administration', 'Administrator Suffix', 'Vaccination Site on Body', 'Created At', 'Updated At'
+        ]
+        sheet.add_row dosages_headers
+        dosages.find_each(batch_size: 500) do |dosage|
+          sheet.add_row dosage.details.values, { types: Array.new(dosages_headers.length, :string) }
+        end
+      end
       return Base64.encode64(p.to_stream.read)
     end
   end
@@ -256,6 +267,23 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
         sheet.add_row history_headers
         histories.find_each(batch_size: 500) do |history|
           sheet.add_row history.details.values, { types: Array.new(history_headers.length, :string) }
+        end
+      end
+      return Base64.encode64(p.to_stream.read)
+    end
+  end
+
+  def excel_export_dosages(patients)
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(name: 'Dosages') do |sheet|
+        dosages = Dosage.where(patient_id: patients.pluck(:id))
+        dosages_headers = [
+          'Patient ID', 'Dose Number', 'CVX', 'Manufacturer', 'Expriation Date', 'Lot Number', 'Date Administered', 'Sending Organization',
+          'Route of Administration', 'Administrator Suffix', 'Vaccination Site on Body', 'Created At', 'Updated At'
+        ]
+        sheet.add_row dosages_headers
+        dosages.find_each(batch_size: 500) do |dosage|
+          sheet.add_row dosage.details.values, { types: Array.new(dosages_headers.length, :string) }
         end
       end
       return Base64.encode64(p.to_stream.read)
