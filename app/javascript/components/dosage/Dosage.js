@@ -164,6 +164,7 @@ class Dosage extends React.Component {
                   <option>Pfizer</option>
                   <option>Moderna</option>
                   <option>AstraZeneca</option>
+                  <option>Janssen</option>
                 </Form.Control>
               </Form.Group>
             </Row>
