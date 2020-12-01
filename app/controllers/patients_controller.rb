@@ -126,18 +126,20 @@ class PatientsController < ApplicationController
       patient.monitored_address_zip = patient.address_zip
     end
     helpers.normalize_state_names(patient)
+
+    # NOTE: Remove head of household logic for now
     # Set the responder for this patient, this will link patients that have duplicate primary contact info
-    patient.responder = if params.permit(:responder_id)[:responder_id]
-                          current_user.get_patient(params.permit(:responder_id)[:responder_id])
-                        elsif ['SMS Texted Weblink', 'Telephone call', 'SMS Text-message'].include? patient[:preferred_contact_method]
-                          if current_user.viewable_patients.responder_for_number(patient[:primary_telephone])&.exists?
-                            current_user.viewable_patients.responder_for_number(patient[:primary_telephone]).first
-                          end
-                        elsif patient[:preferred_contact_method] == 'E-mailed Web Link'
-                          if current_user.viewable_patients.responder_for_email(patient[:email])&.exists?
-                            current_user.viewable_patients.responder_for_email(patient[:email]).first
-                          end
-                        end
+    # patient.responder = if params.permit(:responder_id)[:responder_id]
+    #                       current_user.get_patient(params.permit(:responder_id)[:responder_id])
+    #                     elsif ['SMS Texted Weblink', 'Telephone call', 'SMS Text-message'].include? patient[:preferred_contact_method]
+    #                       if current_user.viewable_patients.responder_for_number(patient[:primary_telephone])&.exists?
+    #                         current_user.viewable_patients.responder_for_number(patient[:primary_telephone]).first
+    #                       end
+    #                     elsif patient[:preferred_contact_method] == 'E-mailed Web Link'
+    #                       if current_user.viewable_patients.responder_for_email(patient[:email])&.exists?
+    #                         current_user.viewable_patients.responder_for_email(patient[:email]).first
+    #                       end
+    #                     end
 
     # Default responder to self if no responder condition met
     patient.responder = patient if patient.responder.nil?
