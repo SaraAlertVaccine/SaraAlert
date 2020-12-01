@@ -310,6 +310,7 @@ class GeographicSummary extends React.Component {
               <Col md="12" className="pr-0">
                 <div className="map-title text-center">Active Records in Exposure Workflow</div>
                 <CountyLevelMaps
+                  appName={this.props.appName}
                   id={1} // Some code requires a specific id (e.g. which div to mount the chart on)
                   style={{ borderRight: '1px solid #dcdcdc' }}
                   jurisdictionToShow={this.state.jurisdictionToShow}
@@ -324,6 +325,7 @@ class GeographicSummary extends React.Component {
               <Col md="12" className="pl-0">
                 <div className="map-title text-center">Active Records in Isolation Workflow</div>
                 <CountyLevelMaps
+                  appName={this.props.appName}
                   id={2}
                   jurisdictionToShow={this.state.jurisdictionToShow}
                   jurisdictionData={this.state.isolationMapData}
@@ -395,6 +397,7 @@ class GeographicSummary extends React.Component {
 }
 
 GeographicSummary.propTypes = {
+  appName: PropTypes.string,
   stats: PropTypes.object,
 };
 

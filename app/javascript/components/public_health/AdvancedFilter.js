@@ -103,7 +103,7 @@ class AdvancedFilter extends React.Component {
           type: 'search',
         },
         { name: 'email', title: 'Email (Text)', description: 'Monitoree email address', type: 'search' },
-        { name: 'sara-id', title: 'Sara Alert ID (Text)', description: 'Monitoree Sara Alert ID', type: 'search' },
+        { name: 'sara-id', title: this.props.appName + ' ID (Text)', description: 'Monitoree ' + this.props.appName + 'ID', type: 'search' },
         { name: 'first-name', title: 'Name (First) (Text)', description: 'Monitoree first name', type: 'search' },
         { name: 'middle-name', title: 'Name (Middle) (Text)', description: 'Monitoree middle name', type: 'search' },
         { name: 'last-name', title: 'Name (Last) (Text)', description: 'Monitoree last name', type: 'search' },
@@ -715,6 +715,7 @@ class AdvancedFilter extends React.Component {
 }
 
 AdvancedFilter.propTypes = {
+  appName: PropTypes.string,
   authenticity_token: PropTypes.string,
   advancedFilterUpdate: PropTypes.func,
   workflow: PropTypes.string,
