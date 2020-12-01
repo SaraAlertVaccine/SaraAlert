@@ -91,10 +91,8 @@ class Export extends React.Component {
               <i className="fas fa-download"></i> Export{' '}
             </React.Fragment>
           }>
-          <Dropdown.Item onClick={() => this.setState({ showCSVModal: true })}>Line list CSV ({this.props.workflow})</Dropdown.Item>
-          <Dropdown.Item onClick={() => this.setState({ showSaraFormatModal: true })}>
-            {this.props.appName} Format ({this.props.workflow})
-          </Dropdown.Item>
+          <Dropdown.Item onClick={() => this.setState({ showCSVModal: true })}>Line list CSV (vaccine)</Dropdown.Item>
+          <Dropdown.Item onClick={() => this.setState({ showSaraFormatModal: true })}>{this.props.appName} Format (vaccine)</Dropdown.Item>
           <Dropdown.Item onClick={() => this.setState({ showAllPurgeEligibleModal: true })}>Excel Export For Purge-Eligible Monitorees</Dropdown.Item>
           <Dropdown.Item onClick={() => this.setState({ showAllModal: true })}>Excel Export For All Monitorees</Dropdown.Item>
         </DropdownButton>

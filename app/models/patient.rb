@@ -146,7 +146,6 @@ class Patient < ApplicationRecord
 
   # Most recent vaccine dosage
   def latest_dosage
-    # dosages.order(created_at: :desc).first
     dosages.order(date_given: :desc).first
   end
 
@@ -157,14 +156,7 @@ class Patient < ApplicationRecord
       .joins(:dosages)
       .where(pause_notifications: false)
       .where('patients.id = patients.responder_id')
-      .where.not('latest_assessment_at >= ?', Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day)
-      .or(
-        where(purged: false)
-          .joins(:dosages)
-          .where(pause_notifications: false)
-          .where('patients.id = patients.responder_id')
-          .where(latest_assessment_at: nil)
-      )
+      .where('last_assessment_reminder_sent IS NULL OR latest_assessment_at <= ?', Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day)
       .distinct
   }
 
