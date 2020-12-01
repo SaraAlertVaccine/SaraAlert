@@ -22,6 +22,12 @@ en:
       muscle-pain:
         name: 'Muscle Pain'
         notes: ''
+      muscle-or-body-aches:
+        name: 'Muscle or Body Aches'
+        notes: ''
+      joint-pain:
+        name: 'Joint Pain'
+        notes: ''
       headache:
         name: 'Headache'
         notes: ''
