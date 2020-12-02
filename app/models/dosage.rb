@@ -9,25 +9,26 @@ class Dosage < ApplicationRecord
     #             latest_date: { date: Time.now.to_date },
     #             if: -> {date_given_changed?}
     # validates :admin_site, inclusion: { in: [nil, '', 'deltoid-l', 'deltoid-r', 'thigh-l', 'thigh-r', 'gluteal-l', 'gluteal-r']}
-    
+
   # after_save :update_patient_linelist_after_save
   # before_destroy :update_patient_linelist_before_destroy
 
 
-  
+
   # Information about this dosage
   def details
     {
+      patient_id: patient_id || '',
+      dose_number: dose_number || '',
       cvx: cvx || '',
       manufacturer: manufacturer || '',
       expiration_date: expiration_date || '',
       lot_number: lot_number || '',
-      date_given: date_given ,
+      date_given: date_given || '',
       sending_org: sending_org || '',
       admin_route: admin_route || '',
       admin_suffix: admin_suffix || '',
       admin_site: admin_site || '',
-      dose_number: dose_number || '',
       dosage_created_at: created_at || '',
       dosage_updated_at: updated_at || ''
     }

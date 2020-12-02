@@ -338,11 +338,11 @@ class Fhir::R4::ApiController < ActionController::API
       kind: 'instance',
       date: DateTime.parse('2020-05-28').strftime('%FT%T%:z'),
       software: FHIR::CapabilityStatement::Software.new(
-        name: 'Sara Alert',
+        name: ADMIN_OPTIONS['app_name'],
         version: ADMIN_OPTIONS['version']
       ),
       implementation: FHIR::CapabilityStatement::Implementation.new(
-        description: 'Sara Alert API'
+        description: "#{ADMIN_OPTIONS['app_name']} API"
       ),
       fhirVersion: '4.0.1',
       format: %w[json],

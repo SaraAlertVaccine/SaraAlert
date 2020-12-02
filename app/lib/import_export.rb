@@ -9,7 +9,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
                       'Transferred From', 'Transferred To', 'Expected Purge Date', 'Symptom Onset', 'Extended Isolation'].freeze
 
   COMPREHENSIVE_HEADERS = ['First Name', 'Middle Name', 'Last Name', 'Date of Birth', 'Sex at Birth', 'White', 'Black or African American',
-                           'American Indian or Alaska Native', 'Asian', 'Native Hawaiian or Other Pacific Islander', 'Ethnicity', 'Primary Language',
+                           'American Indian or Alaska Native', 'Asian', 'Native Hawaiian or Other Pacific Islander', 'Other Race', 'Ethnicity', 'Primary Language',
                            'Secondary Language', 'Interpretation Required?', 'Nationality', 'Identifier (STATE/LOCAL)', 'Identifier (CDC)',
                            'Identifier (NNDSS)', 'Address Line 1', 'Address City', 'Address State', 'Address Line 2', 'Address Zip', 'Address County',
                            'Foreign Address Line 1', 'Foreign Address City', 'Foreign Address Country', 'Foreign Address Line 2', 'Foreign Address Zip',
@@ -52,7 +52,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
                    'Exposure Assessment', 'Contact Made?', 'Monitoring needed?', 'Notes'].freeze
 
   COMPREHENSIVE_FIELDS = [:first_name, :middle_name, :last_name, :date_of_birth, :sex, :white, :black_or_african_american, :american_indian_or_alaska_native,
-                          :asian, :native_hawaiian_or_other_pacific_islander, :ethnicity, :primary_language, :secondary_language, :interpretation_required,
+                          :asian, :native_hawaiian_or_other_pacific_islander, :other_race, :ethnicity, :primary_language, :secondary_language, :interpretation_required,
                           :nationality, :user_defined_id_statelocal, :user_defined_id_cdc, :user_defined_id_nndss, :address_line_1, :address_city,
                           :address_state, :address_line_2, :address_zip, :address_county, :foreign_address_line_1, :foreign_address_city,
                           :foreign_address_country, :foreign_address_line_2, :foreign_address_zip, :foreign_address_line_3, :foreign_address_state,
@@ -174,6 +174,17 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
           sheet.add_row history.details.values, { types: Array.new(history_headers.length, :string) }
         end
       end
+      p.workbook.add_worksheet(name: 'Dosages') do |sheet|
+        dosages = Dosage.where(patient_id: patients.pluck(:id))
+        dosages_headers = [
+          'Patient ID', 'Dose Number', 'CVX', 'Manufacturer', 'Expriation Date', 'Lot Number', 'Date Administered', 'Sending Organization',
+          'Route of Administration', 'Administrator Suffix', 'Vaccination Site on Body', 'Created At', 'Updated At'
+        ]
+        sheet.add_row dosages_headers
+        dosages.find_each(batch_size: 500) do |dosage|
+          sheet.add_row dosage.details.values, { types: Array.new(dosages_headers.length, :string) }
+        end
+      end
       return Base64.encode64(p.to_stream.read)
     end
   end
@@ -256,6 +267,23 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
         sheet.add_row history_headers
         histories.find_each(batch_size: 500) do |history|
           sheet.add_row history.details.values, { types: Array.new(history_headers.length, :string) }
+        end
+      end
+      return Base64.encode64(p.to_stream.read)
+    end
+  end
+
+  def excel_export_dosages(patients)
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(name: 'Dosages') do |sheet|
+        dosages = Dosage.where(patient_id: patients.pluck(:id))
+        dosages_headers = [
+          'Patient ID', 'Dose Number', 'CVX', 'Manufacturer', 'Expriation Date', 'Lot Number', 'Date Administered', 'Sending Organization',
+          'Route of Administration', 'Administrator Suffix', 'Vaccination Site on Body', 'Created At', 'Updated At'
+        ]
+        sheet.add_row dosages_headers
+        dosages.find_each(batch_size: 500) do |dosage|
+          sheet.add_row dosage.details.values, { types: Array.new(dosages_headers.length, :string) }
         end
       end
       return Base64.encode64(p.to_stream.read)
@@ -442,6 +470,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
         american_indian_or_alaska_native: patient[:american_indian_or_alaska_native] || false,
         asian: patient[:asian] || false,
         native_hawaiian_or_other_pacific_islander: patient[:native_hawaiian_or_other_pacific_islander] || false,
+        other_race: patient[:other_race] || false, 
         ethnicity: patient[:ethnicity] || '',
         primary_language: patient[:primary_language] || '',
         secondary_language: patient[:secondary_language] || '',

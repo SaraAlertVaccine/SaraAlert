@@ -15,6 +15,7 @@ class EnrollmentFormSteps < ApplicationSystemTestCase
         { id: 'black_or_african_american', type: 'race', required: false, info_page: 'Black or African American', label: 'BLACK OR AFRICAN AMERICAN' },
         { id: 'american_indian_or_alaska_native', type: 'race', required: false, info_page: 'American Indian or Alaska Native', label: 'AMERICAN INDIAN OR ALASKA NATIVE' },
         { id: 'asian', type: 'race', required: false, info_page: 'Asian', label: 'ASIAN' },
+        { id: 'other_race', type: 'race', required: false, info_page: 'Other Race', label: 'OTHER' },
         { id: 'native_hawaiian_or_other_pacific_islander', type: 'race', required: false, info_page: 'Native Hawaiian or Other Pacific Islander', label: 'NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER' },
         { id: 'ethnicity', type: 'select', required: false, info_page: true },
         { id: 'primary_language', type: 'language', required: false, info_page: true },

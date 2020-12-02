@@ -90,11 +90,11 @@ class PublicHealthHeader extends React.Component {
           {this.state.importData && (
             <React.Fragment>
               {this.state.importData.errors.length > 0 && (
-                <Modal.Title as="h5">{this.state.importType === 'epix' ? 'Import Epi-X' : 'Import Sara Alert Format'} (error)</Modal.Title>
+                <Modal.Title as="h5">{this.state.importType === 'epix' ? 'Import Epi-X' : 'Import ' + this.props.appName + ' Format'} (error)</Modal.Title>
               )}
               {this.state.importData.errors.length === 0 && (
                 <Modal.Title as="h5">
-                  {this.state.importType === 'epix' ? 'Import Epi-X' : 'Import Sara Alert Format'} ({this.props.workflow})
+                  {this.state.importType === 'epix' ? 'Import Epi-X' : 'Import ' + this.props.appName + ' Format'} ({this.props.workflow})
                 </Modal.Title>
               )}
             </React.Fragment>
@@ -122,7 +122,7 @@ class PublicHealthHeader extends React.Component {
       <Modal size="md" show={this.state.showUploadModal} onHide={() => this.setState({ showUploadModal: false, importType: null })}>
         <Modal.Header closeButton>
           {this.state.importType === 'epix' && <Modal.Title as="h5">{`Import Epi-X (${this.props.workflow})`}</Modal.Title>}
-          {this.state.importType === 'saf' && <Modal.Title as="h5">{`Import Sara Alert Format (${this.props.workflow})`}</Modal.Title>}
+          {this.state.importType === 'saf' && <Modal.Title as="h5">{`Import ${this.props.appName} Format (${this.props.workflow})`}</Modal.Title>}
         </Modal.Header>
         <Modal.Body>
           {this.state.importType === 'saf' && (
@@ -162,7 +162,9 @@ class PublicHealthHeader extends React.Component {
               )}
             </Button>
           )}
-          {this.props.abilities.export && <Export authenticity_token={this.props.authenticity_token} workflow={this.props.workflow}></Export>}
+          {this.props.abilities.export && (
+            <Export appName={this.props.appName} authenticity_token={this.props.authenticity_token} workflow={this.props.workflow}></Export>
+          )}
           {this.props.abilities.import && (
             <DropdownButton
               as={ButtonGroup}
@@ -175,7 +177,7 @@ class PublicHealthHeader extends React.Component {
               }>
               <Dropdown.Item onClick={() => this.setState({ importType: 'epix', showUploadModal: true })}>Epi-X ({this.props.workflow})</Dropdown.Item>
               <Dropdown.Item onClick={() => this.setState({ importType: 'saf', showUploadModal: true })}>
-                Sara Alert Format ({this.props.workflow})
+                {this.props.appName} Format ({this.props.workflow})
               </Dropdown.Item>
             </DropdownButton>
           )}
@@ -196,6 +198,7 @@ class PublicHealthHeader extends React.Component {
 }
 
 PublicHealthHeader.propTypes = {
+  appName: PropTypes.string,
   authenticity_token: PropTypes.string,
   workflow: PropTypes.oneOf(['exposure', 'isolation']),
   abilities: PropTypes.exact({

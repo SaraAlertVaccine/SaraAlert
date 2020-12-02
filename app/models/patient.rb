@@ -146,21 +146,17 @@ class Patient < ApplicationRecord
 
   # Most recent vaccine dosage
   def latest_dosage
-    dosages.order(created_at: :desc).first
+    dosages.order(date_given: :desc).first
   end
 
   # Patients who are eligible for reminders
+  # TODO: Right now we're going to just assume that you just need a dosage. So we'll do a simple join
   scope :reminder_eligible, lambda {
     where(purged: false)
+      .joins(:dosages)
       .where(pause_notifications: false)
       .where('patients.id = patients.responder_id')
-      .where.not('latest_assessment_at >= ?', Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day)
-      .or(
-        where(purged: false)
-          .where(pause_notifications: false)
-          .where('patients.id = patients.responder_id')
-          .where(latest_assessment_at: nil)
-      )
+      .where('last_assessment_reminder_sent IS NULL OR latest_assessment_at <= ?', Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day)
       .distinct
   }
 
@@ -233,7 +229,7 @@ class Patient < ApplicationRecord
     where(monitoring_reason: 'Case confirmed')
   }
 
-  # Any individual needing a follow up 
+  # Any individual needing a follow up
   scope :followup, lambda {
     where(monitoring: true)
       .where(purged: false)
@@ -297,7 +293,7 @@ class Patient < ApplicationRecord
       .distinct
   }
 
-  # TODO - Change this to be "vaccine" workflow 
+  # TODO - Change this to be "vaccine" workflow
   # Any individual who has any "follow up" assessments(exposure workflow only)
   scope :exposure_followup, lambda {
     where(isolation: false).followup.distinct
@@ -466,6 +462,12 @@ class Patient < ApplicationRecord
       none
     end
   }
+
+  def second_dose_eligible?
+    dosage = latest_dosage
+    return false if dosage.nil?
+    (dosage.dose_number == 1) && ((Time.now.getlocal(address_timezone_offset) - 21.days).to_date >= dosage.date_given)
+  end
 
   # Gets the current date in the patient's timezone
   def curr_date_in_timezone
@@ -656,24 +658,40 @@ class Patient < ApplicationRecord
     # Stop execution if in CI
     return if Rails.env.test?
 
-    # Return UNLESS:
-    # - in exposure: NOT closed AND within monitoring period OR
-    # - in isolation: NOT closed (as patients on RRR linelist should receive notifications) OR
-    # - in continuous exposure OR
-    # - is a HoH with actively monitored dependents
-    # NOTE: We do not close out folks on the non-reporting line list in exposure (therefore monitoring will still be true for them),
-    # so we also have to check that someone receiving messages is not past they're monitoring period unless they're  in isolation,
-    # continuous exposure, or have active dependents.
-    start_of_exposure = last_date_of_exposure || created_at
-    return unless (monitoring && start_of_exposure >= ADMIN_OPTIONS['monitoring_period_days'].days.ago.beginning_of_day) ||
-                  (monitoring && isolation) ||
-                  (monitoring && continuous_exposure) ||
-                  active_dependents_exclude_self.exists?
+    # Don't send assessments until the user has at least one dose
+    return if latest_dosage.nil?
+
+
+    # start_of_exposure = last_date_of_exposure || created_at
+    # return unless (monitoring && start_of_exposure >= ADMIN_OPTIONS['monitoring_period_days'].days.ago.beginning_of_day) ||
+    #               (monitoring && isolation) ||
+    #               (monitoring && continuous_exposure) ||
+    #               active_dependents_exclude_self.exists?
 
     # Determine if it is yet an appropriate time to send this person a message.
     unless send_now
       # Local "hour" (defaults to eastern if timezone cannot be determined)
       hour = Time.now.getlocal(address_timezone_offset).hour
+
+      now_date = Time.now.getlocal(address_timezone_offset).to_date
+      dose_date = latest_dosage&.date_given&.to_date || latest_dosage&.created_at.to_date
+      difference = (now_date - dose_date).to_i
+      # Determine if this is an appropriate day to send
+      # Daily questionnaire sent daily for 7 days after administration of Dose 1;
+      # Questionnaires will be sent to Recipient weekly until Dose 2 is administered
+      # Dose 2 is administered between 21 and 28 days after Dose 1 has been administered.
+      # Daily questionnaires sent daily for 7 days after dose 2
+      # Questionnaire sent Weekly for 6 weeks after daily Dose 2 questionnaires completed.
+      # Questionnaires will be sent to Recipient once at the 6 and 12 months marks.
+      case latest_dosage&.dose_number
+      when 1
+        return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7 == 0)
+      when 2
+        return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7 == 0 && difference / 7 < 6 && difference / 7 > 0 ) || ((difference % 30 == 0 && (difference / 30 == 6 || difference / 30 == 12 )))
+      else
+        return
+      end
+
 
       # These are the hours that we consider to be morning, afternoon and evening
       morning = (8..12)
@@ -919,6 +937,7 @@ class Patient < ApplicationRecord
       american_indian_or_alaska_native: PatientHelper.race_code?(patient, '1002-5'),
       asian: PatientHelper.race_code?(patient, '2028-9'),
       native_hawaiian_or_other_pacific_islander: PatientHelper.race_code?(patient, '2076-8'),
+      other_race: patient&.other_race.nil? ? false : patient.other_race,
       ethnicity: PatientHelper.ethnicity(patient),
       sex: PatientHelper.birthsex(patient),
       preferred_contact_method: PatientHelper.from_preferred_contact_method_extension(patient),

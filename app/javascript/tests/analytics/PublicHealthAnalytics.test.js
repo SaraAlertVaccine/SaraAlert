@@ -4,7 +4,7 @@ import PublicHealthAnalytics from '../../components/analytics/PublicHealthAnalyt
 import { mockUser1 } from '../mocks/mockUsers'
 import mockAnalyticsData from '../mocks/mockAnalytics'
 
-let wrapped = shallow(<PublicHealthAnalytics current_user={mockUser1} stats={mockAnalyticsData} />);
+let wrapped = shallow(<PublicHealthAnalytics appName='Sara Alert' current_user={mockUser1} stats={mockAnalyticsData} />);
 
 describe('PublicHealthAnalytics', () => {
   it('Properly renders all main components', () => {

@@ -162,7 +162,7 @@ class Assessment < ApplicationRecord
                     "System cleared symptom onset date from #{patient[:symptom_onset].strftime('%m/%d/%Y')} to blank
                      because a report meeting the symptomatic logic was created or updated."
                   end
-        History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: comment)
+        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: comment)
       end
       patient.update(
         latest_assessment_at: patient.assessments.maximum(:created_at),
@@ -187,7 +187,7 @@ class Assessment < ApplicationRecord
                       "System cleared severe symptom onset date from #{patient[:severe_symptom_onset].strftime('%m/%d/%Y')} to blank
                       because a report meeting the 'needs follow up' logic was created or updated."
                     end
-          History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: comment)
+          History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: comment)
         end
         patient.update(
           latest_assessment_at: patient.assessments.maximum(:created_at),
@@ -210,7 +210,7 @@ class Assessment < ApplicationRecord
       new_symptom_onset = patient.assessments.where.not(id: id).where(symptomatic: true).minimum(:created_at)
       unless new_symptom_onset == patient[:symptom_onset] || !new_symptom_onset.nil?
         comment = "System cleared symptom onset date from #{patient[:symptom_onset].strftime('%m/%d/%Y')} to blank because a symptomatic report was removed."
-        History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: comment)
+        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: comment)
       end
       patient.update(
         symptom_onset: new_symptom_onset,
@@ -226,7 +226,7 @@ class Assessment < ApplicationRecord
       new_severe_symptom_onset = patient.assessments.where.not(id: id).where(severe: true).minimum(:created_at)
       unless new_severe_symptom_onset == patient[:severe_symptom_onset] || !new_severe_symptom_onset.nil?
         comment = "System cleared severe symptom onset date from #{patient[:severe_symptom_onset].strftime('%m/%d/%Y')} to blank because a 'needs follow up' report was removed."
-        History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: comment)
+        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: comment)
       end
       patient.update(
         severe_symptom_onset: new_severe_symptom_onset,
