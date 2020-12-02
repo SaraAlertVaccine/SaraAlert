@@ -43,6 +43,12 @@ class PatientsController < ApplicationController
 
     @history_types = History::HISTORY_TYPES
 
+    @new_dosage = Dosage.new(
+      facility_name: 'Washington DC VA Medical Center',
+      facility_type: 'CBOC',
+      facility_address: '50 Irving St. NW Washington, DC 20422 District of Columbia'
+    )
+
     # If we failed to find a subject given the id, redirect to index
     redirect_to(root_url) && return if @patient.nil?
   end
@@ -314,7 +320,7 @@ class PatientsController < ApplicationController
     if params.permit(:apply_to_household_cm_exp_only)[:apply_to_household_cm_exp_only] && params[:apply_to_household_cm_exp_only_date].present?
       # Only update dependents (not including the HoH) in exposure with continuoous exposure is turned on
       (current_user.get_patient(patient.responder_id)&.dependents_exclude_self&.where(continuous_exposure: true, isolation: false) || []).uniq.each do |member|
-        History.monitoring_change(patient: member, created_by: 'Sara Alert System', comment: "User updated Monitoring Status for another member in this
+        History.monitoring_change(patient: member, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: "User updated Monitoring Status for another member in this
         monitoree's household and chose to update Last Date of Exposure for household members so System changed Last Date of Exposure from
         #{member[:last_date_of_exposure] ? member[:last_date_of_exposure].to_date.strftime('%m/%d/%Y') : 'blank'} to
         #{params[:apply_to_household_cm_exp_only_date].to_date.strftime('%m/%d/%Y')} and turned OFF Continuous Exposure.")
@@ -362,7 +368,7 @@ class PatientsController < ApplicationController
     # If the monitoree record was closed, set continuous exposure to be false and set the closed at time.
     if params_to_update.include?(:monitoring) && params.require(:patient).permit(:monitoring)[:monitoring] != patient.monitoring && patient.monitoring
       if patient[:continuous_exposure]
-        History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: 'System turned off Continuous Exposure because the record was
+        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'System turned off Continuous Exposure because the record was
         moved to the closed line list.')
       end
       patient.continuous_exposure = false
@@ -384,7 +390,7 @@ class PatientsController < ApplicationController
       params_to_update << :extended_isolation
       params[:patient][:extended_isolation] = nil
       unless patient[:extended_isolation].nil?
-        History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: 'System cleared Extended Isolation Date because monitoree was
+        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'System cleared Extended Isolation Date because monitoree was
         moved from isolation to exposure workflow.')
       end
     end
@@ -395,7 +401,7 @@ class PatientsController < ApplicationController
       message = patient[:monitoring] ? "System changed Latest Public Health Action from \"#{patient[:public_health_action]}\" to \"None\" so that the monitoree
                                         will appear on the appropriate line list in the exposure workflow to continue monitoring."
                                      : "System changed Latest Public Health Action from \"#{patient[:public_health_action]}\" to \"None\"."
-      History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: message)
+      History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: message)
       params_to_update << :public_health_action
       params[:patient][:public_health_action] = 'None'
     end
@@ -442,7 +448,7 @@ class PatientsController < ApplicationController
               else
                 'System changed Symptom Onset Date. This allows the system to show monitoree on appropriate line list based on daily reports.'
               end
-    History.monitoring_change(patient: patient, created_by: 'Sara Alert System', comment: comment)
+    History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: comment)
   end
 
   def clear_assessments
@@ -536,6 +542,7 @@ class PatientsController < ApplicationController
       :american_indian_or_alaska_native,
       :asian,
       :native_hawaiian_or_other_pacific_islander,
+      :other_race,
       :ethnicity,
       :primary_language,
       :secondary_language,

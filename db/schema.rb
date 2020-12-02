@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_022805) do
+ActiveRecord::Schema.define(version: 2020_12_01_172200) do
 
   create_table "analytics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "jurisdiction_id"
@@ -73,12 +73,15 @@ ActiveRecord::Schema.define(version: 2020_11_24_022805) do
     t.string "lot_number"
     t.date "date_given"
     t.string "sending_org"
-    t.string "admin_route"
+    t.string "admin_route", default: "IM"
     t.string "admin_suffix"
     t.string "admin_site"
     t.integer "dose_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "facility_name"
+    t.string "facility_type"
+    t.string "facility_address"
     t.index ["patient_id"], name: "index_dosages_on_patient_id"
   end
 
@@ -372,6 +375,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_022805) do
     t.date "extended_isolation"
     t.boolean "head_of_household"
     t.date "severe_symptom_onset"
+    t.boolean "other_race"
     t.index ["assigned_user"], name: "index_patients_on_assigned_user"
     t.index ["creator_id"], name: "index_patients_on_creator_id"
     t.index ["date_of_birth"], name: "index_patients_on_date_of_birth"

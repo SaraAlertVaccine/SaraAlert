@@ -8,7 +8,14 @@
       threshold_operator: 'Equal'
       group: 1
       severity: 2
-    'Muscle Pain':
+    'Muscle or Body Aches':
+      value: true
+      type: 'BoolSymptom'
+      required: true
+      threshold_operator: 'Equal'
+      group: 1
+      severity: 2
+    'Joint Pain':
       value: true
       type: 'BoolSymptom'
       required: true

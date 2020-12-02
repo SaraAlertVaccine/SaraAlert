@@ -53,67 +53,67 @@ class History < ApplicationRecord
     end
   }
 
-  def self.record_edit(patient: nil, created_by: 'Sara Alert System', comment: 'User edited a record.')
+  def self.record_edit(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User edited a record.')
     create_history(patient, created_by, HISTORY_TYPES[:record_edit], comment)
   end
 
-  def self.report_created(patient: nil, created_by: 'Sara Alert System', comment: 'User created a new report.')
+  def self.report_created(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User created a new report.')
     create_history(patient, created_by, HISTORY_TYPES[:report_created], comment)
   end
 
-  def self.report_updated(patient: nil, created_by: 'Sara Alert System', comment: 'User updated existing report.')
+  def self.report_updated(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User updated existing report.')
     create_history(patient, created_by, HISTORY_TYPES[:report_updated], comment)
   end
 
-  def self.enrollment(patient: nil, created_by: 'Sara Alert System', comment: 'User enrolled monitoree.')
+  def self.enrollment(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User enrolled monitoree.')
     create_history(patient, created_by, HISTORY_TYPES[:enrollment], comment)
   end
 
-  def self.monitoring_change(patient: nil, created_by: 'Sara Alert System', comment: 'User updated monitoree.')
+  def self.monitoring_change(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User updated monitoree.')
     create_history(patient, created_by, HISTORY_TYPES[:monitoring_change], comment)
   end
 
-  def self.monitoree_data_downloaded(patient: nil, created_by: 'Sara Alert System', comment: 'User downloaded monitoree\'s data in Excel Export.')
+  def self.monitoree_data_downloaded(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User downloaded monitoree\'s data in Excel Export.')
     create_history(patient, created_by, HISTORY_TYPES[:monitoree_data_downloaded], comment)
   end
 
-  def self.reports_reviewed(patient: nil, created_by: 'Sara Alert System', comment: 'User reviewed all reports.')
+  def self.reports_reviewed(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User reviewed all reports.')
     create_history(patient, created_by, HISTORY_TYPES[:reports_reviewed], comment)
   end
 
-  def self.report_reviewed(patient: nil, created_by: 'Sara Alert System', comment: 'User reviewed a report.')
+  def self.report_reviewed(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User reviewed a report.')
     create_history(patient, created_by, HISTORY_TYPES[:report_reviewed], comment)
   end
 
-  def self.report_reminder(patient: nil, created_by: 'Sara Alert System', comment: 'User sent a report reminder to the monitoree.')
+  def self.report_reminder(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User sent a report reminder to the monitoree.')
     create_history(patient, created_by, HISTORY_TYPES[:report_reminder], comment) unless patient&.preferred_contact_method.nil?
   end
 
-  def self.lab_result(patient: nil, created_by: 'Sara Alert System', comment: 'User added a new lab result.')
+  def self.lab_result(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User added a new lab result.')
     create_history(patient, created_by, HISTORY_TYPES[:lab_result], comment)
   end
 
-  def self.lab_result_edit(patient: nil, created_by: 'Sara Alert System', comment: 'User edited a lab result.')
+  def self.lab_result_edit(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User edited a lab result.')
     create_history(patient, created_by, HISTORY_TYPES[:lab_result_edit], comment)
   end
 
-  def self.vaccine_dosage(patient: nil, created_by: 'Sara Alert System', comment: 'User added a vaccine dosage.')
+  def self.vaccine_dosage(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User added a vaccine dosage.')
     create_history(patient, created_by, HISTORY_TYPES[:vaccine_dosage], comment)
   end
 
-  def self.vaccine_dosage_edit(patient: nil, created_by: 'Sara Alert System', comment: 'User edited a vaccine dosage ')
+  def self.vaccine_dosage_edit(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User edited a vaccine dosage ')
     create_history(patient, created_by, HISTORY_TYPES[:vaccine_dosage_edit], comment)
   end
 
-  def self.contact_attempt(patient: nil, created_by: 'Sara Alert System', comment: 'The system attempted to make contact with the monitoree.')
+  def self.contact_attempt(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'The system attempted to make contact with the monitoree.')
     create_history(patient, created_by, HISTORY_TYPES[:contact_attempt], comment)
   end
 
-  def self.welcome_message_sent(patient: nil, created_by: 'Sara Alert System', comment: 'Initial Sara Alert welcome message was sent.')
+  def self.welcome_message_sent(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: "Initial #{ADMIN_OPTIONS['app_name']} welcome message was sent.")
     create_history(patient, created_by, HISTORY_TYPES[:welcome_message_sent], comment)
   end
 
-  def self.record_automatically_closed(patient: nil, created_by: 'Sara Alert System', comment: 'Monitoree has completed monitoring.')
+  def self.record_automatically_closed(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'Monitoree has completed monitoring.')
     create_history(patient, created_by, HISTORY_TYPES[:record_automatically_closed], comment)
   end
 

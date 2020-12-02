@@ -159,7 +159,7 @@ class Identification extends React.Component {
         if (!fullySupported) {
           let message = languageJson.name;
           if (!sms && !email && !phone) {
-            message += ' is not currently supported by Sara Alert. Any messages sent to this monitoree will be in English.';
+            message += ' is not currently supported by ' + this.props.appName + '. Any messages sent to this monitoree will be in English.';
           } else if (!sms && !email && phone) {
             message +=
               ' is supported for the telephone call method only. If email or SMS texted weblink is selected as the preferred reporting method, messages will be in English.';
@@ -390,6 +390,14 @@ class Identification extends React.Component {
                     checked={this.state.current.patient.native_hawaiian_or_other_pacific_islander}
                     onChange={this.handleChange}
                   />
+                  <Form.Check
+                    className="pt-2"
+                    type="switch"
+                    id="other_race"
+                    label="OTHER"
+                    checked={this.state.current.patient.other_race}
+                    onChange={this.handleChange}
+                  />
                 </Form.Group>
                 <Form.Group as={Col} md="1"></Form.Group>
                 <Form.Group as={Col} md="8" controlId="ethnicity">
@@ -569,6 +577,7 @@ const schema = yup.object().shape({
   american_indian_or_alaska_native: yup.boolean().nullable(),
   asian: yup.boolean().nullable(),
   native_hawaiian_or_other_pacific_islander: yup.boolean().nullable(),
+  other_race: yup.boolean().nullable(),
   ethnicity: yup
     .string()
     .max(200, 'Max length exceeded, please limit to 200 characters.')
@@ -593,6 +602,7 @@ const schema = yup.object().shape({
 });
 
 Identification.propTypes = {
+  appName: PropTypes.string,
   currentState: PropTypes.object,
   next: PropTypes.func,
 };
