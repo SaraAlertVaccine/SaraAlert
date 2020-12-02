@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Form, Row, Col, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
-// import moment from 'moment';
+import moment from 'moment';
 
 import DateInput from '../util/DateInput';
 import reportError from '../util/ReportError';
@@ -17,12 +17,16 @@ class Dosage extends React.Component {
       manufacturer: this.props.dosage.manufacturer || '',
       expiration_date: this.props.dosage.expiration_date,
       lot_number: this.props.dosage.lot_number || '',
-      date_given: this.props.dosage.date_given,
+      date_given: this.props.dosage.date_given || new Date().toISOString().slice(0, 10),
       sending_org: this.props.dosage.sending_org || '',
       admin_route: this.props.dosage.admin_route || '',
       admin_suffix: this.props.dosage.admin_suffix || '',
       admin_site: this.props.dosage.admin_site || '',
       dose_number: this.props.dosage.dose_number || '',
+      facility_name: this.props.dosage.facility_name || '',
+      facility_type: this.props.dosage.facility_type || '',
+      facility_address: this.props.dosage.facility_address || '',
+      dosageInvalid: false,
     };
     this.toggleModal = this.toggleModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -38,12 +42,16 @@ class Dosage extends React.Component {
         manufacturer: this.props.dosage.manufacturer || '',
         expiration_date: this.props.dosage.expiration_date,
         lot_number: this.props.dosage.lot_number || '',
-        date_given: this.props.dosage.date_given,
+        date_given: this.props.dosage.date_given || new Date().toISOString().slice(0, 10),
         sending_org: this.props.dosage.sending_org || '',
         admin_route: this.props.dosage.admin_route || '',
         admin_suffix: this.props.dosage.admin_suffix || '',
         admin_site: this.props.dosage.admin_site || '',
         dose_number: this.props.dosage.dose_number || '',
+        facility_name: this.props.dosage.facility_name || '',
+        facility_type: this.props.dosage.facility_type || '',
+        facility_address: this.props.dosage.facility_address || '',
+        dosageInvalid: false,
       };
     });
   }
@@ -52,32 +60,18 @@ class Dosage extends React.Component {
     this.setState({ [event.target.id]: event.target.value });
   }
 
-  // handleDateChange(field, date) {
-  //   // this.setState({ [field]: date }, () => {
-  //   //   this.setState(state => {
-  //   //     return {
-  //   //       reportInvalid: moment(state.report).isBefore(state.specimen_collection, 'day'),
-  //   //     };
-  //   //   });
-  //   // });
-  // }
+  handleDateChange(field, date) {
+    this.setState({ [field]: date }, () => {
+      this.setState(state => {
+        return {
+          dosageInvalid: moment(state.expiration_date).isBefore(state.date_given, 'day'),
+        };
+      });
+    });
+  }
 
   submit() {
     this.setState({ loading: true }, () => {
-      let test = {
-        patient_id: this.props.patient.id,
-        cvx: this.state.cvx,
-        manufacturer: this.state.manufacturer,
-        expiration_date: this.state.expiration_date,
-        lot_number: this.state.lot_number,
-        date_given: this.state.date_given,
-        sending_org: this.state.sending_org,
-        admin_route: this.state.admin_route,
-        admin_suffix: this.state.admin_suffix,
-        admin_site: this.state.admin_site,
-        dose_number: this.state.dose_number,
-      };
-      console.log('Submission', test);
       axios.defaults.headers.common['X-CSRF-Token'] = this.props.authenticity_token;
       axios
         .post(window.BASE_PATH + '/dosages' + (this.props.dosage.id ? '/' + this.props.dosage.id : ''), {
@@ -92,6 +86,9 @@ class Dosage extends React.Component {
           admin_suffix: this.state.admin_suffix,
           admin_site: this.state.admin_site,
           dose_number: this.state.dose_number,
+          facility_name: this.state.facility_name,
+          facility_type: this.state.facility_type,
+          facility_address: this.state.facility_address,
         })
         .then(() => {
           location.reload(true);
@@ -112,11 +109,39 @@ class Dosage extends React.Component {
           <Form>
             <Row>
               <Form.Group as={Col}>
+                <Form.Label className="nav-input-label">Facility Name</Form.Label>
+                <Form.Control as="select" className="form-control-lg" id="facility_name" onChange={this.handleChange} value={this.state.facility_name}>
+                  <option disabled></option>
+                  <option>Washington DC VA Medical Center</option>
+                </Form.Control>
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group as={Col}>
+                <Form.Label className="nav-input-label">Facility Type</Form.Label>
+                <Form.Control as="select" className="form-control-lg" id="facility_type" onChange={this.handleChange} value={this.state.facility_type}>
+                  <option disabled></option>
+                  <option>Hospital</option>
+                  <option>CBOC</option>
+                  <option>Mobile Clinic</option>
+                  <option>Other</option>
+                </Form.Control>
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group as={Col}>
+                <Form.Label className="nav-input-label">Facility Address</Form.Label>
+                <Form.Control size="lg" id="facility_address" className="form-square" value={this.state.facility_address} onChange={this.handleChange} />
+              </Form.Group>
+            </Row>
+
+            <Row>
+              <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Dose Number</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="dose_number" onChange={this.handleChange} value={this.state.dose_number}>
                   <option disabled></option>
                   <option>1</option>
-                  <option>2</option>
+                  <option disabled={this.props.secondDoseEligible ? null : true}>2</option>
                 </Form.Control>
               </Form.Group>
             </Row>
@@ -129,7 +154,13 @@ class Dosage extends React.Component {
             <Row>
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Manufacturer</Form.Label>
-                <Form.Control size="lg" id="manufacturer" className="form-square" value={this.state.manufacturer || ''} onChange={this.handleChange} />
+                <Form.Control as="select" className="form-control-lg" id="manufacturer" onChange={this.handleChange} value={this.state.manufacturer}>
+                  <option disabled></option>
+                  <option>Pfizer</option>
+                  <option>Moderna</option>
+                  <option>AstraZeneca</option>
+                  <option>Janssen</option>
+                </Form.Control>
               </Form.Group>
             </Row>
             <Row>
@@ -138,9 +169,9 @@ class Dosage extends React.Component {
                 <DateInput
                   id="expiration_date"
                   date={this.state.expiration_date}
-                  onChange={date => this.setState({ expiration_date: date })}
+                  onChange={date => this.handleDateChange('expiration_date', date)}
                   placement="bottom"
-                  customClass="form-control-lg"
+                  customClass={!this.state.dosageInvalid ? 'form-control-lg' : 'form-control-lg is-invalid'}
                 />
               </Form.Group>
             </Row>
@@ -156,7 +187,7 @@ class Dosage extends React.Component {
                 <DateInput
                   id="date_given"
                   date={this.state.date_given}
-                  onChange={date => this.setState({ date_given: date })}
+                  onChange={date => this.handleDateChange('date_given', date)}
                   placement="bottom"
                   customClass="form-control-lg"
                 />
@@ -165,7 +196,12 @@ class Dosage extends React.Component {
             <Row>
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Sending Organization</Form.Label>
-                <Form.Control size="lg" id="sending_org" className="form-square" value={this.state.sending_org || ''} onChange={this.handleChange} />
+                <Form.Control as="select" className="form-control-lg" id="sending_org" onChange={this.handleChange} value={this.state.sending_org}>
+                  <option disabled></option>
+                  <option>VA</option>
+                  <option>DHS</option>
+                  <option>TSA</option>
+                </Form.Control>
               </Form.Group>
             </Row>
             <Row>
@@ -212,7 +248,7 @@ class Dosage extends React.Component {
           <Button variant="secondary btn-square" onClick={toggle}>
             Cancel
           </Button>
-          <Button variant="primary btn-square" disabled={this.state.loading} onClick={submit}>
+          <Button variant="primary btn-square" disabled={this.state.loading || this.state.dosageInvalid} onClick={submit}>
             Create
           </Button>
         </Modal.Footer>
@@ -243,6 +279,7 @@ Dosage.propTypes = {
   dosage: PropTypes.object,
   patient: PropTypes.object,
   authenticity_token: PropTypes.string,
+  secondDoseEligible: PropTypes.bool,
 };
 
 export default Dosage;

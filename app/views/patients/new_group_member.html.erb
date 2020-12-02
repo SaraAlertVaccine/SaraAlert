@@ -1,6 +1,7 @@
 <%= render partial: 'layouts/breadcrumb', locals: { jurisdiction_path: current_user.jurisdiction_path, crumbs: [{ value: 'Return to Vaccine Dashboard', href: '/' }, { value: 'Register New Monitoree', href: nil }] } %>
 
 <%= react_component('enrollment/Enrollment', {
+                      appName: ADMIN_OPTIONS['app_name'],
                       current_user: current_user,
                       patient: @patient,
                       parent_id: @parent_id,

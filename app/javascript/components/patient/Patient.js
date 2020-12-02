@@ -81,6 +81,9 @@ class Patient extends React.Component {
                 <br />
                 <span className="font-weight-normal">NNDSS ID:</span>{' '}
                 <span className="font-weight-light">{`${this.props.details.user_defined_id_nndss ? this.props.details.user_defined_id_nndss : ''}`}</span>
+                <br />
+                <span className="font-weight-normal">VACCS ID:</span> <span className="font-weight-light">{`${this.props.details.id}`}</span>
+                <br />
               </Col>
               <Col className="text-truncate">
                 <span className="font-weight-normal">Birth Sex:</span>{' '}
@@ -97,7 +100,7 @@ class Patient extends React.Component {
                   this.props.details.black_or_african_american ? ' Black or African American' : ''
                 }${this.props.details.asian ? ' Asian' : ''}${this.props.details.american_indian_or_alaska_native ? ' American Indian or Alaska Native' : ''}${
                   this.props.details.native_hawaiian_or_other_pacific_islander ? ' Native Hawaiian or Other Pacific Islander' : ''
-                }`}</span>
+                }${this.props.details.other_race ? ' Other' : ''}`}</span>
                 <br />
                 <span className="font-weight-normal">Ethnicity:</span>{' '}
                 <span className="font-weight-light">{`${this.props.details.ethnicity ? this.props.details.ethnicity : ''}`}</span>

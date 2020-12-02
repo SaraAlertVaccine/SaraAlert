@@ -55,8 +55,8 @@ class ClearReports extends React.Component {
             <p>
               You are about to clear all symptomatic report flags (red highlight) on this record. This indicates that the disease of interest is not suspected
               after review of all of the monitoree&apos;s symptomatic reports. The &quot;Needs Review&quot; status will be changed to &quot;No&quot; for all
-              reports. The record will move from the symptomatic line list to the asymptomatic or non-reporting line list as appropriate unless a symptom onset
-              date has been entered by a user.
+              reports. The record will move from the symptomatic line list to the reviewed or non-reporting line list as appropriate unless a symptom onset date
+              has been entered by a user.
             </p>
           )}
           {this.props.patient.isolation && (

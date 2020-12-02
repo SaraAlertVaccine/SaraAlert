@@ -196,7 +196,13 @@ class Enrollment extends React.Component {
           direction={this.state.direction}
           onSelect={() => {}}>
           <Carousel.Item>
-            <Identification goto={this.goto} next={this.next} setEnrollmentState={this.setEnrollmentState} currentState={this.state.enrollmentState} />
+            <Identification
+              appName={this.props.appName}
+              goto={this.goto}
+              next={this.next}
+              setEnrollmentState={this.setEnrollmentState}
+              currentState={this.state.enrollmentState}
+            />
           </Carousel.Item>
           <Carousel.Item>
             <Address currentState={this.state.enrollmentState} setEnrollmentState={this.setEnrollmentState} previous={this.previous} next={this.next} />
@@ -223,6 +229,7 @@ class Enrollment extends React.Component {
 }
 
 Enrollment.propTypes = {
+  appName: PropTypes.string,
   current_user: PropTypes.object,
   patient: PropTypes.object,
   propagated_fields: PropTypes.object,
