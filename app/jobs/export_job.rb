@@ -65,10 +65,10 @@ class ExportJob < ApplicationJob
                             excel_export_assessments(group),
                             build_filename(export_app_name + '-Full-Export-Assessments', file_index, file_extension),
                             export_type)
-        lookups << get_file(user_id,
-                            excel_export_lab_results(group),
-                            build_filename(export_app_name + '-Full-Export-Lab-Results', file_index, file_extension),
-                            export_type)
+        # lookups << get_file(user_id,
+        #                     excel_export_lab_results(group),
+        #                     build_filename(export_app_name + '-Full-Export-Lab-Results', file_index, file_extension),
+        #                     export_type)
         lookups << get_file(user_id,
                             excel_export_histories(group),
                             build_filename(export_app_name + '-Full-Export-Histories', file_index, file_extension),
@@ -91,17 +91,17 @@ class ExportJob < ApplicationJob
                             excel_export_assessments(group),
                             build_filename(export_app_name + '-Purge-Eligible-Export-Assessments', file_index, file_extension),
                             export_type)
-        lookups << get_file(user_id,
-                            excel_export_lab_results(group),
-                            build_filename(export_app_name + '-Purge-Eligible-Export-Lab-Results', file_index, file_extension),
-                            export_type)
+        # lookups << get_file(user_id,
+        #                     excel_export_lab_results(group),
+        #                     build_filename(export_app_name + '-Purge-Eligible-Export-Lab-Results', file_index, file_extension),
+        #                     export_type)
         lookups << get_file(user_id,
                             excel_export_histories(group),
                             build_filename(export_app_name + '-Purge-Eligible-Export-Histories', file_index, file_extension),
                             export_type)
         lookups << get_file(user_id,
                             excel_export_dosages(group),
-                            build_filename('Sara-Alert-Purge-Eligible-Export-Dosages', file_index, file_extension),
+                            build_filename(export_app_name + '-Purge-Eligible-Export-Dosages', file_index, file_extension),
                             export_type)
       end
     end
