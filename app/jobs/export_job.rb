@@ -101,7 +101,7 @@ class ExportJob < ApplicationJob
                             export_type)
         lookups << get_file(user_id,
                             excel_export_dosages(group),
-                            build_filename('Sara-Alert-Purge-Eligible-Export-Dosages', file_index, file_extension),
+                            build_filename(export_app_name + '-Purge-Eligible-Export-Dosages', file_index, file_extension),
                             export_type)
       end
     end
