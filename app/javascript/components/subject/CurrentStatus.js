@@ -15,7 +15,7 @@ class CurrentStatus extends React.Component {
     } else if (status === 'exposure_followup') {
       return <span className="text-danger">needs follow up</span>;
     } else if (status === 'exposure_asymptomatic') {
-      return <span className="text-success">Reviewed</span>;
+      return <span className="text-success">reviewed</span>;
     } else if (status === 'exposure_non_reporting') {
       return <span className="text-warning">non-reporting</span>;
     } else if (status === 'exposure_under_investigation') {
