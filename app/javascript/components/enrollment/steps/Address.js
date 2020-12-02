@@ -14,6 +14,7 @@ class Address extends React.Component {
       // When viewing existing patients, the `monitored_address_state` needs to be reverse mapped back to the abbreviation
       this.state.current.patient.monitored_address_state = stateOptions.find(state => state.name === this.props.currentState.monitored_address_state)?.abbrv;
     }
+    this.foreignAddressAccepted = false;
   }
 
   handleChange = event => {
@@ -334,241 +335,249 @@ class Address extends React.Component {
                   </Form.Row>
                 </Form>
               </Tab>
-              <Tab eventKey="foreign" title="Home Address Outside USA (Foreign)">
-                <Form>
-                  <Form.Row className="h-100">
-                    <Form.Group as={Col} md={12} className="my-auto"></Form.Group>
-                  </Form.Row>
-                  <Form.Row className="pt-4">
-                    <Form.Group as={Col} controlId="foreign_address_line_1">
-                      <Form.Label className="nav-input-label">
-                        ADDRESS 1{schemaForeign?.fields?.foreign_address_line_1?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_address_line_1']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_address_line_1 || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_address_line_1']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="foreign_address_city">
-                      <Form.Label className="nav-input-label">TOWN/CITY{schemaForeign?.fields?.foreign_address_city?._exclusive?.required && ' *'}</Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_address_city']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_address_city || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_address_city']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="foreign_address_country">
-                      <Form.Label className="nav-input-label">COUNTRY{schemaForeign?.fields?.foreign_address_country?._exclusive?.required && ' *'}</Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_address_country']}
-                        as="select"
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_address_country || ''}
-                        onChange={this.handleChange}>
-                        <option></option>
-                        {countryOptions.map((country, index) => (
-                          <option key={`country-${index}`}>{country}</option>
-                        ))}
-                      </Form.Control>
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_address_country']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Form.Row>
-                  <Form.Row>
-                    <Form.Group as={Col} md={8} controlId="foreign_address_line_2">
-                      <Form.Label className="nav-input-label">
-                        ADDRESS 2{schemaForeign?.fields?.foreign_address_line_2?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_address_line_2']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_address_line_2 || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_address_line_2']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group as={Col} md={4} controlId="foreign_address_zip">
-                      <Form.Label className="nav-input-label">POSTAL CODE{schemaForeign?.fields?.foreign_address_zip?._exclusive?.required && ' *'}</Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_address_zip']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_address_zip || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_address_zip']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Form.Row>
-                  <Form.Row>
-                    <Form.Group as={Col} md={8} controlId="foreign_address_line_3">
-                      <Form.Label className="nav-input-label">
-                        ADDRESS 3{schemaForeign?.fields?.foreign_address_line_3?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_address_line_3']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_address_line_3 || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_address_line_3']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group as={Col} md={4} controlId="foreign_address_state">
-                      <Form.Label className="nav-input-label">
-                        STATE/PROVINCE{schemaForeign?.fields?.foreign_address_state?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_address_state']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_address_state || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_address_state']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Form.Row>
-                  <Form.Row>
-                    <hr />
-                  </Form.Row>
-                  <Form.Row className="h-100">
-                    <Form.Group as={Col} md={24} className="my-auto">
-                      <h5>Address at Destination in USA Where Monitored</h5>
-                    </Form.Group>
-                  </Form.Row>
-                  <Form.Row className="pb-2">
-                    <Form.Group as={Col} md={24} className="my-auto">
-                      <span className="font-weight-light">
-                        (If monitoree is planning on travel within the US, enter the <b>first</b> location where they may be contacted)
-                      </span>
-                    </Form.Group>
-                  </Form.Row>
-                  <Form.Row className="pt-3">
-                    <Form.Group as={Col} controlId="foreign_monitored_address_line_1">
-                      <Form.Label className="nav-input-label">
-                        ADDRESS 1{schemaForeign?.fields?.foreign_monitored_address_line_1?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_monitored_address_line_1']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_monitored_address_line_1 || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_monitored_address_line_1']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="foreign_monitored_address_city">
-                      <Form.Label className="nav-input-label">
-                        TOWN/CITY{schemaForeign?.fields?.foreign_monitored_address_city?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_monitored_address_city']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_monitored_address_city || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_monitored_address_city']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="foreign_monitored_address_state">
-                      <Form.Label className="nav-input-label">
-                        STATE{schemaForeign?.fields?.foreign_monitored_address_state?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_monitored_address_state']}
-                        as="select"
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_monitored_address_state || ''}
-                        onChange={this.handleChange}>
-                        <option></option>
-                        {stateOptions.map((state, index) => (
-                          <option key={`state-${index}`} value={state.name}>
-                            {state.name}
-                          </option>
-                        ))}
-                      </Form.Control>
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_monitored_address_state']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Form.Row>
-                  <Form.Row>
-                    <Form.Group as={Col} md={8} controlId="foreign_monitored_address_line_2">
-                      <Form.Label className="nav-input-label">
-                        ADDRESS 2{schemaForeign?.fields?.foreign_monitored_address_line_2?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_monitored_address_line_2']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_monitored_address_line_2 || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_monitored_address_line_2']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group as={Col} md={4} controlId="foreign_monitored_address_zip">
-                      <Form.Label className="nav-input-label">
-                        ZIP{schemaForeign?.fields?.foreign_monitored_address_zip?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_monitored_address_zip']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_monitored_address_zip || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_monitored_address_zip']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Form.Row>
-                  <Form.Row className="pb-2">
-                    <Form.Group as={Col} md={8} controlId="foreign_monitored_address_county">
-                      <Form.Label className="nav-input-label">
-                        COUNTY (DISTRICT) {schemaForeign?.fields?.foreign_monitored_address_county?._exclusive?.required && ' *'}
-                      </Form.Label>
-                      <Form.Control
-                        isInvalid={this.state.errors['foreign_monitored_address_county']}
-                        size="lg"
-                        className="form-square"
-                        value={this.state.current.patient.foreign_monitored_address_county || ''}
-                        onChange={this.handleChange}
-                      />
-                      <Form.Control.Feedback className="d-block" type="invalid">
-                        {this.state.errors['foreign_monitored_address_county']}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Form.Row>
-                </Form>
-              </Tab>
+              {this.foreignAddressAccepted && (
+                <Tab eventKey="foreign" title="Home Address Outside USA (Foreign)">
+                  <Form>
+                    <Form.Row className="h-100">
+                      <Form.Group as={Col} md={12} className="my-auto"></Form.Group>
+                    </Form.Row>
+                    <Form.Row className="pt-4">
+                      <Form.Group as={Col} controlId="foreign_address_line_1">
+                        <Form.Label className="nav-input-label">
+                          ADDRESS 1{schemaForeign?.fields?.foreign_address_line_1?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_address_line_1']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_address_line_1 || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_address_line_1']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="foreign_address_city">
+                        <Form.Label className="nav-input-label">
+                          TOWN/CITY{schemaForeign?.fields?.foreign_address_city?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_address_city']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_address_city || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_address_city']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="foreign_address_country">
+                        <Form.Label className="nav-input-label">
+                          COUNTRY{schemaForeign?.fields?.foreign_address_country?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_address_country']}
+                          as="select"
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_address_country || ''}
+                          onChange={this.handleChange}>
+                          <option></option>
+                          {countryOptions.map((country, index) => (
+                            <option key={`country-${index}`}>{country}</option>
+                          ))}
+                        </Form.Control>
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_address_country']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} md={8} controlId="foreign_address_line_2">
+                        <Form.Label className="nav-input-label">
+                          ADDRESS 2{schemaForeign?.fields?.foreign_address_line_2?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_address_line_2']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_address_line_2 || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_address_line_2']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col} md={4} controlId="foreign_address_zip">
+                        <Form.Label className="nav-input-label">
+                          POSTAL CODE{schemaForeign?.fields?.foreign_address_zip?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_address_zip']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_address_zip || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_address_zip']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} md={8} controlId="foreign_address_line_3">
+                        <Form.Label className="nav-input-label">
+                          ADDRESS 3{schemaForeign?.fields?.foreign_address_line_3?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_address_line_3']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_address_line_3 || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_address_line_3']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col} md={4} controlId="foreign_address_state">
+                        <Form.Label className="nav-input-label">
+                          STATE/PROVINCE{schemaForeign?.fields?.foreign_address_state?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_address_state']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_address_state || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_address_state']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <hr />
+                    </Form.Row>
+                    <Form.Row className="h-100">
+                      <Form.Group as={Col} md={24} className="my-auto">
+                        <h5>Address at Destination in USA Where Monitored</h5>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row className="pb-2">
+                      <Form.Group as={Col} md={24} className="my-auto">
+                        <span className="font-weight-light">
+                          (If monitoree is planning on travel within the US, enter the <b>first</b> location where they may be contacted)
+                        </span>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row className="pt-3">
+                      <Form.Group as={Col} controlId="foreign_monitored_address_line_1">
+                        <Form.Label className="nav-input-label">
+                          ADDRESS 1{schemaForeign?.fields?.foreign_monitored_address_line_1?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_monitored_address_line_1']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_monitored_address_line_1 || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_monitored_address_line_1']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="foreign_monitored_address_city">
+                        <Form.Label className="nav-input-label">
+                          TOWN/CITY{schemaForeign?.fields?.foreign_monitored_address_city?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_monitored_address_city']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_monitored_address_city || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_monitored_address_city']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col} controlId="foreign_monitored_address_state">
+                        <Form.Label className="nav-input-label">
+                          STATE{schemaForeign?.fields?.foreign_monitored_address_state?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_monitored_address_state']}
+                          as="select"
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_monitored_address_state || ''}
+                          onChange={this.handleChange}>
+                          <option></option>
+                          {stateOptions.map((state, index) => (
+                            <option key={`state-${index}`} value={state.name}>
+                              {state.name}
+                            </option>
+                          ))}
+                        </Form.Control>
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_monitored_address_state']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} md={8} controlId="foreign_monitored_address_line_2">
+                        <Form.Label className="nav-input-label">
+                          ADDRESS 2{schemaForeign?.fields?.foreign_monitored_address_line_2?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_monitored_address_line_2']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_monitored_address_line_2 || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_monitored_address_line_2']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col} md={4} controlId="foreign_monitored_address_zip">
+                        <Form.Label className="nav-input-label">
+                          ZIP{schemaForeign?.fields?.foreign_monitored_address_zip?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_monitored_address_zip']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_monitored_address_zip || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_monitored_address_zip']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row className="pb-2">
+                      <Form.Group as={Col} md={8} controlId="foreign_monitored_address_county">
+                        <Form.Label className="nav-input-label">
+                          COUNTY (DISTRICT) {schemaForeign?.fields?.foreign_monitored_address_county?._exclusive?.required && ' *'}
+                        </Form.Label>
+                        <Form.Control
+                          isInvalid={this.state.errors['foreign_monitored_address_county']}
+                          size="lg"
+                          className="form-square"
+                          value={this.state.current.patient.foreign_monitored_address_county || ''}
+                          onChange={this.handleChange}
+                        />
+                        <Form.Control.Feedback className="d-block" type="invalid">
+                          {this.state.errors['foreign_monitored_address_county']}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Form.Row>
+                  </Form>
+                </Tab>
+              )}
             </Tabs>
             {this.props.previous && (
               <Button variant="outline-primary" size="lg" className="btn-square px-5" onClick={this.props.previous}>
