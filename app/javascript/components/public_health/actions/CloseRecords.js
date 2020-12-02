@@ -13,24 +13,13 @@ class CloseRecords extends React.Component {
       apply_to_household: false,
       loading: false,
       monitoring: false,
-      monitoring_reasons: [
-        'Completed Monitoring',
-        'Meets Case Definition',
-        'Lost to follow-up during monitoring period',
-        'Lost to follow-up (contact never established)',
-        'Transferred to another jurisdiction',
-        'Person Under Investigation (PUI)',
-        'Case confirmed',
-        'Meets criteria to discontinue isolation',
-        'Deceased',
-        'Duplicate',
-        'Other',
-      ],
+      monitoring_reasons: ['Both doses completed', 'Deceased', 'Duplicate', 'Person under investigation', 'Other'],
       monitoring_reason: '',
       reasoning: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.submit = this.submit.bind(this);
+    this.allowApplyToHousehold = false;
   }
 
   handleChange(event) {
@@ -93,15 +82,17 @@ class CloseRecords extends React.Component {
             <Form.Label>Please include any additional details:</Form.Label>
             <Form.Control as="textarea" rows="2" id="reasoning" onChange={this.handleChange} />
           </Form.Group>
-          <Form.Group className="my-2">
-            <Form.Check
-              type="switch"
-              id="apply_to_household"
-              label="Apply this change to the entire household that these monitorees are responsible for, if it applies."
-              checked={this.state.apply_to_household}
-              onChange={this.handleChange}
-            />
-          </Form.Group>
+          {this.allowApplyToHousehold && (
+            <Form.Group className="my-2">
+              <Form.Check
+                type="switch"
+                id="apply_to_household"
+                label="Apply this change to the entire household that these monitorees are responsible for, if it applies."
+                checked={this.state.apply_to_household}
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary btn-square" onClick={this.props.close}>

@@ -13,16 +13,10 @@ const authyToken = 'Q1z4yZXLdN+tZod6dBSIlMbZ3yWAUFdY44U06QWffEP76nx1WGMHIz8rYxEU
 const monitoringStatusValues = [ 'Actively Monitoring', 'Not Monitoring' ];
 const monitoringReasons = [
   '--',
-  'Completed Monitoring',
-  'Meets Case Definition',
-  'Lost to follow-up during monitoring period',
-  'Lost to follow-up (contact never established)',
-  'Transferred to another jurisdiction',
-  'Person Under Investigation (PUI)',
-  'Case confirmed',
-  'Meets criteria to discontinue isolation',
+  'Both doses completed',
   'Deceased',
   'Duplicate',
+  'Person under investigation',
   'Other'
 ];
 
@@ -213,7 +207,7 @@ describe('MonitoringStatus', () => {
     expect(wrapper.find('#apply_to_household_cm_exp_only_no').prop('checked')).toBeTruthy();
     expect(wrapper.find('#apply_to_household_cm_exp_only_yes').prop('checked')).toBeFalsy();
 
-    // change to 'YES' 
+    // change to 'YES'
     wrapper.find('#apply_to_household_cm_exp_only_yes').simulate('change', { target: { name: 'apply_to_household_cm_exp_only', id: 'apply_to_household_cm_exp_only_yes' } });
     wrapper.update();
     expect(wrapper.state('apply_to_household_cm_exp_only')).toBeTruthy();
