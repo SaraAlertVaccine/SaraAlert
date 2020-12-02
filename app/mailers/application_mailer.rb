@@ -2,6 +2,6 @@
 
 # ApplicationMailer: base mailer
 class ApplicationMailer < ActionMailer::Base
-  default from: 'notifications@vaccs.org'
+  default from: 'notifications@vaccs.net'
   layout 'mailer'
 end
