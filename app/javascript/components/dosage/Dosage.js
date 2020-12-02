@@ -171,7 +171,7 @@ class Dosage extends React.Component {
                   date={this.state.expiration_date}
                   onChange={date => this.handleDateChange('expiration_date', date)}
                   placement="bottom"
-                  customClass="form-control-lg"
+                  customClass={!this.state.dosageInvalid ? 'form-control-lg' : 'form-control-lg is-invalid'}
                 />
               </Form.Group>
             </Row>
