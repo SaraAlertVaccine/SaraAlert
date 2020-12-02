@@ -23,10 +23,10 @@ class Dosage extends React.Component {
       admin_suffix: this.props.dosage.admin_suffix || '',
       admin_site: this.props.dosage.admin_site || '',
       dose_number: this.props.dosage.dose_number || '',
-      dosageInvalid: false,
       facility_name: this.props.dosage.facility_name || '',
       facility_type: this.props.dosage.facility_type || '',
       facility_address: this.props.dosage.facility_address || '',
+      dosageInvalid: false,
     };
     this.toggleModal = this.toggleModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -48,10 +48,10 @@ class Dosage extends React.Component {
         admin_suffix: this.props.dosage.admin_suffix || '',
         admin_site: this.props.dosage.admin_site || '',
         dose_number: this.props.dosage.dose_number || '',
-        dosageInvalid: false,
         facility_name: this.props.dosage.facility_name || '',
         facility_type: this.props.dosage.facility_type || '',
         facility_address: this.props.dosage.facility_address || '',
+        dosageInvalid: false,
       };
     });
   }
