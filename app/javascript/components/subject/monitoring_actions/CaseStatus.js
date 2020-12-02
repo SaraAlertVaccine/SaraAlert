@@ -54,7 +54,7 @@ class CaseStatus extends React.Component {
       ) {
         this.setState({
           isolation: false,
-          modal_text: `This case will be moved to the exposure workflow and will be placed in the symptomatic, non-reporting, or asymptomatic line list as appropriate to continue exposure monitoring.`,
+          modal_text: `This case will be moved to the exposure workflow and will be placed in the symptomatic, non-reporting, or reviewed line list as appropriate to continue exposure monitoring.`,
         });
 
         // changing case status to Confirmed from Probable or vice versa in the isolation workflow

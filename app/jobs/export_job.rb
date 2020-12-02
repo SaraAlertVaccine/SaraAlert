@@ -22,7 +22,7 @@ class ExportJob < ApplicationJob
     case export_type
     when 'csv_exposure'
       patients = user.viewable_patients.where(isolation: false).where(purged: false)
-      base_filename = export_app_name + '-Linelist-Exposure'
+      base_filename = export_app_name + '-Linelist-Vaccine'
       file_extension = 'csv'
       patients.in_batches(of: RECORD_BATCH_SIZE).each_with_index do |group, index|
         data = csv_line_list(group)
@@ -38,7 +38,7 @@ class ExportJob < ApplicationJob
       end
     when 'sara_format_exposure'
       patients = user.viewable_patients.where(isolation: false).where(purged: false)
-      base_filename = export_app_name + '-Format-Exposure'
+      base_filename = export_app_name + '-Format-Vaccine'
       file_extension = 'xlsx'
       patients.in_batches(of: RECORD_BATCH_SIZE).each_with_index do |group, index|
         data = sara_alert_format(group)

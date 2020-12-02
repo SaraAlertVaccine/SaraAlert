@@ -153,7 +153,7 @@ class UpdateCaseStatus extends React.Component {
                   {[undefined, true].includes(this.state.initialIsolation) && (
                     <p>
                       The selected cases will be moved from the isolation workflow to the exposure workflow and placed in the symptomatic, non-reporting, or
-                      asymptomatic line list as appropriate.
+                      reviewed line list as appropriate.
                     </p>
                   )}
                   {this.state.initialIsolation === false && <p>The selected cases will remain in the exposure workflow.</p>}
