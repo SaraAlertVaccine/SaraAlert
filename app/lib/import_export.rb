@@ -158,14 +158,14 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
           end
         end
       end
-      p.workbook.add_worksheet(name: 'Lab Results') do |sheet|
-        labs = Laboratory.where(patient_id: patients.pluck(:id))
-        lab_headers = ['Patient ID', 'Lab Type', 'Specimen Collection Date', 'Report Date', 'Result Date', 'Created At', 'Updated At']
-        sheet.add_row lab_headers
-        labs.find_each(batch_size: 500) do |lab|
-          sheet.add_row lab.details.values, { types: Array.new(lab_headers.length, :string) }
-        end
-      end
+      # p.workbook.add_worksheet(name: 'Lab Results') do |sheet|
+      #   labs = Laboratory.where(patient_id: patients.pluck(:id))
+      #   lab_headers = ['Patient ID', 'Lab Type', 'Specimen Collection Date', 'Report Date', 'Result Date', 'Created At', 'Updated At']
+      #   sheet.add_row lab_headers
+      #   labs.find_each(batch_size: 500) do |lab|
+      #     sheet.add_row lab.details.values, { types: Array.new(lab_headers.length, :string) }
+      #   end
+      # end
       p.workbook.add_worksheet(name: 'Edit Histories') do |sheet|
         histories = History.where(patient_id: patients.pluck(:id))
         history_headers = ['Patient ID', 'Comment', 'Created By', 'History Type', 'Created At', 'Updated At']
