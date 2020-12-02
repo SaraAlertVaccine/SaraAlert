@@ -70,7 +70,7 @@
     <table class="assessment_table table table-sm table-striped table-bordered table-hover table-smaller-font">
       <thead>
         <tr>
-          <th class="DataTable-table-header">ID</th>
+          <th class="DataTable-table-header">Report ID</th>
           <% unless @patient.isolation %>
           <th class="DataTable-table-header dt-a-w-50">Needs Review <%= react_component('util/InfoTooltip', { tooltipTextKey: 'exposureNeedsReviewColumn', location: 'right' }, { style: 'display:inline' }) %></th>
           <% end %>
@@ -175,7 +175,7 @@
     <table class="dosage_table table table-sm table-striped table-bordered table-hover table-smaller-font" style="width:100%">
       <thead>
         <tr>
-          <th class="DataTable-table-header">ID</th>
+          <th class="DataTable-table-header">Vaccine Dose ID</th>
           <th class="DataTable-table-header">Dose Number</th>
           <th class="DataTable-table-header">CVX</th>
           <th class="DataTable-table-header">Manufacturer</th>
