@@ -81,6 +81,9 @@ class Patient extends React.Component {
                 <br />
                 <span className="font-weight-normal">NNDSS ID:</span>{' '}
                 <span className="font-weight-light">{`${this.props.details.user_defined_id_nndss ? this.props.details.user_defined_id_nndss : ''}`}</span>
+                <br />
+                <span className="font-weight-normal">VACCS ID:</span> <span className="font-weight-light">{`${this.props.details.id}`}</span>
+                <br />
               </Col>
               <Col className="text-truncate">
                 <span className="font-weight-normal">Birth Sex:</span>{' '}
