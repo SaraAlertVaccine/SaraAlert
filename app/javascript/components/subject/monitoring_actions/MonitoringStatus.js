@@ -137,16 +137,10 @@ class MonitoringStatus extends React.Component {
                 <option value={-1} disabled>
                   --
                 </option>
-                <option>Completed Monitoring</option>
-                <option>Meets Case Definition</option>
-                <option>Lost to follow-up during monitoring period</option>
-                <option>Lost to follow-up (contact never established)</option>
-                <option>Transferred to another jurisdiction</option>
-                <option>Person Under Investigation (PUI)</option>
-                <option>Case confirmed</option>
-                <option>Meets criteria to discontinue isolation</option>
+                <option>Both doses completed</option>
                 <option>Deceased</option>
                 <option>Duplicate</option>
+                <option>Person under investigation</option>
                 <option>Other</option>
               </Form.Control>
             </Form.Group>

@@ -33,6 +33,8 @@ class Patient < ApplicationRecord
                                                   'Deceased',
                                                   'Duplicate',
                                                   'Other',
+                                                  'Both doses completed',
+                                                  'Person under investigation',
                                                   nil, ''] }
 
   validates :monitoring_plan, inclusion: { in: ['None',
