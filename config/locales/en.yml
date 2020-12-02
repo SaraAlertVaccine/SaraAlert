@@ -90,7 +90,7 @@ en:
         name: 'Issues at Injection Site'
         notes: 'Such as pain, redness, swelling or itching'
       additional-symptoms-not-mentioned-here:
-        name: 'Any Symptoms you are Experiencing that are not mentioned here'
+        name: 'Any Symptoms that are not mentioned here'
         notes: ''
     threshold-op:
       less-than: 'Less Than'

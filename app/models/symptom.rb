@@ -35,7 +35,8 @@ class Symptom < ApplicationRecord
         I18n.t("assessments.threshold-op.#{threshold_operator.parameterize}", locale: lang), value
       ].to_sentence(words_connector: ' ', last_word_connector: ' ').humanize
     when 'TextSymptom'
-      # TODO!
+      return "Experience #{I18n.t("assessments.symptoms.#{name}.name", locale: lang)}" if threshold_operator.downcase == 'not equal'
+      "Not experience #{I18n.t("assessments.symptoms.#{name}.name", locale: lang)}"
     end
   end
 
