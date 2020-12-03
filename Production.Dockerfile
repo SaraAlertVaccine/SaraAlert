@@ -18,6 +18,9 @@ COPY Gemfile Gemfile.lock /app/disease-trakker/
 WORKDIR /app/disease-trakker
 RUN gem install bundler && bundle config set without 'development test' && bundle config set deployment 'true'
 RUN bundle install --jobs $(nproc)
+
+RUN yarn config set network-timeout 1000000
+
 RUN yarn install --no-optional
 
 RUN addgroup -g 1000 -S app && adduser -u 1000 -S app -G app
