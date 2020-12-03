@@ -583,10 +583,13 @@ class PatientsTable extends React.Component {
                           <span className="ml-2">Close Records</span>
                         </Dropdown.Item>
                       )}
-                      <Dropdown.Item className="px-3" onClick={() => this.setState({ action: 'Update Case Status' })}>
-                        <i className="fas fa-clipboard-list text-center" style={{ width: '1em' }}></i>
-                        <span className="ml-2">Update Case Status</span>
-                      </Dropdown.Item>
+
+                      {this.state.query.tab == 'closed' && (
+                        <Dropdown.Item className="px-3" onClick={() => this.setState({ action: 'Update Case Status' })}>
+                          <i className="fas fa-clipboard-list text-center" style={{ width: '1em' }}></i>
+                          <span className="ml-2">Update Case Status</span>
+                        </Dropdown.Item>
+                      )}
                     </DropdownButton>
                   )}
                 </InputGroup>
