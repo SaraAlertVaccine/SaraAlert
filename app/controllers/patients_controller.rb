@@ -45,7 +45,7 @@ class PatientsController < ApplicationController
 
     @new_dosage = Dosage.new(
       facility_name: 'Washington DC VA Medical Center',
-      facility_type: 'CBOC',
+      facility_type: 'Hospital',
       facility_address: '50 Irving St. NW Washington, DC 20422 District of Columbia'
     )
 
