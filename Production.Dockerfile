@@ -19,7 +19,7 @@ WORKDIR /app/disease-trakker
 RUN gem install bundler && bundle config set without 'development test' && bundle config set deployment 'true'
 RUN bundle install --jobs $(nproc)
 
-RUN yarn config set network-timeout 1000000
+RUN yarn config set network-timeout 1000000000
 
 RUN yarn install --no-optional
 
