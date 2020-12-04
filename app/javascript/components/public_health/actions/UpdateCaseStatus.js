@@ -114,12 +114,12 @@ class UpdateCaseStatus extends React.Component {
         <Modal.Body>
           <p>Please select the desired case status to be assigned to all selected patients:</p>
           <Form.Control as="select" className="form-control-lg mb-3" id="case_status" onChange={this.handleChange} value={this.state.case_status}>
-            <option></option>
-            <option>Confirmed</option>
+            <option disabled></option>
+            {/* <option>Confirmed</option>
             <option>Probable</option>
-            <option>Suspect</option>
+            <option>Suspect</option> */}
             <option>Unknown</option>
-            <option>Not a Case</option>
+            {/* <option>Not a Case</option> */}
           </Form.Control>
           {this.state.case_status !== '' && (
             <React.Fragment>
@@ -152,14 +152,14 @@ class UpdateCaseStatus extends React.Component {
                 <React.Fragment>
                   {[undefined, true].includes(this.state.initialIsolation) && (
                     <p>
-                      The selected cases will be moved from the isolation workflow to the exposure workflow and placed in the symptomatic, non-reporting, or
-                      reviewed line list as appropriate.
+                      The selected cases will be moved into the vaccine workflow and placed in the symptomatic, non-reporting, or reviewed line list as
+                      appropriate.
                     </p>
                   )}
                   {this.state.initialIsolation === false && <p>The selected cases will remain in the exposure workflow.</p>}
                 </React.Fragment>
               )}
-              <Form.Group className="my-2">
+              {/* <Form.Group className="my-2">
                 <Form.Check
                   type="switch"
                   id="apply_to_household"
@@ -167,7 +167,7 @@ class UpdateCaseStatus extends React.Component {
                   checked={this.state.apply_to_household}
                   onChange={this.handleChange}
                 />
-              </Form.Group>
+              </Form.Group> */}
             </React.Fragment>
           )}
         </Modal.Body>
