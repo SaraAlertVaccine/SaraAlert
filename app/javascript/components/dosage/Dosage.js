@@ -74,7 +74,7 @@ class Dosage extends React.Component {
       'facility_type',
       'facility_address',
     ];
-    let check = Object.keys(this.state).filter(k => fields.includes(k) && (this.state[`${k}`] == '' || this.state[`${k}`] == null));
+    let check = Object.keys(this.state).filter(k => fields.includes(k) && (this.state[`${k}`] == null || this.state[`${k}`].trim() == ''));
     this.setState({ dosageInvalid: check.length > 0 });
   };
 
@@ -108,7 +108,7 @@ class Dosage extends React.Component {
           cvx: this.state.cvx,
           manufacturer: this.state.manufacturer,
           expiration_date: this.state.expiration_date,
-          lot_number: this.state.lot_number,
+          lot_number: this.state.lot_number.trim(),
           date_given: this.state.date_given,
           sending_org: this.state.sending_org,
           admin_route: this.state.admin_route,
@@ -117,7 +117,7 @@ class Dosage extends React.Component {
           dose_number: this.state.dose_number,
           facility_name: this.state.facility_name,
           facility_type: this.state.facility_type,
-          facility_address: this.state.facility_address,
+          facility_address: this.state.facility_address.trim(),
         })
         .then(() => {
           location.reload(true);
