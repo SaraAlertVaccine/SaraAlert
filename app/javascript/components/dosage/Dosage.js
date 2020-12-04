@@ -57,7 +57,14 @@ class Dosage extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({ [event.target.id]: event.target.value });
+    this.setState({ [event.target.id]: event.target.value }, () => {
+      if (this.state.manufacturer == 'Pfizer') {
+        this.setState({ cvx: '208' });
+      }
+      if (this.state.manufacturer == 'Moderna') {
+        this.setState({ cvx: '207' });
+      }
+    });
   }
 
   handleDateChange(field, date) {
@@ -147,20 +154,18 @@ class Dosage extends React.Component {
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">CVX</Form.Label>
-                <Form.Control size="lg" id="cvx" className="form-square" value={this.state.cvx || ''} onChange={this.handleChange} />
-              </Form.Group>
-            </Row>
-            <Row>
-              <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Manufacturer</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="manufacturer" onChange={this.handleChange} value={this.state.manufacturer}>
                   <option disabled></option>
                   <option>Pfizer</option>
                   <option>Moderna</option>
-                  <option>AstraZeneca</option>
-                  <option>Janssen</option>
                 </Form.Control>
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group as={Col}>
+                <Form.Label className="nav-input-label">CVX</Form.Label>
+                <Form.Control size="lg" id="cvx" className="form-square" value={this.state.cvx || ''} onChange={this.handleChange} disabled />
               </Form.Group>
             </Row>
             <Row>
