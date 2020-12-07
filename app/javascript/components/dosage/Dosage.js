@@ -59,6 +59,7 @@ class Dosage extends React.Component {
   }
 
   validate = () => {
+    console.log(this.state);
     const fields = [
       'cvx',
       'manufacturer',
@@ -74,12 +75,14 @@ class Dosage extends React.Component {
       'facility_type',
       'facility_address',
     ];
-    let check = Object.keys(this.state).filter(k => fields.includes(k) && (this.state[`${k}`] == null || this.state[`${k}`].trim() == ''));
+
+    let check = Object.keys(this.state).filter(k => fields.includes(k) && (this.state[`${k}`] == null || String(this.state[`${k}`]).trim() == ''));
     this.setState({ dosageInvalid: check.length > 0 });
   };
 
   handleChange(event) {
     this.setState({ [event.target.id]: event.target.value }, () => {
+      console.log(this.state);
       if (this.state.manufacturer == 'Pfizer') {
         this.setState({ cvx: '208' }, this.validate());
       }
