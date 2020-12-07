@@ -15,8 +15,8 @@ class ImportController < ApplicationController
 
   def download_guidance
     send_file(
-      "#{Rails.root}/public/Sara%20Alert%20Import%20Format.xlsx",
-      filename: 'Sara%20Alert%20Import%20Format.xlsx',
+      "#{Rails.root}/public/VACCS%20Import%20Format.xlsx",
+      filename: 'VACCS%20Import%20Format.xlsx',
       type: 'application/vnd.ms-excel'
     )
   end
@@ -24,7 +24,7 @@ class ImportController < ApplicationController
   def import
     redirect_to(root_url) && return unless current_user.can_import?
 
-    redirect_to(root_url) && return unless params.permit(:workflow)[:workflow] == 'vaccine' || params.permit(:workflow)[:workflow] == 'isolation'
+    redirect_to(root_url) && return unless params.permit(:workflow)[:workflow] == 'exposure' || params.permit(:workflow)[:workflow] == 'isolation'
 
     redirect_to(root_url) && return unless params.permit(:format)[:format] == 'epix' || params.permit(:format)[:format] == 'comprehensive_monitorees'
 
@@ -53,22 +53,22 @@ class ImportController < ApplicationController
 
           begin
             if format == :comprehensive_monitorees
-              if col_num == 95
-                patient[:jurisdiction_id], patient[:jurisdiction_path] = validate_jurisdiction(row[95], row_ind, valid_jurisdiction_ids)
-              elsif col_num == 96
-                patient[:assigned_user] = validate_assigned_user(row[96], row_ind)
-              elsif col_num == 85 && workflow == :isolation
-                patient[:user_defined_symptom_onset] = row[85].present?
+              if col_num == 96
+                patient[:jurisdiction_id], patient[:jurisdiction_path] = validate_jurisdiction(row[96], row_ind, valid_jurisdiction_ids)
+              elsif col_num == 97
+                patient[:assigned_user] = validate_assigned_user(row[97], row_ind)
+              elsif col_num == 86 && workflow == :isolation
+                patient[:user_defined_symptom_onset] = row[86].present?
                 patient[field] = validate_field(field, row[col_num], row_ind)
               else
-                patient[field] = validate_field(field, row[col_num], row_ind) unless [85, 86].include?(col_num) && workflow != :isolation
+                patient[field] = validate_field(field, row[col_num], row_ind) unless [86, 87].include?(col_num) && workflow != :isolation
               end
             end
 
             if format == :epix
-              patient[field] = if col_num == 34 # copy over potential exposure country to location
-                                 validate_field(field, row[35], row_ind)
-                               elsif [41, 42].include?(col_num) # contact of known case and was in healthcare facilities
+              patient[field] = if col_num == 35 # copy over potential exposure country to location
+                                 validate_field(field, row[36], row_ind)
+                               elsif [42, 43].include?(col_num) # contact of known case and was in healthcare facilities
                                  validate_field(field, !row[col_num].blank?, row_ind)
                                else
                                  validate_field(field, row[col_num], row_ind)
@@ -94,8 +94,8 @@ class ImportController < ApplicationController
 
           if format == :comprehensive_monitorees
             lab_results = []
-            lab_results.push(lab_result(row[87..90], row_ind)) if !row[87].blank? || !row[88].blank? || !row[89].blank? || !row[90].blank?
-            lab_results.push(lab_result(row[91..94], row_ind)) if !row[91].blank? || !row[92].blank? || !row[93].blank? || !row[94].blank?
+            lab_results.push(lab_result(row[88..91], row_ind)) if !row[88].blank? || !row[89].blank? || !row[90].blank? || !row[91].blank?
+            lab_results.push(lab_result(row[92..95], row_ind)) if !row[92].blank? || !row[93].blank? || !row[94].blank? || !row[95].blank?
             patient[:laboratories_attributes] = lab_results unless lab_results.empty?
           end
         rescue ValidationError => e

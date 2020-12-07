@@ -93,9 +93,7 @@ class PublicHealthHeader extends React.Component {
                 <Modal.Title as="h5">{this.state.importType === 'epix' ? 'Import Epi-X' : 'Import ' + this.props.appName + ' Format'} (error)</Modal.Title>
               )}
               {this.state.importData.errors.length === 0 && (
-                <Modal.Title as="h5">
-                  {this.state.importType === 'epix' ? 'Import Epi-X' : 'Import ' + this.props.appName + ' Format'} ({this.props.workflow})
-                </Modal.Title>
+                <Modal.Title as="h5">{this.state.importType === 'epix' ? 'Import Epi-X' : 'Import ' + this.props.appName + ' Format'}</Modal.Title>
               )}
             </React.Fragment>
           )}
@@ -121,13 +119,13 @@ class PublicHealthHeader extends React.Component {
     return (
       <Modal size="md" show={this.state.showUploadModal} onHide={() => this.setState({ showUploadModal: false, importType: null })}>
         <Modal.Header closeButton>
-          {this.state.importType === 'epix' && <Modal.Title as="h5">{`Import Epi-X (${this.props.workflow})`}</Modal.Title>}
-          {this.state.importType === 'saf' && <Modal.Title as="h5">{`Import ${this.props.appName} Format (${this.props.workflow})`}</Modal.Title>}
+          {this.state.importType === 'epix' && <Modal.Title as="h5">{`Import Epi-X`}</Modal.Title>}
+          {this.state.importType === 'saf' && <Modal.Title as="h5">{`Import ${this.props.appName} Format`}</Modal.Title>}
         </Modal.Header>
         <Modal.Body>
           {this.state.importType === 'saf' && (
             <div className="mb-3">
-              <a href="https://github.com/SaraAlert/SaraAlert/blob/master/public/Sara%20Alert%20Import%20Format.xlsx?raw=true">Download formatting guidance</a>
+              <a href="https://github.com/SaraAlertVaccine/SaraAlert/blob/master/public/VACCS%20Import%20Format.xlsx?raw=true">Download formatting guidance</a>
             </div>
           )}
           <Form inline>
@@ -175,10 +173,8 @@ class PublicHealthHeader extends React.Component {
                   <i className="fas fa-upload"></i> Import{' '}
                 </React.Fragment>
               }>
-              <Dropdown.Item onClick={() => this.setState({ importType: 'epix', showUploadModal: true })}>Epi-X ({this.props.workflow})</Dropdown.Item>
-              <Dropdown.Item onClick={() => this.setState({ importType: 'saf', showUploadModal: true })}>
-                {this.props.appName} Format ({this.props.workflow})
-              </Dropdown.Item>
+              <Dropdown.Item onClick={() => this.setState({ importType: 'epix', showUploadModal: true })}>Epi-X Format</Dropdown.Item>
+              <Dropdown.Item onClick={() => this.setState({ importType: 'saf', showUploadModal: true })}>{this.props.appName} Format</Dropdown.Item>
             </DropdownButton>
           )}
         </ButtonGroup>
