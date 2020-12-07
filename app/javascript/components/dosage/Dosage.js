@@ -26,7 +26,8 @@ class Dosage extends React.Component {
       facility_name: this.props.dosage.facility_name || '',
       facility_type: this.props.dosage.facility_type || '',
       facility_address: this.props.dosage.facility_address || '',
-      dosageInvalid: false,
+      dosageInvalid: true,
+      dosageDateInvalid: false,
     };
     this.toggleModal = this.toggleModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -51,22 +52,50 @@ class Dosage extends React.Component {
         facility_name: this.props.dosage.facility_name || '',
         facility_type: this.props.dosage.facility_type || '',
         facility_address: this.props.dosage.facility_address || '',
-        dosageInvalid: false,
+        dosageInvalid: true,
+        dosageDateInvalid: false,
       };
     });
   }
 
+  validate = () => {
+    const fields = [
+      'cvx',
+      'manufacturer',
+      'expiration_date',
+      'lot_number',
+      'date_given',
+      'sending_org',
+      'admin_route',
+      'admin_suffix',
+      'admin_site',
+      'dose_number',
+      'facility_name',
+      'facility_type',
+      'facility_address',
+    ];
+    let check = Object.keys(this.state).filter(k => fields.includes(k) && (this.state[`${k}`] == null || this.state[`${k}`].trim() == ''));
+    this.setState({ dosageInvalid: check.length > 0 });
+  };
+
   handleChange(event) {
-    this.setState({ [event.target.id]: event.target.value });
+    this.setState({ [event.target.id]: event.target.value }, () => {
+      if (this.state.manufacturer == 'Pfizer') {
+        this.setState({ cvx: '208' }, this.validate());
+      }
+      if (this.state.manufacturer == 'Moderna') {
+        this.setState({ cvx: '207' }, this.validate());
+      }
+    });
   }
 
   handleDateChange(field, date) {
     this.setState({ [field]: date }, () => {
       this.setState(state => {
         return {
-          dosageInvalid: moment(state.expiration_date).isBefore(state.date_given, 'day'),
+          dosageDateInvalid: moment(state.expiration_date).isBefore(state.date_given, 'day'),
         };
-      });
+      }, this.validate());
     });
   }
 
@@ -79,7 +108,7 @@ class Dosage extends React.Component {
           cvx: this.state.cvx,
           manufacturer: this.state.manufacturer,
           expiration_date: this.state.expiration_date,
-          lot_number: this.state.lot_number,
+          lot_number: this.state.lot_number.trim(),
           date_given: this.state.date_given,
           sending_org: this.state.sending_org,
           admin_route: this.state.admin_route,
@@ -88,7 +117,7 @@ class Dosage extends React.Component {
           dose_number: this.state.dose_number,
           facility_name: this.state.facility_name,
           facility_type: this.state.facility_type,
-          facility_address: this.state.facility_address,
+          facility_address: this.state.facility_address.trim(),
         })
         .then(() => {
           location.reload(true);
@@ -109,7 +138,7 @@ class Dosage extends React.Component {
           <Form>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Facility Name</Form.Label>
+                <Form.Label className="nav-input-label">Facility Name*</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="facility_name" onChange={this.handleChange} value={this.state.facility_name}>
                   <option disabled></option>
                   <option>Washington DC VA Medical Center</option>
@@ -118,7 +147,7 @@ class Dosage extends React.Component {
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Facility Type</Form.Label>
+                <Form.Label className="nav-input-label">Facility Type*</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="facility_type" onChange={this.handleChange} value={this.state.facility_type}>
                   <option disabled></option>
                   <option>Hospital</option>
@@ -130,15 +159,15 @@ class Dosage extends React.Component {
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Facility Address</Form.Label>
+                <Form.Label className="nav-input-label">Facility Address*</Form.Label>
                 <Form.Control size="lg" id="facility_address" className="form-square" value={this.state.facility_address} onChange={this.handleChange} />
               </Form.Group>
             </Row>
 
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Dose Number</Form.Label>
-                <Form.Control as="select" className="form-control-lg" id="dose_number" onChange={this.handleChange} value={this.state.dose_number}>
+                <Form.Label className="nav-input-label">Dose Number*</Form.Label>
+                <Form.Control as="select" className="form-control-lg" id="dose_number" onChange={this.handleChange} value={this.state.dose_number} required>
                   <option disabled></option>
                   <option>1</option>
                   <option disabled={this.props.secondDoseEligible ? null : true}>2</option>
@@ -147,43 +176,42 @@ class Dosage extends React.Component {
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">CVX</Form.Label>
-                <Form.Control size="lg" id="cvx" className="form-square" value={this.state.cvx || ''} onChange={this.handleChange} />
-              </Form.Group>
-            </Row>
-            <Row>
-              <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Manufacturer</Form.Label>
+                <Form.Label className="nav-input-label">Manufacturer*</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="manufacturer" onChange={this.handleChange} value={this.state.manufacturer}>
                   <option disabled></option>
                   <option>Pfizer</option>
                   <option>Moderna</option>
-                  <option>AstraZeneca</option>
-                  <option>Janssen</option>
                 </Form.Control>
               </Form.Group>
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Vaccine Expiration Date</Form.Label>
+                <Form.Label className="nav-input-label">CVX*</Form.Label>
+                <Form.Control size="lg" id="cvx" className="form-square" value={this.state.cvx || ''} onChange={this.handleChange} readOnly />
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group as={Col}>
+                <Form.Label className="nav-input-label">Vaccine Expiration Date*</Form.Label>
                 <DateInput
+                  isInvalid={this.state.dosageDateInvalid && this.state.expiration_date != null}
                   id="expiration_date"
                   date={this.state.expiration_date}
                   onChange={date => this.handleDateChange('expiration_date', date)}
                   placement="bottom"
-                  customClass={!this.state.dosageInvalid ? 'form-control-lg' : 'form-control-lg is-invalid'}
+                  customClass="form-control-lg"
                 />
               </Form.Group>
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Lot Number</Form.Label>
+                <Form.Label className="nav-input-label">Lot Number*</Form.Label>
                 <Form.Control size="lg" id="lot_number" className="form-square" value={this.state.lot_number || ''} onChange={this.handleChange} />
               </Form.Group>
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Date Administered</Form.Label>
+                <Form.Label className="nav-input-label">Date Administered*</Form.Label>
                 <DateInput
                   id="date_given"
                   date={this.state.date_given}
@@ -195,7 +223,7 @@ class Dosage extends React.Component {
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Sending Organization</Form.Label>
+                <Form.Label className="nav-input-label">Sending Organization*</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="sending_org" onChange={this.handleChange} value={this.state.sending_org}>
                   <option disabled></option>
                   <option>VA</option>
@@ -206,7 +234,7 @@ class Dosage extends React.Component {
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Route of Administration</Form.Label>
+                <Form.Label className="nav-input-label">Route of Administration*</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="admin_route" onChange={this.handleChange} value={this.state.admin_route}>
                   <option disabled></option>
                   <option>IM</option>
@@ -216,7 +244,7 @@ class Dosage extends React.Component {
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Administrator Suffix</Form.Label>
+                <Form.Label className="nav-input-label">Administrator Suffix*</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="admin_suffix" onChange={this.handleChange} value={this.state.admin_suffix}>
                   <option disabled></option>
                   <option>RN</option>
@@ -230,7 +258,7 @@ class Dosage extends React.Component {
             </Row>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Vaccination Site on Body</Form.Label>
+                <Form.Label className="nav-input-label">Vaccination Site on Body*</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="admin_site" onChange={this.handleChange} value={this.state.admin_site}>
                   <option disabled></option>
                   <option value="deltoid-l">Deltoid - Left</option>
@@ -248,7 +276,7 @@ class Dosage extends React.Component {
           <Button variant="secondary btn-square" onClick={toggle}>
             Cancel
           </Button>
-          <Button variant="primary btn-square" disabled={this.state.loading || this.state.dosageInvalid} onClick={submit}>
+          <Button variant="primary btn-square" disabled={this.state.loading || this.state.dosageInvalid || this.state.dosageDateInvalid} onClick={submit}>
             Create
           </Button>
         </Modal.Footer>

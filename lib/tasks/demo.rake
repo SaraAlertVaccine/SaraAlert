@@ -11,13 +11,14 @@ namespace :demo do
 
     jurisdictions = {}
 
-    jurisdictions[:usa] = Jurisdiction.where(name: 'USA').first
+    # jurisdictions[:usa] = Jurisdiction.where(name: 'USA').first
     jurisdictions[:state1] = Jurisdiction.where(name: 'State 1').first
     jurisdictions[:state2] = Jurisdiction.where(name: 'State 2').first
     jurisdictions[:county1] = Jurisdiction.where(name: 'County 1').first
     jurisdictions[:county2] = Jurisdiction.where(name: 'County 2').first
     jurisdictions[:county3] = Jurisdiction.where(name: 'County 3').first
     jurisdictions[:county4] = Jurisdiction.where(name: 'County 4').first
+    jurisdictions[:six_eight_eight] = Jurisdiction.where(name: '688').first
 
     if jurisdictions.has_value?(nil)
       puts ' Demonstration jurisdictions were not found! Make sure to run `bundle exec rake admin:import_or_update_jurisdictions` with the demonstration jurisdictions.yml'
@@ -56,21 +57,39 @@ namespace :demo do
 
     print 'Creating public health enroller users...'
 
-    phe1 = User.create(email: 'epi_enroller_all@example.com', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe1 = User.create(email: 'epi_enroller_all@example.com', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
     phe2 = User.create(email: 'state1_epi_enroller@example.com', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:state1], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe3 = User.create(email: 'jkufro@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe4 = User.create(email: 'forbes@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe5 = User.create(email: 'cqduong@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe6 = User.create(email: 'ksheridan@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe7 = User.create(email: 'kevins@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe8 = User.create(email: 'dcphillips@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe9 = User.create(email: 'mlingelbach@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe10 = User.create(email: 'ecanzone@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe11 = User.create(email: 'cbezold@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe12 = User.create(email: 'lberko@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe13 = User.create(email: 'suzette@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe14 = User.create(email: 'bahier@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
-    phe15 = User.create(email: 'aouyang@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe3 = User.create(email: 'jkufro@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe4 = User.create(email: 'forbes@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe5 = User.create(email: 'cqduong@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe6 = User.create(email: 'ksheridan@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe7 = User.create(email: 'kevins@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe8 = User.create(email: 'dcphillips@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe9 = User.create(email: 'mlingelbach@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe10 = User.create(email: 'ecanzone@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe11 = User.create(email: 'cbezold@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe12 = User.create(email: 'lberko@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe13 = User.create(email: 'suzette@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe14 = User.create(email: 'bahier@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    phe15 = User.create(email: 'aouyang@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+
+    
+    
+    # phe1 = User.create(email: 'epi_enroller_all@example.com', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe2 = User.create(email: 'state1_epi_enroller@example.com', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:state1], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe3 = User.create(email: 'jkufro@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe4 = User.create(email: 'forbes@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe5 = User.create(email: 'cqduong@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe6 = User.create(email: 'ksheridan@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe7 = User.create(email: 'kevins@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe8 = User.create(email: 'dcphillips@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe9 = User.create(email: 'mlingelbach@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe10 = User.create(email: 'ecanzone@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe11 = User.create(email: 'cbezold@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe12 = User.create(email: 'lberko@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe13 = User.create(email: 'suzette@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe14 = User.create(email: 'bahier@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    # phe15 = User.create(email: 'aouyang@mitre.org', password: '1234567ab!', role: Roles::PUBLIC_HEALTH_ENROLLER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
 
     puts ' done!'
 
@@ -78,7 +97,7 @@ namespace :demo do
 
     print 'Creating admin users...'
 
-    admin1 = User.create(email: 'admin1@example.com', password: '1234567ab!', role: Roles::ADMIN, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false)
+    admin1 = User.create(email: 'admin1@example.com', password: '1234567ab!', role: Roles::ADMIN, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false)
 
     puts ' done!'
 
@@ -86,7 +105,7 @@ namespace :demo do
 
     print 'Creating analyst users...'
 
-    analyst1 = User.create(email: 'analyst_all@example.com', password: '1234567ab!', role: Roles::ANALYST, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false)
+    analyst1 = User.create(email: 'analyst_all@example.com', password: '1234567ab!', role: Roles::ANALYST, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false)
     analyst2 = User.create(email: 'state1_analyst@example.com', password: '1234567ab!', role: Roles::ANALYST, jurisdiction: jurisdictions[:state1], force_password_change: false, authy_enabled: false, authy_enforced: false)
     analyst3 = User.create(email: 'localS1C1_analyst@example.com', password: '1234567ab!', role: Roles::ANALYST, jurisdiction: jurisdictions[:county1], force_password_change: false, authy_enabled: false, authy_enforced: false)
 
@@ -96,7 +115,7 @@ namespace :demo do
 
     print 'Creating super users...'
 
-    super_user1 = User.create(email: 'usa_super_user@example.com', password: '1234567ab!', role: Roles::SUPER_USER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    super_user1 = User.create(email: 'usa_super_user@example.com', password: '1234567ab!', role: Roles::SUPER_USER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
     super_user2 = User.create(email: 'state1_super_user@example.com', password: '1234567ab!', role: Roles::SUPER_USER, jurisdiction: jurisdictions[:state1], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
 
     puts ' done!'
@@ -105,7 +124,7 @@ namespace :demo do
 
     print 'Creating contract tracer users...'
 
-    contact_tracer1 = User.create(email: 'usa_contact_tracer@example.com', password: '1234567ab!', role: Roles::CONTACT_TRACER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    contact_tracer1 = User.create(email: 'usa_contact_tracer@example.com', password: '1234567ab!', role: Roles::CONTACT_TRACER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
     contact_tracer2 = User.create(email: 'state1_contact_tracer@example.com', password: '1234567ab!', role: Roles::CONTACT_TRACER, jurisdiction: jurisdictions[:state1], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
 
     puts ' done!'

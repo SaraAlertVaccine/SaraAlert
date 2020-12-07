@@ -300,7 +300,11 @@ class Import extends React.Component {
                         <br />
                         <b>Language:</b> {patient.primary_language}
                         <br />
-                        <b>Flight or Vessel Number:</b> {patient.flight_or_vessel_number}
+                        <b>Phone Number 1:</b> {patient.primary_telephone}
+                        <br />
+                        <b>Phone Number 2:</b> {patient.secondary_telephone}
+                        <br />
+                        <b>Email:</b> {patient.email}
                       </Col>
                       <Col>
                         <b>Home Address Line 1:</b> {patient.address_line_1}
@@ -318,21 +322,6 @@ class Import extends React.Component {
                         <b>Monitored State:</b> {patient.monitored_address_state}
                         <br />
                         <b>Monitored Zip:</b> {patient.monitored_address_zip}
-                      </Col>
-                      <Col>
-                        <b>Phone Number 1:</b> {patient.primary_telephone}
-                        <br />
-                        <b>Phone Number 2:</b> {patient.secondary_telephone}
-                        <br />
-                        <b>Email:</b> {patient.email}
-                        <br />
-                        <b>Exposure Location:</b> {patient.potential_exposure_location}
-                        <br />
-                        <b>Date of Departure:</b> {patient.date_of_departure}
-                        <br />
-                        <b>Close Contact w/ Known Case:</b> {patient.contact_of_known_case?.toString()}
-                        <br />
-                        <b>Was in HC Fac. w/ Known Cases:</b> {patient.was_in_health_care_facility_with_known_cases?.toString()}
                       </Col>
                     </Row>
                   </React.Fragment>

@@ -60,7 +60,9 @@
         <% unless @patient.isolation %>
         <%= react_component('subject/ClearReports', { authenticity_token: form_authenticity_token, patient: @patient }) %>
         <% end %>
+        <% if false %>
         <%= react_component('subject/PauseNotifications', { authenticity_token: form_authenticity_token, patient: @patient }) %>
+        <% end %>
         <%= react_component('subject/ContactAttempt', { authenticity_token: form_authenticity_token, patient: @patient }) %>
       </div>
     </div>
@@ -177,8 +179,8 @@
         <tr>
           <th class="DataTable-table-header">Vaccine Dose ID</th>
           <th class="DataTable-table-header">Dose Number</th>
-          <th class="DataTable-table-header">CVX</th>
           <th class="DataTable-table-header">Manufacturer</th>
+          <th class="DataTable-table-header">CVX</th>
           <th class="DataTable-table-header">Vaccine Expiration Date</th>
           <th class="DataTable-table-header">Lot Number</th>
           <th class="DataTable-table-header">Date Administered</th>
@@ -197,8 +199,8 @@
         <tr>
           <td><%= d.id %></td>
           <td><%= d.dose_number%></td>
-          <td><%= d.cvx %></td>
           <td><%= d.manufacturer %></td>
+          <td><%= d.cvx %></td>
           <td><%= d.expiration_date %></td>
           <td><%= d.lot_number %></td>
           <td><%= d.date_given %></td>

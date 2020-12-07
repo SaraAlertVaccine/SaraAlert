@@ -29,12 +29,24 @@ class AssessmentCompleted extends React.Component {
             </Form.Label>
             <br />
             <Form.Label className="text-left pt-1">
-              <br />• {this.props.translations[this.props.lang]['web']['instruction1']}
-              <br />
-              <br />• {this.props.translations[this.props.lang]['web']['instruction2']}
-              <br />
-              <br />• {this.props.translations[this.props.lang]['web']['instruction3']}
-              <br />
+              {this.props.translations[this.props.lang]['web']['instruction1'].trim().length != 0 && (
+                <React.Fragment>
+                  <br />• {this.props.translations[this.props.lang]['web']['instruction1']}
+                  <br />
+                </React.Fragment>
+              )}
+              {this.props.translations[this.props.lang]['web']['instruction2'].trim().length != 0 && (
+                <React.Fragment>
+                  <br />• {this.props.translations[this.props.lang]['web']['instruction2']}
+                  <br />
+                </React.Fragment>
+              )}
+              {this.props.translations[this.props.lang]['web']['instruction3'].trim().length != 0 && (
+                <React.Fragment>
+                  <br />• {this.props.translations[this.props.lang]['web']['instruction3']}
+                  <br />
+                </React.Fragment>
+              )}
               <br />
               {(this.props.contact_info.email || this.props.contact_info.phone || this.props.contact_info.webpage) && (
                 <React.Fragment>
