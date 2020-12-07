@@ -185,7 +185,7 @@ class Contact extends React.Component {
     return (
       <React.Fragment>
         <Card className="mx-2 card-square">
-          <Card.Header as="h5">Monitoree Contact Information</Card.Header>
+          <Card.Header as="h5">Recipient Contact Information</Card.Header>
           <Card.Body>
             <Form>
               <Form.Row className="pb-3">
@@ -241,11 +241,11 @@ class Contact extends React.Component {
                         Evening:
                       </Form.Group>
                       <Form.Group as={Col} md="auto">
-                        <span className="font-weight-light">Between 8:00 and 12:00 in monitoree&apos;s timezone</span>
+                        <span className="font-weight-light">Between 8:00 and 12:00 in recipient&apos;s timezone</span>
                         <br />
-                        <span className="font-weight-light">Between 12:00 and 16:00 in monitoree&apos;s timezone</span>
+                        <span className="font-weight-light">Between 12:00 and 16:00 in recipient&apos;s timezone</span>
                         <br />
-                        <span className="font-weight-light">Between 16:00 and 20:00 in monitoree&apos;s timezone</span>
+                        <span className="font-weight-light">Between 16:00 and 20:00 in recipient&apos;s timezone</span>
                       </Form.Group>
                     </Form.Row>
                     <Form.Control.Feedback className="d-block" type="invalid">
@@ -327,21 +327,21 @@ class Contact extends React.Component {
                   {this.state.current.patient.preferred_contact_method === 'SMS Texted Weblink' &&
                     this.state.current.patient.primary_telephone_type == 'Plain Cell' && (
                       <i>
-                        <b>* Warning:</b> Plain cell phones cannot receive web-links. Please make sure the monitoree has a compatible device to receive this
+                        <b>* Warning:</b> Plain cell phones cannot receive web-links. Please make sure the recipient has a compatible device to receive this
                         type of message.
                       </i>
                     )}
                   {this.state.current.patient.preferred_contact_method === 'SMS Texted Weblink' &&
                     this.state.current.patient.primary_telephone_type == 'Landline' && (
                       <i>
-                        <b>* Warning:</b> Landline phones cannot receive web-links. Please make sure the monitoree has a compatible device to receive this type
+                        <b>* Warning:</b> Landline phones cannot receive web-links. Please make sure the recipient has a compatible device to receive this type
                         of message.
                       </i>
                     )}
                   {this.state.current.patient.preferred_contact_method === 'SMS Text-message' &&
                     this.state.current.patient.primary_telephone_type === 'Landline' && (
                       <i>
-                        <b>* Warning:</b> Landline phones cannot receive text messages. Please make sure the monitoree has a compatible device to receive this
+                        <b>* Warning:</b> Landline phones cannot receive text messages. Please make sure the recipient has a compatible device to receive this
                         type of message.
                       </i>
                     )}

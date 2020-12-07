@@ -113,7 +113,7 @@ class AssessmentsController < ApplicationController
       @assessment.patient = patient
 
       # Determine if a user created this assessment or a monitoree
-      @assessment.who_reported = current_user.nil? ? 'Monitoree' : current_user.email
+      @assessment.who_reported = current_user.nil? ? 'Recipient' : current_user.email
       @assessment.save
 
       # Save a new receipt and clear out any older ones

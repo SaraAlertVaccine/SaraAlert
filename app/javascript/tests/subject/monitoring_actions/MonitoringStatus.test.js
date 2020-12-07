@@ -103,9 +103,9 @@ describe('MonitoringStatus', () => {
     expect(modalBody.find(Form.Group).exists()).toBeTruthy();
     expect(modalBody.find(Form.Check).length).toEqual(2);
     expect(modalBody.find('#apply_to_household_no').prop('type')).toEqual('radio');
-    expect(modalBody.find('#apply_to_household_no').prop('label')).toEqual('This monitoree only');
+    expect(modalBody.find('#apply_to_household_no').prop('label')).toEqual('This recipient only');
     expect(modalBody.find('#apply_to_household_yes').prop('type')).toEqual('radio');
-    expect(modalBody.find('#apply_to_household_yes').prop('label')).toEqual('This monitoree and all household members (this will turn Continuous Exposure OFF for all household members)');
+    expect(modalBody.find('#apply_to_household_yes').prop('label')).toEqual('This recipient and all household members (this will turn Continuous Exposure OFF for all household members)');
   });
 
   it('Clicking HoH radio buttons toggles this.state.apply_to_household', () => {

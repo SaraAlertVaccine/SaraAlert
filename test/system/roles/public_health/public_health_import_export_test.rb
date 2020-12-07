@@ -86,7 +86,7 @@ class PublicHealthTest < ApplicationSystemTestCase
   end
 
   test 'import epi-x to exposure and validate empty monitorees list' do
-    @@public_health_test_helper.import_epi_x('locals2c3_epi', :exposure, 'Epi-X-Format-Invalid-Monitorees.xlsx', :invalid_monitorees, nil)
+    @@public_health_test_helper.import_epi_x('locals2c3_epi', :exposure, 'Epi-X-Format-Invalid-Recipients.xlsx', :invalid_monitorees, nil)
   end
 
   test 'import epi-x to exposure and validate fields' do
@@ -150,7 +150,7 @@ class PublicHealthTest < ApplicationSystemTestCase
   end
 
   test 'import sara alert format to isolation and validate empty monitorees list' do
-    @@public_health_test_helper.import_sara_alert_format('state1_epi_enroller', :isolation, 'Sara-Alert-Format-Invalid-Monitorees.xlsx',
+    @@public_health_test_helper.import_sara_alert_format('state1_epi_enroller', :isolation, 'Sara-Alert-Format-Invalid-Recipients.xlsx',
                                                          :invalid_monitorees, nil)
   end
 

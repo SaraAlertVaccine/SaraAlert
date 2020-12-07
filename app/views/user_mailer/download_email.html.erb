@@ -10,9 +10,9 @@
     <% elsif @export_type == 'sara_format_isolation' %>
       <b><%= ADMIN_OPTIONS['app_name'] %> Format (isolation)</b>
     <% elsif @export_type == 'full_history_all' %>
-      <b>Excel Export For All Monitorees</b>
+      <b>Excel Export For All Recipients</b>
     <% elsif @export_type == 'full_history_purgeable' %>
-      <b>Excel Export For Purge-Eligible Monitorees</b>
+      <b>Excel Export For Purge-Eligible Recipients</b>
     <% else %>
       <b>Default</b>
     <% end %>
@@ -22,8 +22,8 @@
       These downloads will be invalid if you attempt another export of this type before retrieving the file(s). Exports will not work if forwarded to another user. You must be logged into <%= ADMIN_OPTIONS['app_name'] %> to access exports.
       <br />
       <br />
-      If your export exceeded <%= number_with_delimiter(@batch_size) %> records, you will see separate files below with each containing data for no more than <%= number_with_delimiter(@batch_size) %> monitorees.
-      Each file (e.g., monitorees, assessments, etc) belonging to the same batch will have the same number at the end of the filename.
+      If your export exceeded <%= number_with_delimiter(@batch_size) %> records, you will see separate files below with each containing data for no more than <%= number_with_delimiter(@batch_size) %> recipients.
+      Each file (e.g., recipients, assessments, etc) belonging to the same batch will have the same number at the end of the filename.
     </p>
   </p>
   <% @lookups.each do |lookup| %>

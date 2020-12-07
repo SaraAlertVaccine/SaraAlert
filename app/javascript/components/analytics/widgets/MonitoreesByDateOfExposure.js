@@ -54,7 +54,7 @@ class MonitoreesByDateOfExposure extends React.Component {
       <React.Fragment>
         <Card className="card-square text-center">
           <Card.Header as="h5" className="text-left">
-            Total Monitorees by Date of Last Exposure By Risk Status
+            Total Recipients by Date of Last Exposure By Risk Status
           </Card.Header>
           <Card.Body>
             <Form.Row className="justify-content-md-center">

@@ -58,7 +58,7 @@ class AnalystDashboardMonitoreeCountsVerifier < ApplicationSystemTestCase
       count = distribution.fetch("#{risk_level}_count".to_sym)
       expected_count = get_expected_count(analytic_id, active_monitoring, category_type, category, risk_level)
       unless expected_count.nil?
-        err_msg = @@system_test_utils.get_err_msg('Monitoree count', "#{category_type} #{category} #{risk_level}", expected_count['total'])
+        err_msg = @@system_test_utils.get_err_msg('Recipient count', "#{category_type} #{category} #{risk_level}", expected_count['total'])
         assert_equal(expected_count['total'], count, err_msg)
       end
     end
@@ -69,7 +69,7 @@ class AnalystDashboardMonitoreeCountsVerifier < ApplicationSystemTestCase
     RISK_LEVELS.each do |risk_level|
       sum_of_counts += distribution.fetch("#{risk_level}_count".to_sym)
     end
-    assert_equal(sum_of_counts, distribution.fetch(:total_count), @@system_test_utils.get_err_msg('Monitoree count', 'sum of counts', sum_of_counts))
+    assert_equal(sum_of_counts, distribution.fetch(:total_count), @@system_test_utils.get_err_msg('Recipient count', 'sum of counts', sum_of_counts))
   end
 
   def validate_percentages(distribution)
@@ -130,7 +130,7 @@ class AnalystDashboardMonitoreeCountsVerifier < ApplicationSystemTestCase
   end
 
   def err_msg_for_distribution_percentage(distribution, risk_level)
-    @@system_test_utils.get_err_msg('Monitoree counts',
+    @@system_test_utils.get_err_msg('Recipient counts',
                                     "#{distribution.fetch('category'.to_sym)} #{risk_level} risk level percentage",
                                     'less than or equal to 100')
   end

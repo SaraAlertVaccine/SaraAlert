@@ -68,12 +68,12 @@ class RemoveFromHousehold extends React.Component {
               <Form.Group as={Col}>
                 {this.state.removeEligible && (
                   <Form.Label size="sm" className="nav-input-label">
-                    This monitoree will be removed from their household and will be responsible for their own responses.
+                    This recipient will be removed from their household and will be responsible for their own responses.
                   </Form.Label>
                 )}
                 {this.state.removeEligible == false && (
                   <Form.Label size="sm" className="nav-input-label">
-                    This monitoree cannot be removed from their household until their email and primary telephone number differ from those of the current head
+                    This recipient cannot be removed from their household until their email and primary telephone number differ from those of the current head
                     of household.
                   </Form.Label>
                 )}
@@ -108,10 +108,10 @@ class RemoveFromHousehold extends React.Component {
         <Button size="sm" className="my-2" onClick={this.toggleModal}>
           <i className="fas fa-house-user"></i> Remove From Household
         </Button>
-        {this.state.showModal && this.state.removeEligible && this.createModal('Remove Monitoree From Household', this.toggleModal, this.submit)}
+        {this.state.showModal && this.state.removeEligible && this.createModal('Remove Recipient From Household', this.toggleModal, this.submit)}
         {this.state.showModal &&
           this.state.removeEligible == false &&
-          this.createModal('Cannot Remove Monitoree From Household', this.toggleModal, this.submit)}
+          this.createModal('Cannot Remove Recipient From Household', this.toggleModal, this.submit)}
       </React.Fragment>
     );
   }

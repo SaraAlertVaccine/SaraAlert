@@ -26,7 +26,7 @@ class DownloadMonitoreeExcel extends React.Component {
           var fileDate = moment().format();
           FileDownload(
             base64StringToBlob(response.data.replace(/(\r\n|\n|\r)/gm, ''), 'application/xlsx'),
-            'Sara-Alert-Monitoree-Export-' + this.props.patient.id + '-' + fileDate + '.xlsx'
+            'VACCS-Recipient-Export-' + this.props.patient.id + '-' + fileDate + '.xlsx'
           );
           this.setState({ loading: false });
         })

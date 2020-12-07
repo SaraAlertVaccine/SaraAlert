@@ -97,7 +97,7 @@ class AssignedUser extends React.Component {
                   className="mb-1"
                   name="apply_to_household"
                   id="apply_to_household_no"
-                  label="This monitoree only"
+                  label="This recipient only"
                   onChange={this.handleApplyHouseholdChange}
                   checked={!this.state.apply_to_household}
                 />
@@ -106,7 +106,7 @@ class AssignedUser extends React.Component {
                   className="mb-3"
                   name="apply_to_household"
                   id="apply_to_household_yes"
-                  label="This monitoree and all household members"
+                  label="This recipient and all household members"
                   onChange={this.handleApplyHouseholdChange}
                   checked={this.state.apply_to_household}
                 />

@@ -24,7 +24,7 @@ class ReportingSummary extends React.Component {
                   <YAxis
                     label={
                       <Text x={-30} y={60} dx={50} dy={150} offset={0} angle={-90}>
-                        Number of Monitorees
+                        Number of Recipients
                       </Text>
                     }
                   />

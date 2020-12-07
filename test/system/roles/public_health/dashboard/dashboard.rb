@@ -41,12 +41,12 @@ class PublicHealthDashboard < ApplicationSystemTestCase
   end
 
   def export_excel_purge_eligible_monitorees(user_label, workflow, action)
-    start_export(workflow, 'Excel Export For Purge-Eligible Monitorees', action)
+    start_export(workflow, 'Excel Export For Purge-Eligible Recipients', action)
     @@public_health_export_verifier.verify_excel_purge_eligible_monitorees(user_label) if action == :export
   end
 
   def export_excel_all_monitorees(user_label, workflow, action)
-    start_export(workflow, 'Excel Export For All Monitorees', action)
+    start_export(workflow, 'Excel Export For All Recipients', action)
     @@public_health_export_verifier.verify_excel_all_monitorees(user_label) if action == :export
   end
 
@@ -89,7 +89,7 @@ class PublicHealthDashboard < ApplicationSystemTestCase
       assert_content('Please make sure to use the latest Epi-X format.')
       find('.modal-header').find('.close').click
     when :invalid_monitorees
-      assert_content('File must contain at least one monitoree to import')
+      assert_content('File must contain at least one recipient to import')
       find('.modal-header').find('.close').click
     when :invalid_fields
       @@public_health_import_verifier.verify_epi_x_field_validation(jurisdiction_id, workflow, file_name)
@@ -118,7 +118,7 @@ class PublicHealthDashboard < ApplicationSystemTestCase
       assert_content('Please make sure to use the latest format specified by the Sara Alert Format guidance doc.')
       find('.modal-header').find('.close').click
     when :invalid_monitorees
-      assert_content('File must contain at least one monitoree to import')
+      assert_content('File must contain at least one recipient to import')
       find('.modal-header').find('.close').click
     when :invalid_fields
       @@public_health_import_verifier.verify_sara_alert_format_field_validation(jurisdiction_id, workflow, file_name)

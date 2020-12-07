@@ -159,7 +159,7 @@ class Identification extends React.Component {
         if (!fullySupported) {
           let message = languageJson.name;
           if (!sms && !email && !phone) {
-            message += ' is not currently supported by ' + this.props.appName + '. Any messages sent to this monitoree will be in English.';
+            message += ' is not currently supported by ' + this.props.appName + '. Any messages sent to this recipient will be in English.';
           } else if (!sms && !email && phone) {
             message +=
               ' is supported for the telephone call method only. If email or SMS texted weblink is selected as the preferred reporting method, messages will be in English.';
@@ -199,7 +199,7 @@ class Identification extends React.Component {
     return (
       <React.Fragment>
         <Card className="mx-2 card-square">
-          <Card.Header as="h5">Monitoree Identification</Card.Header>
+          <Card.Header as="h5">Recipient Identification</Card.Header>
           <Card.Body>
             <Form>
               <Form.Row>
@@ -460,7 +460,7 @@ class Identification extends React.Component {
                 <Form.Group as={Col} controlId="secondary_language_support_message">
                   {this.state.current.patient.secondary_language && (
                     <i>
-                      <b>* Warning:</b> Not used to determine which language the system sends messages to the monitoree in.
+                      <b>* Warning:</b> Not used to determine which language the system sends messages to the recipient in.
                     </i>
                   )}
                 </Form.Group>
