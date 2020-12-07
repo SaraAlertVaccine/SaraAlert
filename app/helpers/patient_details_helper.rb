@@ -8,11 +8,11 @@ module PatientDetailsHelper # rubocop:todo Metrics/ModuleLength
     return :closed unless monitoring
 
     unless isolation
-      return :exposure_followup unless severe_symptom_onset.nil?
+      return :exposure_follow_up unless severe_symptom_onset.nil?
       return :exposure_under_investigation if public_health_action != 'None'
       return :exposure_symptomatic unless symptom_onset.nil?
-      return :exposure_asymptomatic if (!latest_assessment_at.nil? && latest_assessment_at >= ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago) ||
-                                       (!created_at.nil? && created_at >= ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago)
+      return :exposure_reviewed if (!latest_assessment_at.nil? && latest_assessment_at >= ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago) ||
+      (!created_at.nil? && created_at >= ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago)
 
       return :exposure_non_reporting
     end

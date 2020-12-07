@@ -45,7 +45,7 @@ class PublicHealthController < ApplicationController
     return head :bad_request unless order.nil? || order.blank? || %w[name jurisdiction transferred_from transferred_to assigned_user state_local_id dob
                                                                      end_of_monitoring risk_level monitoring_plan public_health_action expected_purge_date
                                                                      reason_for_closure closed_at transferred_at latest_report symptom_onset
-                                                                     extended_isolation].include?(order)
+                                                                     extended_isolation status].include?(order)
 
     direction = permitted_params[:direction]
     return head :bad_request unless direction.nil? || direction.blank? || %w[asc desc].include?(direction)
@@ -199,6 +199,10 @@ class PublicHealthController < ApplicationController
       patients = patients.order('CASE WHEN latest_transfer_at IS NULL THEN 1 ELSE 0 END, latest_transfer_at ' + dir)
     when 'latest_report'
       patients = patients.order('CASE WHEN latest_assessment_at IS NULL THEN 1 ELSE 0 END, latest_assessment_at ' + dir)
+    when 'status'
+      # For alphabetical sorting: closed 0, followup 1, non-reporting 2, reviewed 3, symptomatic 4
+      # Case determination -> closed, followup, symptomatic, reviewed, non-reporting
+      patients = patients.order('CASE WHEN monitoring != true THEN 0 WHEN severe_symptom_onset IS NOT NULL THEN 1 WHEN symptom_onset IS NOT NULL then 4 WHEN latest_assessment_at IS NOT NULL and latest_assessment_at >= DATE_SUB(DATE(NOW()), INTERVAL ' + ADMIN_OPTIONS['reporting_period_minutes'].to_s + ' MINUTE) THEN 3 ELSE 2 END ' + dir)
     end
 
     patients
