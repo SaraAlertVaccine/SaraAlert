@@ -11,7 +11,7 @@ namespace :demo do
 
     jurisdictions = {}
 
-    jurisdictions[:usa] = Jurisdiction.where(name: 'USA').first
+    # jurisdictions[:usa] = Jurisdiction.where(name: 'USA').first
     jurisdictions[:state1] = Jurisdiction.where(name: 'State 1').first
     jurisdictions[:state2] = Jurisdiction.where(name: 'State 2').first
     jurisdictions[:county1] = Jurisdiction.where(name: 'County 1').first
@@ -97,7 +97,7 @@ namespace :demo do
 
     print 'Creating admin users...'
 
-    admin1 = User.create(email: 'admin1@example.com', password: '1234567ab!', role: Roles::ADMIN, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false)
+    admin1 = User.create(email: 'admin1@example.com', password: '1234567ab!', role: Roles::ADMIN, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false)
 
     puts ' done!'
 
@@ -105,7 +105,7 @@ namespace :demo do
 
     print 'Creating analyst users...'
 
-    analyst1 = User.create(email: 'analyst_all@example.com', password: '1234567ab!', role: Roles::ANALYST, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false)
+    analyst1 = User.create(email: 'analyst_all@example.com', password: '1234567ab!', role: Roles::ANALYST, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false)
     analyst2 = User.create(email: 'state1_analyst@example.com', password: '1234567ab!', role: Roles::ANALYST, jurisdiction: jurisdictions[:state1], force_password_change: false, authy_enabled: false, authy_enforced: false)
     analyst3 = User.create(email: 'localS1C1_analyst@example.com', password: '1234567ab!', role: Roles::ANALYST, jurisdiction: jurisdictions[:county1], force_password_change: false, authy_enabled: false, authy_enforced: false)
 
@@ -115,7 +115,7 @@ namespace :demo do
 
     print 'Creating super users...'
 
-    super_user1 = User.create(email: 'usa_super_user@example.com', password: '1234567ab!', role: Roles::SUPER_USER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    super_user1 = User.create(email: 'usa_super_user@example.com', password: '1234567ab!', role: Roles::SUPER_USER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
     super_user2 = User.create(email: 'state1_super_user@example.com', password: '1234567ab!', role: Roles::SUPER_USER, jurisdiction: jurisdictions[:state1], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
 
     puts ' done!'
@@ -124,7 +124,7 @@ namespace :demo do
 
     print 'Creating contract tracer users...'
 
-    contact_tracer1 = User.create(email: 'usa_contact_tracer@example.com', password: '1234567ab!', role: Roles::CONTACT_TRACER, jurisdiction: jurisdictions[:usa], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
+    contact_tracer1 = User.create(email: 'usa_contact_tracer@example.com', password: '1234567ab!', role: Roles::CONTACT_TRACER, jurisdiction: jurisdictions[:six_eight_eight], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
     contact_tracer2 = User.create(email: 'state1_contact_tracer@example.com', password: '1234567ab!', role: Roles::CONTACT_TRACER, jurisdiction: jurisdictions[:state1], force_password_change: false, authy_enabled: false, authy_enforced: false, api_enabled: true)
 
     puts ' done!'
