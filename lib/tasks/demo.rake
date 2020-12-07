@@ -11,7 +11,7 @@ namespace :demo do
 
     jurisdictions = {}
 
-    jurisdictions[:usa] = Jurisdiction.where(name: 'USA').first
+    # jurisdictions[:usa] = Jurisdiction.where(name: 'USA').first
     jurisdictions[:state1] = Jurisdiction.where(name: 'State 1').first
     jurisdictions[:state2] = Jurisdiction.where(name: 'State 2').first
     jurisdictions[:county1] = Jurisdiction.where(name: 'County 1').first
