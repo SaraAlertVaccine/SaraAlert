@@ -178,7 +178,7 @@ class RiskFactors extends React.Component {
         </Table>
         <div className="text-secondary text-right mb-3">
           <i className="fas fa-info-circle mr-1"></i>
-          Cumulative percentage may not sum to 100 as monitorees may report more than one exposure risk factor
+          Cumulative percentage may not sum to 100 as recipients may report more than one exposure risk factor
         </div>
         {this.NO_COUNTRY_DATA ? (
           <div>
@@ -226,7 +226,7 @@ class RiskFactors extends React.Component {
             </Table>
             <div className="text-secondary text-right mb-3">
               <i className="fas fa-info-circle mr-1"></i>
-              Excludes monitorees where exposure country is not reported
+              Excludes recipients where exposure country is not reported
             </div>
           </div>
         )}

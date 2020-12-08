@@ -54,7 +54,7 @@ class Export extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <p>
-            After clicking <b>Start Export</b>, {this.props.appName} will gather all of the monitoree data that comprises your request and generate an export
+            After clicking <b>Start Export</b>, {this.props.appName} will gather all of the recipient data that comprises your request and generate an export
             file. {this.props.appName} will then send your user account an email with a one-time download link. This process may take several minutes to
             complete, based on the amount of data present.
           </p>
@@ -94,7 +94,7 @@ class Export extends React.Component {
           {/* <Dropdown.Item onClick={() => this.setState({ showCSVModal: true })}>Line list CSV (vaccine)</Dropdown.Item>
           <Dropdown.Item onClick={() => this.setState({ showSaraFormatModal: true })}>{this.props.appName} Format (vaccine)</Dropdown.Item>
           <Dropdown.Item onClick={() => this.setState({ showAllPurgeEligibleModal: true })}>Excel Export For Purge-Eligible Monitorees</Dropdown.Item> */}
-          <Dropdown.Item onClick={() => this.setState({ showAllModal: true })}>Excel Export For All Monitorees</Dropdown.Item>
+          <Dropdown.Item onClick={() => this.setState({ showAllModal: true })}>Excel Export For All Recipients</Dropdown.Item>
         </DropdownButton>
         {this.state.showCSVModal &&
           this.createModal(
@@ -116,7 +116,7 @@ class Export extends React.Component {
           )}
         {this.state.showAllPurgeEligibleModal &&
           this.createModal(
-            'Excel Export For Purge-Eligible Monitorees',
+            'Excel Export For Purge-Eligible Recipients',
             () => {
               this.setState({ showAllPurgeEligibleModal: false });
             },
@@ -125,7 +125,7 @@ class Export extends React.Component {
           )}
         {this.state.showAllModal &&
           this.createModal(
-            'Excel Export For All Monitorees',
+            'Excel Export For All Recipients',
             () => {
               this.setState({ showAllModal: false });
             },

@@ -119,9 +119,9 @@ class PublicHealthDashboardVerifier < ApplicationSystemTestCase
     @@public_health_dashboard.search_for_monitoree(monitoree_label)
     monitoree_display_name = @@system_test_utils.get_monitoree_display_name(monitoree_label)
     if should_exist
-      assert page.has_content?(monitoree_display_name), @@system_test_utils.get_err_msg('Dashboard', 'monitoree name', monitoree_display_name)
+      assert page.has_content?(monitoree_display_name), @@system_test_utils.get_err_msg('Dashboard', 'recipient name', monitoree_display_name)
     else
-      assert page.has_no_content?(monitoree_display_name), @@system_test_utils.get_err_msg('Dashboard', 'monitoree name', monitoree_display_name)
+      assert page.has_no_content?(monitoree_display_name), @@system_test_utils.get_err_msg('Dashboard', 'recipient name', monitoree_display_name)
     end
   end
 

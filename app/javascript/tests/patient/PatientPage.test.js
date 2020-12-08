@@ -19,11 +19,11 @@ describe('PatientPage', () => {
 
     it('Properly renders all main components', () => {
         expect(wrapper.find('#patient-info-header').exists()).toBeTruthy();
-        expect(wrapper.find('#patient-info-header').text()).toEqual('Monitoree Details  (edit details)');
+        expect(wrapper.find('#patient-info-header').text()).toEqual('Recipient Details  (edit details)');
         expect(wrapper.find('#patient-info-header a').prop('href')).toEqual('undefined/patients/17/edit');
         expect(wrapper.find('.collapse-hover .fa-bars').exists()).toBeTruthy();
         expect(wrapper.containsMatchingElement(<Patient />)).toBeTruthy();
-        expect(wrapper2.find('#patient-info-header').text()).toEqual('Monitoree Details (ID: 00000-1) (edit details)');
+        expect(wrapper2.find('#patient-info-header').text()).toEqual('Recipient Details (ID: 00000-1) (edit details)');
     });
 
     it('Updates this.state.hideBody by clicking card header', () => {

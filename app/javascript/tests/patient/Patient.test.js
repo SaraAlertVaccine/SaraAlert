@@ -14,7 +14,7 @@ const hohTableHeaders = [ 'Name', 'Workflow', 'Monitoring Status', 'Continuous E
 const identificationFields = [ 'DOB', 'Age', 'Language', 'State/Local ID', 'CDC ID', 'NNDSS ID', 'Birth Sex', 'Gender Identity', 'Sexual Orientation', 'Race', 'Ethnicity', 'Nationality' ];
 const contactFields = [ 'Phone', 'Preferred Contact Time', 'Type', 'Email', 'Preferred Reporting Method' ];
 const additionalTravelFields = [ 'Type', 'Place', 'Port Of Departure', 'End Date', 'Start Date' ];
-const potentialExposureFields = [ 
+const potentialExposureFields = [
     'CLOSE CONTACT WITH A KNOWN CASE',
     'MEMBER OF A COMMON EXPOSURE COHORT',
     'TRAVEL FROM AFFECTED COUNTRY OR AREA',
@@ -127,7 +127,7 @@ describe('Patient', () => {
             jurisdiction_path="USA, State 1, County 2" authenticity_token={authyToken} />);
         expect(wrapper.find('#head-of-household').exists()).toBeTruthy();
         expect(wrapper.find('#head-of-household').find(Row).at(1).text())
-            .toEqual('This monitoree is responsible for handling the reporting of the following other monitorees:');
+            .toEqual('This recipient is responsible for handling the reporting of the following other recipients:');
         expect(wrapper.containsMatchingElement(<ChangeHOH />)).toBeTruthy();
         expect(wrapper.containsMatchingElement(<RemoveFromHousehold />)).toBeFalsy();
         expect(wrapper.containsMatchingElement(<MoveToHousehold />)).toBeFalsy();
@@ -142,7 +142,7 @@ describe('Patient', () => {
             jurisdiction_path="USA, State 1, County 2" authenticity_token={authyToken} />);
         expect(wrapper.find('#household-member-not-hoh').exists()).toBeTruthy();
         expect(wrapper.find('#household-member-not-hoh').find(Row).first().text())
-            .toEqual('The reporting responsibility for this monitoree is handled by another monitoree. Click here to view that monitoree.');
+            .toEqual('The reporting responsibility for this recipient is handled by another recipient. Click here to view that recipient.');
         expect(wrapper.find('#household-member-not-hoh a').prop('href')).toEqual('/patients/17');
         expect(wrapper.containsMatchingElement(<RemoveFromHousehold />)).toBeTruthy();
         expect(wrapper.containsMatchingElement(<MoveToHousehold />)).toBeFalsy();
@@ -153,7 +153,7 @@ describe('Patient', () => {
         const wrapper = shallow(<Patient details={mockPatient1} dependents={[ ]} goto={goToMock} hideBody={true}
             jurisdiction_path="USA, State 1, County 2" authenticity_token={authyToken} />);
         expect(wrapper.find('#no-household').exists()).toBeTruthy();
-        expect(wrapper.find('#no-household').find(Row).at(1).text()).toEqual('This monitoree is not a member of a household:');
+        expect(wrapper.find('#no-household').find(Row).at(1).text()).toEqual('This recipient is not a member of a household:');
         expect(wrapper.containsMatchingElement(<MoveToHousehold />)).toBeTruthy();
         expect(wrapper.containsMatchingElement(<ChangeHOH />)).toBeFalsy();
         expect(wrapper.containsMatchingElement(<RemoveFromHousehold />)).toBeFalsy();
@@ -161,7 +161,7 @@ describe('Patient', () => {
 
     it('Properly renders no details message', () => {
         const blankWrapper = shallow(<Patient />);
-        expect(blankWrapper.text()).toEqual('No monitoree details to show.');
+        expect(blankWrapper.text()).toEqual('No recipient details to show.');
     });
 
     it('Expands/collapses details with this.props.hideBody', () => {

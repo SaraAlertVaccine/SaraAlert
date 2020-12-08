@@ -227,7 +227,7 @@ class AdditionalPlannedTravel extends React.Component {
                     rows="5"
                     size="lg"
                     className="form-square"
-                    placeholder="enter additional information about monitoree's planned travel (e.g. additional destinations, planned activities/social interactions, etc...)"
+                    placeholder="enter additional information about recipient's planned travel (e.g. additional destinations, planned activities/social interactions, etc...)"
                     value={this.state.current.patient.additional_planned_travel_related_notes || ''}
                     onChange={this.handleChange}
                   />

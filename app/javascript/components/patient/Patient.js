@@ -18,7 +18,7 @@ class Patient extends React.Component {
 
   render() {
     if (!this.props.details) {
-      return <React.Fragment>No monitoree details to show.</React.Fragment>;
+      return <React.Fragment>No recipient details to show.</React.Fragment>;
     }
     return (
       <React.Fragment>

@@ -115,7 +115,7 @@ class LastDateExposure extends React.Component {
               <Form.Check
                 type="radio"
                 id="apply_to_monitoree_only"
-                label="This monitoree only"
+                label="This recipient only"
                 onChange={this.handleChange}
                 checked={this.state.apply_to_household === false && this.state.apply_to_household_cm_only === false}
               />
@@ -126,7 +126,7 @@ class LastDateExposure extends React.Component {
               <Form.Check
                 type="radio"
                 id="apply_to_household_cm_only"
-                label={`This monitoree and only household members ${
+                label={`This recipient and only household members ${
                   update_continuous_exposure ? 'that are not on the closed line list' : ''
                 } where Continuous Exposure is turned ON`}
                 onChange={this.handleChange}
@@ -139,7 +139,7 @@ class LastDateExposure extends React.Component {
               <Form.Check
                 type="radio"
                 id="apply_to_household"
-                label={`This monitoree and all household members ${update_continuous_exposure ? 'that are not on the closed line list' : ''}`}
+                label={`This recipient and all household members ${update_continuous_exposure ? 'that are not on the closed line list' : ''}`}
                 onChange={this.handleChange}
                 checked={this.state.apply_to_household}
               />
@@ -240,7 +240,7 @@ class LastDateExposure extends React.Component {
                   placement="left"
                   overlay={
                     <Tooltip id="tooltip-ce" style={this.props.patient.monitoring ? { display: 'none' } : {}}>
-                      Continuous Exposure cannot be turned on or off for records on the Closed line list. If this monitoree requires monitoring due to a
+                      Continuous Exposure cannot be turned on or off for records on the Closed line list. If this recipient requires monitoring due to a
                       Continuous Exposure, you may update this field after changing Monitoring Status to &quot;Actively Monitoring&quot;
                     </Tooltip>
                   }>

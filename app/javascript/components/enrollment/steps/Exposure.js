@@ -546,7 +546,7 @@ class Exposure extends React.Component {
               rows="4"
               size="lg"
               className="form-square"
-              placeholder="enter additional information about monitoree’s potential exposure"
+              placeholder="enter additional information about recipient’s potential exposure"
               maxLength="2000"
               value={this.state.current.patient.exposure_notes || ''}
               onChange={this.handleChange}
@@ -565,8 +565,8 @@ class Exposure extends React.Component {
     return (
       <React.Fragment>
         <Card className="mx-2 card-square">
-          {!this.props.currentState.isolation && <Card.Header as="h5">Monitoree Potential Exposure Information</Card.Header>}
-          {this.props.currentState.isolation && <Card.Header as="h5">Monitoree Case Information</Card.Header>}
+          {!this.props.currentState.isolation && <Card.Header as="h5">Recipient Potential Exposure Information</Card.Header>}
+          {this.props.currentState.isolation && <Card.Header as="h5">Recipient Case Information</Card.Header>}
           <Card.Body>
             <Form>
               <Form.Row className="pb-3 h-100">
@@ -613,7 +613,7 @@ class Exposure extends React.Component {
                               type="switch"
                               id="update_group_member_jurisdiction_id"
                               name="jurisdiction_id"
-                              label="Apply this change to the entire household that this monitoree is responsible for"
+                              label="Apply this change to the entire household that this recipient is responsible for"
                               onChange={this.handlePropagatedFieldChange}
                               checked={this.state.current.propagatedFields.jurisdiction_id}
                             />
@@ -657,7 +657,7 @@ class Exposure extends React.Component {
                               type="switch"
                               id="update_group_member_assigned_user"
                               name="assigned_user"
-                              label="Apply this change to the entire household that this monitoree is responsible for"
+                              label="Apply this change to the entire household that this recipient is responsible for"
                               onChange={this.handlePropagatedFieldChange}
                               checked={this.state.current.propagatedFields.assigned_user}
                             />

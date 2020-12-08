@@ -43,7 +43,7 @@ class CaseStatus extends React.Component {
         // changing case status to blank from any other case status and either workflow
       } else if (value === '') {
         this.setState({
-          modal_text: `Are you sure you want to change case status from ${this.props.patient.case_status} to blank? The monitoree will remain in the same workflow.`,
+          modal_text: `Are you sure you want to change case status from ${this.props.patient.case_status} to blank? The recipient will remain in the same workflow.`,
         });
 
         // changing case status to Unknown, Suspect or Not a Case from Confirmed or Probable in the isolation workflow
@@ -192,7 +192,7 @@ class CaseStatus extends React.Component {
                   className="mb-1"
                   name="apply_to_household"
                   id="apply_to_household_no"
-                  label="This monitoree only"
+                  label="This recipient only"
                   onChange={this.handleApplyHouseholdChange}
                   checked={!this.state.apply_to_household}
                 />
@@ -201,7 +201,7 @@ class CaseStatus extends React.Component {
                   className="mb-3"
                   name="apply_to_household"
                   id="apply_to_household_yes"
-                  label="This monitoree and all household members"
+                  label="This recipient and all household members"
                   onChange={this.handleApplyHouseholdChange}
                   checked={this.state.apply_to_household}
                 />

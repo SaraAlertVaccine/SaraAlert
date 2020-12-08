@@ -230,7 +230,7 @@ class Address extends React.Component {
                   <Form.Row className="pt-1 pb-2">
                     <Form.Group as={Col} md={24} className="my-auto">
                       <span className="font-weight-light">
-                        (If monitoree is planning on travel within the US, enter the <b>first</b> location where they may be contacted)
+                        (If recipient is planning on travel within the US, enter the <b>first</b> location where they may be contacted)
                       </span>
                     </Form.Group>
                   </Form.Row>
@@ -468,7 +468,7 @@ class Address extends React.Component {
                     <Form.Row className="pb-2">
                       <Form.Group as={Col} md={24} className="my-auto">
                         <span className="font-weight-light">
-                          (If monitoree is planning on travel within the US, enter the <b>first</b> location where they may be contacted)
+                          (If recipient is planning on travel within the US, enter the <b>first</b> location where they may be contacted)
                         </span>
                       </Form.Group>
                     </Form.Row>
