@@ -286,12 +286,12 @@ class PublicHealthController < ApplicationController
       return %i[jurisdiction assigned_user extended_isolation symptom_onset monitoring_plan latest_report report_eligibility]
     end
 
-    return %i[jurisdiction assigned_user end_of_monitoring risk_level monitoring_plan latest_report status report_eligibility dose1_date dose2_date dose2_app] if tab == :all
+    return %i[jurisdiction end_of_monitoring latest_report status report_eligibility dose1_date dose2_date dose2_app] if tab == :all
     return %i[jurisdiction assigned_user end_of_monitoring risk_level public_health_action latest_report report_eligibility] if tab == :pui
     return %i[transferred_from end_of_monitoring risk_level monitoring_plan transferred_at] if tab == :transferred_in
     return %i[transferred_to end_of_monitoring risk_level monitoring_plan transferred_at] if tab == :transferred_out
 
-    %i[jurisdiction assigned_user end_of_monitoring risk_level monitoring_plan latest_report report_eligibility dose1_date dose2_date dose2_app]
+    %i[jurisdiction end_of_monitoring latest_report report_eligibility dose1_date dose2_date dose2_app]
   end
 
   # rubocop:disable Metrics/MethodLength
