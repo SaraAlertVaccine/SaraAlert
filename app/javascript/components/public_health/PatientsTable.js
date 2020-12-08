@@ -37,27 +37,18 @@ class PatientsTable extends React.Component {
     this.advancedFilterUpdate = this.advancedFilterUpdate.bind(this);
     this.state = {
       table: {
+        // Monitoree, Dose 1 Administration Date, Dose 2 appointment date, Dose 2 Administration date, Jurisdiction, Date of Birth, End of Monitoring, Latest Report, Status
         colData: [
           { field: 'name', label: 'Monitoree', isSortable: true, tooltip: null, filter: this.linkPatient },
+          { field: 'dose1_date', label: 'Dose 1 Administration Date', isSortable: true, tooltip: null, filter: this.formatDate },
+          { field: 'dose2_app', label: 'Dose 2 Appointment Date', isSortable: true, tooltip: null, filter: this.formatDate },
+          { field: 'dose2_date', label: 'Dose 2 Administration Date', isSortable: true, tooltip: null, filter: this.formatDate },
           { field: 'jurisdiction', label: 'Jurisdiction', isSortable: true, tooltip: null },
-          { field: 'transferred_from', label: 'From Jurisdiction', isSortable: true, tooltip: null },
-          { field: 'transferred_to', label: 'To Jurisdiction', isSortable: true, tooltip: null },
-          { field: 'assigned_user', label: 'Assigned User', isSortable: true, tooltip: null },
-          { field: 'state_local_id', label: 'State/Local ID', isSortable: true, tooltip: null },
           { field: 'dob', label: 'Date of Birth', isSortable: true, tooltip: null, filter: this.formatDate },
-          { field: 'end_of_monitoring', label: 'End of Monitoring', isSortable: true, tooltip: null, filter: this.formatEndOfMonitoring },
-          { field: 'extended_isolation', label: 'Extended Isolation To', isSortable: true, tooltip: 'extendedIsolation', filter: this.formatDate },
-          { field: 'symptom_onset', label: 'Symptom Onset', isSortable: true, tooltip: null, filter: this.formatDate },
-          { field: 'risk_level', label: 'Risk Level', isSortable: true, tooltip: null },
-          { field: 'monitoring_plan', label: 'Monitoring Plan', isSortable: true, tooltip: null },
-          { field: 'public_health_action', label: 'Latest Public Health Action', isSortable: true, tooltip: null },
-          { field: 'expected_purge_date', label: 'Eligible For Purge After', isSortable: true, tooltip: 'purgeDate', filter: this.formatTimestamp },
-          { field: 'reason_for_closure', label: 'Reason for Closure', isSortable: true, tooltip: null },
-          { field: 'closed_at', label: 'Closed At', isSortable: true, tooltip: null, filter: this.formatTimestamp },
-          { field: 'transferred_at', label: 'Transferred At', isSortable: true, tooltip: null, filter: this.formatTimestamp },
+          { field: 'end_of_monitoring', label: 'End of Monitoring', isSortable: true, tooltip: null, filter: this.formatDate },
           { field: 'latest_report', label: 'Latest Report', isSortable: true, tooltip: null, filter: this.formatTimestamp },
           { field: 'status', label: 'Status', isSortable: true, tooltip: null },
-          { field: 'report_eligibility', label: '', isSortable: false, tooltip: null, filter: this.createEligibilityTooltip, icon: 'far fa-comment' },
+          // { field: 'report_eligibility', label: '', isSortable: false, tooltip: null, filter: this.createEligibilityTooltip, icon: 'far fa-comment' },
         ],
         displayedColData: [],
         rowData: [],
@@ -389,12 +380,12 @@ class PatientsTable extends React.Component {
     return date ? moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY') : '';
   }
 
-  formatEndOfMonitoring(endOfMonitoring) {
-    if (endOfMonitoring === 'Continuous Exposure') {
-      return 'Continuous Exposure';
-    }
-    return moment(endOfMonitoring, 'YYYY-MM-DD').format('MM/DD/YYYY');
-  }
+  // formatEndOfMonitoring(endOfMonitoring) {
+  //   if (endOfMonitoring === 'Continuous Exposure') {
+  //     return 'Continuous Exposure';
+  //   }
+  //   return moment(endOfMonitoring, 'YYYY-MM-DD').format('MM/DD/YYYY');
+  // }
 
   createEligibilityTooltip(reportEligibility, patientId) {
     return <EligibilityTooltip id={patientId} report_eligibility={reportEligibility} inline={false} />;

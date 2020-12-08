@@ -51,7 +51,11 @@ module PatientDetailsHelper # rubocop:todo Metrics/ModuleLength
       transferred_from: latest_transfer&.from_path || '',
       transferred_to: latest_transfer&.to_path || '',
       expected_purge_date: updated_at.nil? ? '' : ((updated_at + ADMIN_OPTIONS['purgeable_after'].minutes)&.rfc2822 || ''),
-      extended_isolation: extended_isolation || ''
+      extended_isolation: extended_isolation || '',
+      dose1_date: latest_dose1&.date_given|| '',
+      dose2_date: latest_dosage&.dose_number == 2 ? latest_dosage.date_given : '',
+      dose2_app: '' # Blank for now, until we know how this is defined
+
     }
   end
 

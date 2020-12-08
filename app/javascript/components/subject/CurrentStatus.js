@@ -12,9 +12,9 @@ class CurrentStatus extends React.Component {
   generateStatus(status) {
     if (status === 'exposure_symptomatic') {
       return <span className="text-danger">symptomatic</span>;
-    } else if (status === 'exposure_followup') {
+    } else if (status === 'exposure_follow_up') {
       return <span className="text-danger">needs follow up</span>;
-    } else if (status === 'exposure_asymptomatic') {
+    } else if (status === 'exposure_reviewed') {
       return <span className="text-success">reviewed</span>;
     } else if (status === 'exposure_non_reporting') {
       return <span className="text-warning">non-reporting</span>;

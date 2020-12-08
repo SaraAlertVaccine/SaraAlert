@@ -45,7 +45,7 @@ class PublicHealthController < ApplicationController
     return head :bad_request unless order.nil? || order.blank? || %w[name jurisdiction transferred_from transferred_to assigned_user state_local_id dob
                                                                      end_of_monitoring risk_level monitoring_plan public_health_action expected_purge_date
                                                                      reason_for_closure closed_at transferred_at latest_report symptom_onset
-                                                                     extended_isolation status].include?(order)
+                                                                     extended_isolation status dose1_date dose2_date dose2_app].include?(order)
 
     direction = permitted_params[:direction]
     return head :bad_request unless direction.nil? || direction.blank? || %w[asc desc].include?(direction)
@@ -203,6 +203,11 @@ class PublicHealthController < ApplicationController
       # For alphabetical sorting: closed 0, followup 1, non-reporting 2, reviewed 3, symptomatic 4
       # Case determination -> closed, followup, symptomatic, reviewed, non-reporting
       patients = patients.order('CASE WHEN monitoring != true THEN 0 WHEN severe_symptom_onset IS NOT NULL THEN 1 WHEN symptom_onset IS NOT NULL then 4 WHEN latest_assessment_at IS NOT NULL and latest_assessment_at >= DATE_SUB(DATE(NOW()), INTERVAL ' + ADMIN_OPTIONS['reporting_period_minutes'].to_s + ' MINUTE) THEN 3 ELSE 2 END ' + dir)
+    when 'dose1_date'
+      patients = patients.select("patients.*, dosages.dose_number, MAX(dosages.date_given)").joins('LEFT JOIN dosages ON patients.id = dosages.patient_id').group("patients.id, dosages.dose_number").having("dosages.dose_number = 1 OR dosages.dose_number IS NULL").order("CASE WHEN MAX(dosages.date_given) IS NULL THEN 1 ELSE 0 END, MAX(dosages.date_given) " + dir)
+    when 'dose2_date'
+      # Assumes that you shouldn't have a dose 1 administered after a dose 2
+      patients = patients.select("patients.*, dosages.dose_number, MAX(dosages.date_given)").joins('LEFT JOIN dosages ON patients.id = dosages.patient_id').group("patients.id, dosages.dose_number").order("CASE WHEN dosages.dose_number IS NULL THEN 1 ELSE 0 END, dosages.dose_number DESC, CASE WHEN MAX(dosages.date_given) IS NULL THEN 1 ELSE 0 END, MAX(dosages.date_given) " + dir)
     end
 
     patients
@@ -218,6 +223,7 @@ class PublicHealthController < ApplicationController
                else
                  patients.joins(:jurisdiction)
                end
+    
 
     # only select patient fields necessary to generate linelists
     patients = patients.select('patients.id, patients.first_name, patients.last_name, patients.user_defined_id_statelocal, patients.symptom_onset, '\
@@ -259,6 +265,9 @@ class PublicHealthController < ApplicationController
       details[:status] = patient.status.to_s.gsub('_', ' ').gsub('exposure ', '')&.gsub('isolation ', '') if fields.include?(:status)
       details[:report_eligibility] = patient.report_eligibility if fields.include?(:report_eligibility)
       details[:is_hoh] = patient.head_of_household?
+      details[:dose1_date] = patient.latest_dose1&.date_given || '' if fields.include?(:dose1_date)
+      details[:dose2_date] = (patient.latest_dosage&.dose_number == 2 ? patient.latest_dosage&.date_given : '') if fields.include?(:dose2_date)
+      details[:dose2_app] = patient[:dose2_app] || '' if fields.include?(:dose2_app)
 
       linelist << details
     end
@@ -267,7 +276,7 @@ class PublicHealthController < ApplicationController
   end
 
   def linelist_specific_fields(workflow, tab)
-    return %i[jurisdiction assigned_user expected_purge_date reason_for_closure closed_at] if tab == :closed
+    return %i[jurisdiction assigned_user expected_purge_date reason_for_closure closed_at dose1_date dose2_date dose2_app] if tab == :closed
 
     if workflow == :isolation
       return %i[jurisdiction assigned_user extended_isolation symptom_onset monitoring_plan latest_report status report_eligibility] if tab == :all
@@ -277,12 +286,12 @@ class PublicHealthController < ApplicationController
       return %i[jurisdiction assigned_user extended_isolation symptom_onset monitoring_plan latest_report report_eligibility]
     end
 
-    return %i[jurisdiction assigned_user end_of_monitoring risk_level monitoring_plan latest_report status report_eligibility] if tab == :all
+    return %i[jurisdiction assigned_user end_of_monitoring risk_level monitoring_plan latest_report status report_eligibility dose1_date dose2_date dose2_app] if tab == :all
     return %i[jurisdiction assigned_user end_of_monitoring risk_level public_health_action latest_report report_eligibility] if tab == :pui
     return %i[transferred_from end_of_monitoring risk_level monitoring_plan transferred_at] if tab == :transferred_in
     return %i[transferred_to end_of_monitoring risk_level monitoring_plan transferred_at] if tab == :transferred_out
 
-    %i[jurisdiction assigned_user end_of_monitoring risk_level monitoring_plan latest_report report_eligibility]
+    %i[jurisdiction assigned_user end_of_monitoring risk_level monitoring_plan latest_report report_eligibility dose1_date dose2_date dose2_app]
   end
 
   # rubocop:disable Metrics/MethodLength
