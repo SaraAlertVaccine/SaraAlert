@@ -24,7 +24,7 @@ class Enrollment extends React.Component {
       index: this.props.editMode ? 3 : 0,
       direction: null,
       enrollmentState: {
-        patient: pickBy(this.props.patient, identity),
+        patient: { sex: 'Unknown', ethnicity: 'Unknown', ...pickBy(this.props.patient, identity) },
         propagatedFields: {},
         isolation: !!this.props.patient.isolation,
       },
