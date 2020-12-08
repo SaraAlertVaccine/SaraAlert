@@ -59,7 +59,6 @@ class Dosage extends React.Component {
   }
 
   validate = () => {
-    console.log(this.state);
     const fields = [
       'cvx',
       'manufacturer',
@@ -82,7 +81,6 @@ class Dosage extends React.Component {
 
   handleChange(event) {
     this.setState({ [event.target.id]: event.target.value }, () => {
-      console.log(this.state);
       if (this.state.manufacturer == 'Pfizer') {
         this.setState({ cvx: '208' }, this.validate());
       }
