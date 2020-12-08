@@ -74,7 +74,8 @@ class Dosage extends React.Component {
       'facility_type',
       'facility_address',
     ];
-    let check = Object.keys(this.state).filter(k => fields.includes(k) && (this.state[`${k}`] == null || this.state[`${k}`].trim() == ''));
+
+    let check = Object.keys(this.state).filter(k => fields.includes(k) && (this.state[`${k}`] == null || String(this.state[`${k}`]).trim() == ''));
     this.setState({ dosageInvalid: check.length > 0 });
   };
 

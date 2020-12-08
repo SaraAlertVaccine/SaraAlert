@@ -151,6 +151,11 @@ class Patient < ApplicationRecord
     dosages.order(date_given: :desc).first
   end
 
+
+  def latest_dose1
+    dosages.where(dose_number: 1).order(date_given: :desc).first
+  end 
+
   # Patients who are eligible for reminders
   # TODO: Right now we're going to just assume that you just need a dosage. So we'll do a simple join
   scope :reminder_eligible, lambda {
@@ -468,7 +473,8 @@ class Patient < ApplicationRecord
   def second_dose_eligible?
     dosage = latest_dosage
     return false if dosage.nil?
-    (dosage.dose_number == 1) && ((Time.now.getlocal(address_timezone_offset) - 21.days).to_date >= dosage.date_given)
+    return false if dosage.dose_number.nil? || dosage&.date_given.nil?
+    (dosage&.dose_number == 1) && ((Time.now.getlocal(address_timezone_offset) - 21.days).to_date >= dosage&.date_given)
   end
 
   # Gets the current date in the patient's timezone
@@ -612,12 +618,17 @@ class Patient < ApplicationRecord
   end
 
   # Single place for calculating the end of monitoring date for this subject.
+  # TODO: For now, end of monitoring will be a year away from Dose 2
   def end_of_monitoring
-    return 'Continuous Exposure' if continuous_exposure
-    return (last_date_of_exposure + ADMIN_OPTIONS['monitoring_period_days'].days)&.to_s if last_date_of_exposure.present?
+    return nil if latest_dosage.nil?
+    return (latest_dosage&.date_given + 1.year) if latest_dosage&.dose_number == 2
 
-    # Check for created_at is necessary here because custom as_json is automatically called when enrolling a new patient, which calls this method indirectly.
-    return (created_at.to_date + ADMIN_OPTIONS['monitoring_period_days'].days)&.to_s if created_at.present?
+    # --- Previous definition
+    # return 'Continuous Exposure' if continuous_exposure
+    # return (last_date_of_exposure + ADMIN_OPTIONS['monitoring_period_days'].days)&.to_s if last_date_of_exposure.present?
+
+    # # Check for created_at is necessary here because custom as_json is automatically called when enrolling a new patient, which calls this method indirectly.
+    # return (created_at.to_date + ADMIN_OPTIONS['monitoring_period_days'].days)&.to_s if created_at.present?
   end
 
   # Date when patient is expected to be purged
