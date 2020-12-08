@@ -5,13 +5,13 @@
 
 <div class="btn-group">
   <%= link_to({ controller: 'patients', action: 'new' }, { class: 'btn btn-primary btn-square ml-2 mb-3' }) do %>
-    <i class="fas fa-plus-square"></i> Enroll New Monitoree
+    <i class="fas fa-plus-square"></i> Enroll New Recipient
   <% end %>
 </div>
 
 <div class="mx-2 pb-4">
   <div class="card card-square">
-    <h5 class="card-header">Enrolled Monitorees</h5>
+    <h5 class="card-header">Enrolled Recipients</h5>
     <div class="m-3">
       <%= render partial: 'patients', locals: { patients: @enrolled_patients } %>
     </div>

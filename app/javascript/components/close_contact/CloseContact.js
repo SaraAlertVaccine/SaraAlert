@@ -28,7 +28,7 @@ class CloseContact extends React.Component {
     };
     this.closeContactNotePlaceholder = this.props.patient.isolation
       ? 'enter additional information about case'
-      : 'enter additional information about monitoree’s potential exposure';
+      : 'enter additional information about Recipient’s potential exposure';
   }
 
   toggleModal = () => {

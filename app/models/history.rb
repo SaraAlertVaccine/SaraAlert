@@ -12,7 +12,7 @@ class History < ApplicationRecord
     comment: 'Comment',
     enrollment: 'Enrollment',
     monitoring_change: 'Monitoring Change',
-    monitoree_data_downloaded: 'Monitoree Data Downloaded',
+    monitoree_data_downloaded: 'Recipient Data Downloaded',
     reports_reviewed: 'Reports Reviewed',
     report_reviewed: 'Report Reviewed',
     report_reminder: 'Report Reminder',
@@ -65,15 +65,15 @@ class History < ApplicationRecord
     create_history(patient, created_by, HISTORY_TYPES[:report_updated], comment)
   end
 
-  def self.enrollment(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User enrolled monitoree.')
+  def self.enrollment(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User enrolled recipient.')
     create_history(patient, created_by, HISTORY_TYPES[:enrollment], comment)
   end
 
-  def self.monitoring_change(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User updated monitoree.')
+  def self.monitoring_change(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User updated recipient.')
     create_history(patient, created_by, HISTORY_TYPES[:monitoring_change], comment)
   end
 
-  def self.monitoree_data_downloaded(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User downloaded monitoree\'s data in Excel Export.')
+  def self.monitoree_data_downloaded(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User downloaded recipient\'s data in Excel Export.')
     create_history(patient, created_by, HISTORY_TYPES[:monitoree_data_downloaded], comment)
   end
 
@@ -85,7 +85,7 @@ class History < ApplicationRecord
     create_history(patient, created_by, HISTORY_TYPES[:report_reviewed], comment)
   end
 
-  def self.report_reminder(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User sent a report reminder to the monitoree.')
+  def self.report_reminder(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User sent a report reminder to the recipient.')
     create_history(patient, created_by, HISTORY_TYPES[:report_reminder], comment) unless patient&.preferred_contact_method.nil?
   end
 
@@ -105,7 +105,7 @@ class History < ApplicationRecord
     create_history(patient, created_by, HISTORY_TYPES[:vaccine_dosage_edit], comment)
   end
 
-  def self.contact_attempt(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'The system attempted to make contact with the monitoree.')
+  def self.contact_attempt(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'The system attempted to make contact with the recipient.')
     create_history(patient, created_by, HISTORY_TYPES[:contact_attempt], comment)
   end
 
@@ -113,7 +113,7 @@ class History < ApplicationRecord
     create_history(patient, created_by, HISTORY_TYPES[:welcome_message_sent], comment)
   end
 
-  def self.record_automatically_closed(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'Monitoree has completed monitoring.')
+  def self.record_automatically_closed(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'Recipient has completed monitoring.')
     create_history(patient, created_by, HISTORY_TYPES[:record_automatically_closed], comment)
   end
 
@@ -228,7 +228,7 @@ class History < ApplicationRecord
     return if field[:old_value] == field[:new_value]
 
     creator = history[:household] == :patient ? 'User' : 'System'
-    comment = "#{creator} #{field[:new_value]} notifications for this monitoree#{compose_explanation(history, field)}."
+    comment = "#{creator} #{field[:new_value]} notifications for this recipient#{compose_explanation(history, field)}."
     create_history(history[:patient], history[:created_by], HISTORY_TYPES[:monitoring_change], comment)
   end
 
@@ -323,10 +323,10 @@ class History < ApplicationRecord
     elsif history[:household] == :patient && history[:propagation] == :group_cm
       " and chose to update this #{field[:type]} for household members under continuous exposure"
     elsif history[:household] != :patient && history[:propagation] == :group
-      " because User updated #{field[:name]} for another member in this monitoree's household and chose to update this
+      " because User updated #{field[:name]} for another member in this recipient's household and chose to update this
         #{field[:type].nil? ? 'field' : field[:type]} for all household members"
     elsif history[:household] != :patient && history[:propagation] == :group_cm
-      " because User updated #{field[:name]} for another member in this monitoree's household and chose to update this
+      " because User updated #{field[:name]} for another member in this recipient's household and chose to update this
         #{field[:type].nil? ? 'field' : field[:type]} for household members under continuous exposure"
     else
       ''

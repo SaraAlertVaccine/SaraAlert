@@ -4,7 +4,7 @@
 module ImportExport # rubocop:todo Metrics/ModuleLength
   include ValidationHelper
 
-  LINELIST_HEADERS = ['Patient ID', 'Monitoree', 'Jurisdiction', 'Assigned User', 'State/Local ID', 'Sex', 'Date of Birth', 'End of Monitoring', 'Risk Level',
+  LINELIST_HEADERS = ['Patient ID', 'Recipient', 'Jurisdiction', 'Assigned User', 'State/Local ID', 'Sex', 'Date of Birth', 'End of Monitoring', 'Risk Level',
                       'Monitoring Plan', 'Latest Report', 'Transferred At', 'Reason For Closure', 'Latest Public Health Action', 'Status', 'Closed At',
                       'Transferred From', 'Transferred To', 'Expected Purge Date', 'Symptom Onset', 'Extended Isolation'].freeze
 
@@ -98,7 +98,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
 
   def sara_alert_format(patients)
     Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(name: 'Monitorees') do |sheet|
+      p.workbook.add_worksheet(name: 'Recipients') do |sheet|
         sheet.add_row COMPREHENSIVE_HEADERS
         statuses = patient_statuses(patients)
         patients.find_in_batches(batch_size: 500) do |patients_group|
@@ -114,7 +114,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
 
   def excel_export(patients)
     Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(name: 'Monitorees List') do |sheet|
+      p.workbook.add_worksheet(name: 'Recipients List') do |sheet|
         headers = MONITOREES_LIST_HEADERS
         sheet.add_row headers
         statuses = patient_statuses(patients)
@@ -191,7 +191,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
 
   def excel_export_monitorees(patients)
     Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(name: 'Monitorees List') do |sheet|
+      p.workbook.add_worksheet(name: 'Recipients List') do |sheet|
         headers = MONITOREES_LIST_HEADERS
         sheet.add_row headers
         statuses = patient_statuses(patients)

@@ -80,7 +80,7 @@ class EnrollerDashboardVerifier < ApplicationSystemTestCase
   def search_and_verify_nonexistence(query, is_epi)
     click_on 'Asymptomatic' if is_epi
     fill_in is_epi ? 'search' : 'Search', with: query
-    assert page.has_content?('No matching records found'), @@system_test_utils.get_err_msg('Dashboard', 'monitoree', 'non-existent')
+    assert page.has_content?('No matching records found'), @@system_test_utils.get_err_msg('Dashboard', 'recipient', 'non-existent')
   end
 
   def verify_patient_info_in_data_table(patient)

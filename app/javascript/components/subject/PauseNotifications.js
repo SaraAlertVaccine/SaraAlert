@@ -48,7 +48,7 @@ class PauseNotifications extends React.Component {
       text = `Notifications cannot be ${notificationsAction} for records on the Closed line list. You may update this field after changing Monitoring Status to "Actively Monitoring"`;
       // monitoree is a HH dependent
     } else if (this.props.patient.id !== this.props.patient.responder_id) {
-      text = `Notifications cannot be ${notificationsAction} because the monitoree is within a Household, so the Head of Household will receive notifications instead. If notifications to the Head of Household should be ${notificationsAction}, you may update this field on the Head of Household record.`;
+      text = `Notifications cannot be ${notificationsAction} because the recipient is within a Household, so the Head of Household will receive notifications instead. If notifications to the Head of Household should be ${notificationsAction}, you may update this field on the Head of Household record.`;
     }
     return (
       <ReactTooltip id={`notifications-tooltip`} multiline={true} place="bottom" type="dark" effect="solid" className="tooltip-container mt-3">
@@ -68,8 +68,8 @@ class PauseNotifications extends React.Component {
             onClick={() =>
               this.handleSubmit(
                 this.props.patient.pause_notifications
-                  ? `You are about to change this monitoree's notification status to resumed. This means that the system will start sending the monitoree symptom report requests during their preferred reporting time until they are no longer eligible or notifications are paused by a user.`
-                  : `You are about to change this monitoree's notification status to paused. This means that the system will stop sending the monitoree symptom report requests until notifications are resumed by a user.`
+                  ? `You are about to change this recipient's notification status to resumed. This means that the system will start sending the recipient symptom report requests during their preferred reporting time until they are no longer eligible or notifications are paused by a user.`
+                  : `You are about to change this recipient's notification status to paused. This means that the system will stop sending the recipient symptom report requests until notifications are resumed by a user.`
               )
             }>
             {this.props.patient.pause_notifications && (

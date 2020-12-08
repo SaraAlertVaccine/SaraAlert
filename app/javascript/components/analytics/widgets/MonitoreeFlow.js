@@ -17,7 +17,7 @@ class MonitoreeFlow extends React.Component {
       <React.Fragment>
         <Card className="card-square text-center">
           <Card.Header as="h5" className="text-left">
-            Monitoree Flow Over Time
+            Recipient Flow Over Time
           </Card.Header>
           <Card.Body className="card-body">
             <Row className="mx-md-5 mx-lg-0">

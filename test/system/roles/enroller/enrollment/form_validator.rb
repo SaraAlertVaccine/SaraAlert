@@ -115,10 +115,10 @@ class EnrollmentFormValidator < ApplicationSystemTestCase
   end
 
   def verify_text_displayed(text)
-    assert page.has_content?(text), "Monitoree enrollment input validation - should display error message: #{text}"
+    assert page.has_content?(text), "Recipient enrollment input validation - should display error message: #{text}"
   end
 
   def verify_text_not_displayed(text)
-    assert page.has_no_content?(text), "Monitoree enrollment input validation - should not display error message: #{text}"
+    assert page.has_no_content?(text), "Recipient enrollment input validation - should not display error message: #{text}"
   end
 end

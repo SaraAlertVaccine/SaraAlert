@@ -70,7 +70,7 @@ describe('CaseStatus', () => {
         expect(wrapper.state('confirmedOrProbable')).toBeFalsy();
         expect(wrapper.state('isolation')).toEqual(mockPatient1.isolation);
         expect(wrapper.state('monitoring')).toBeTruthy();
-        expect(modalBody.find('p').text()).toEqual(`Are you sure you want to change case status from ${mockPatient1.case_status} to blank? The monitoree will remain in the same workflow.`);
+        expect(modalBody.find('p').text()).toEqual(`Are you sure you want to change case status from ${mockPatient1.case_status} to blank? The recipient will remain in the same workflow.`);
     });
 
     it('Correctly renders modal body and updates to exposure workflow when changing Case Status to Suspect, Unknown or Not a Case from Confirmed or Probable in isolation workflow', () => {
@@ -187,9 +187,9 @@ describe('CaseStatus', () => {
         expect(modalBody.find(Form.Group).exists()).toBeTruthy();
         expect(modalBody.find(Form.Check).length).toEqual(2);
         expect(modalBody.find('#apply_to_household_no').prop('type')).toEqual('radio');
-        expect(modalBody.find('#apply_to_household_no').prop('label')).toEqual('This monitoree only');
+        expect(modalBody.find('#apply_to_household_no').prop('label')).toEqual('This recipient only');
         expect(modalBody.find('#apply_to_household_yes').prop('type')).toEqual('radio');
-        expect(modalBody.find('#apply_to_household_yes').prop('label')).toEqual('This monitoree and all household members');
+        expect(modalBody.find('#apply_to_household_yes').prop('label')).toEqual('This recipient and all household members');
     });
 
     it('Clicking HoH radio buttons toggles this.state.apply_to_household', () => {

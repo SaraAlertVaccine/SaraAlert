@@ -85,9 +85,9 @@ class MoveToHousehold extends React.Component {
           <Form>
             <Row>
               <Form.Group as={Col}>
-                <Form.Label className="nav-input-label">Select The New Monitoree That Will Respond For The Current Monitoree</Form.Label>
+                <Form.Label className="nav-input-label">Select The New Recipient That Will Respond For The Current Recipient</Form.Label>
                 <Form.Label size="sm" className="nav-input-label">
-                  Note: The current monitoree will be moved into the selected monitoree&apos;s household
+                  Note: The current recipient will be moved into the selected recipient&apos;s household
                 </Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="hoh_selection" onChange={this.handleChange} defaultValue={-1}>
                   <option value={-1} disabled>

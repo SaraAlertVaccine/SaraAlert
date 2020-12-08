@@ -26,7 +26,7 @@ describe('PauseNotifications', () => {
         expect(wrapper.find(Button).text().includes('Pause Notifications')).toBeTruthy();
         expect(wrapper.find(Button).prop('disabled')).toBeTruthy();
         expect(wrapper.find(ReactTooltip)).toBeTruthy();
-        expect(wrapper.find(ReactTooltip).find('span').text()).toEqual('Notifications cannot be paused because the monitoree is within a Household, so the Head of Household will receive notifications instead. If notifications to the Head of Household should be paused, you may update this field on the Head of Household record.');
+        expect(wrapper.find(ReactTooltip).find('span').text()).toEqual('Notifications cannot be paused because the recipient is within a Household, so the Head of Household will receive notifications instead. If notifications to the Head of Household should be paused, you may update this field on the Head of Household record.');
     });
 
     it('Disables the pause notifications button and renders tooltip if record is closed', () => {
@@ -63,7 +63,7 @@ describe('PauseNotifications', () => {
         expect(wrapper.find(Button).text().includes('Resume Notifications')).toBeTruthy();
         expect(wrapper.find(Button).prop('disabled')).toBeTruthy();
         expect(wrapper.find(ReactTooltip)).toBeTruthy();
-        expect(wrapper.find(ReactTooltip).find('span').text()).toEqual('Notifications cannot be resumed because the monitoree is within a Household, so the Head of Household will receive notifications instead. If notifications to the Head of Household should be resumed, you may update this field on the Head of Household record.');
+        expect(wrapper.find(ReactTooltip).find('span').text()).toEqual('Notifications cannot be resumed because the recipient is within a Household, so the Head of Household will receive notifications instead. If notifications to the Head of Household should be resumed, you may update this field on the Head of Household record.');
     });
 
     it('Disables the resume notifications button and renders tooltip if record is closed', () => {

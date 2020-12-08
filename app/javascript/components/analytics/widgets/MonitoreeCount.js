@@ -35,7 +35,7 @@ class MonitoreeCount extends React.Component {
           <Card.Body>
             <div className="display-6">
               {' '}
-              <u> Symptomatic Monitorees </u>{' '}
+              <u> Symptomatic Recipients </u>{' '}
             </div>
             <div style={{ textAlign: 'center' }} className="text-center display-5 mt-3">
               {this.state.system_symptomatic_today}

@@ -23,7 +23,7 @@ class PublicHealthPatientPageVerifier < ApplicationSystemTestCase
     find('#patient-info-header').click
     fields = %w[first_name last_name]
     fields.each do |field|
-      assert page.has_content?(patient[field]), @@system_test_utils.get_err_msg('Monitoree details', field, patient[field])
+      assert page.has_content?(patient[field]), @@system_test_utils.get_err_msg('Recipient details', field, patient[field])
     end
   end
 end

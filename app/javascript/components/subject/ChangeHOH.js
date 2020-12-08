@@ -60,7 +60,7 @@ class ChangeHOH extends React.Component {
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Select The New Head Of Household</Form.Label>
                 <Form.Label size="sm" className="nav-input-label">
-                  Note: The selected monitoree will become the responder for the current monitoree and all others within the list
+                  Note: The selected recipient will become the responder for the current recipient and all others within the list
                 </Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="hoh_selection" onChange={this.handleChange} defaultValue={-1}>
                   <option value={-1} disabled>

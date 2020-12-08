@@ -38,7 +38,7 @@ class PatientsTable extends React.Component {
     this.state = {
       table: {
         colData: [
-          { field: 'name', label: 'Monitoree', isSortable: true, tooltip: null, filter: this.linkPatient },
+          { field: 'name', label: 'Recipient', isSortable: true, tooltip: null, filter: this.linkPatient },
           { field: 'jurisdiction', label: 'Jurisdiction', isSortable: true, tooltip: null },
           { field: 'transferred_from', label: 'From Jurisdiction', isSortable: true, tooltip: null },
           { field: 'transferred_to', label: 'To Jurisdiction', isSortable: true, tooltip: null },
@@ -371,7 +371,7 @@ class PatientsTable extends React.Component {
             </Badge>
           </span>
           <ReactTooltip id={`${id}-hoh`} multiline={true} place="right" type="dark" effect="solid" className="tooltip-container">
-            <span>Monitoree is Head of Household that reports on behalf of household members</span>
+            <span>Recipient is Head of Household that reports on behalf of household members</span>
           </ReactTooltip>
           <a href={`/patients/${id}`}>{name}</a>
         </div>
@@ -516,7 +516,7 @@ class PatientsTable extends React.Component {
                             })}
                           </datalist>
                           <OverlayTrigger
-                            overlay={<Tooltip>Search for {this.props.workflow === 'exposure' ? 'monitorees' : 'cases'} with any or no assigned user</Tooltip>}>
+                            overlay={<Tooltip>Search for {this.props.workflow === 'exposure' ? 'recipients' : 'cases'} with any or no assigned user</Tooltip>}>
                             <Button
                               id="allAssignedUsers"
                               size="sm"
@@ -527,7 +527,7 @@ class PatientsTable extends React.Component {
                             </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
-                            overlay={<Tooltip>Search for {this.props.workflow === 'exposure' ? 'monitorees' : 'cases'} with no assigned user</Tooltip>}>
+                            overlay={<Tooltip>Search for {this.props.workflow === 'exposure' ? 'recipients' : 'cases'} with no assigned user</Tooltip>}>
                             <Button
                               id="noAssignedUser"
                               size="sm"
@@ -544,7 +544,7 @@ class PatientsTable extends React.Component {
                 </Form.Row>
                 <InputGroup size="sm" className="d-flex justify-content-between">
                   <InputGroup.Prepend>
-                    <OverlayTrigger overlay={<Tooltip>Search by monitoree name, date of birth, state/local id, cdc id, or nndss/case id</Tooltip>}>
+                    <OverlayTrigger overlay={<Tooltip>Search by recipient name, date of birth, state/local id, cdc id, or nndss/case id</Tooltip>}>
                       <InputGroup.Text className="rounded-0">
                         <i className="fas fa-search"></i>
                         <span className="ml-1">Search</span>

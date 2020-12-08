@@ -59,7 +59,7 @@ class ExportJob < ApplicationJob
         file_index = index + 1
         lookups << get_file(user_id,
                             excel_export_monitorees(group),
-                            build_filename(export_app_name + '-Full-Export-Monitorees', file_index, file_extension),
+                            build_filename(export_app_name + '-Full-Export-Recipients', file_index, file_extension),
                             export_type)
         lookups << get_file(user_id,
                             excel_export_assessments(group),
@@ -85,7 +85,7 @@ class ExportJob < ApplicationJob
         file_index = index + 1
         lookups << get_file(user_id,
                             excel_export_monitorees(group),
-                            build_filename(export_app_name + '-Purge-Eligible-Export-Monitorees', file_index, file_extension),
+                            build_filename(export_app_name + '-Purge-Eligible-Export-Recipients', file_index, file_extension),
                             export_type)
         lookups << get_file(user_id,
                             excel_export_assessments(group),

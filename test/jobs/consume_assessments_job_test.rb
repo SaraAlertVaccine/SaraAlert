@@ -84,7 +84,7 @@ class ConsumeAssessmentsJobTest < ActiveJob::TestCase
       ConsumeAssessmentsJob.perform_now
       @patient.reload
       assert @patient.assessments.first.symptomatic
-      assert_equal 'Monitoree', @patient.assessments.first.who_reported
+      assert_equal 'Recipient', @patient.assessments.first.who_reported
     end
 
     # Bypass latest assessment check

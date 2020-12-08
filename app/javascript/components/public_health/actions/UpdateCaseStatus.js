@@ -137,15 +137,15 @@ class UpdateCaseStatus extends React.Component {
                 <React.Fragment>
                   {this.state.follow_up === 'Continue Monitoring in Isolation Workflow' && [undefined, false].includes(this.state.initialIsolation) && (
                     <p>
-                      The selected monitorees will be moved to the isolation workflow and placed in the requiring review, non-reporting, or reporting line list
+                      The selected recipient will be moved to the isolation workflow and placed in the requiring review, non-reporting, or reporting line list
                       as appropriate.
                     </p>
                   )}
                   {this.state.follow_up === 'Continue Monitoring in Isolation Workflow' && this.state.initialIsolation === true && (
-                    <p>The selected monitorees will remain in the isolation workflow.</p>
+                    <p>The selected recipient will remain in the isolation workflow.</p>
                   )}
                   {this.state.follow_up === 'End Monitoring' && (
-                    <p>The selected monitorees will be moved into the &quot;Closed&quot; line list, and will no longer be monitored.</p>
+                    <p>The selected recipient will be moved into the &quot;Closed&quot; line list, and will no longer be monitored.</p>
                   )}
                 </React.Fragment>
               ) : (

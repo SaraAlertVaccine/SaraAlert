@@ -61,7 +61,7 @@ class Review extends React.Component {
     return (
       <React.Fragment>
         <Card className="mx-2 card-square">
-          <Card.Header as="h5">Monitoree Review</Card.Header>
+          <Card.Header as="h5">Recipient Review</Card.Header>
           <Card.Body>
             <Patient
               goto={this.props.goto}
