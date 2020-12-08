@@ -135,7 +135,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
                             .distinct
                             .pluck('symptoms.label')
                             .sort
-    assessment_headers = ['Patient ID', 'Symptomatic', 'Who Reported', 'Created At', 'Updated At'] + symptom_labels.to_a.sort
+    assessment_headers = ['Recipient ID', 'Symptomatic', 'Who Reported', 'Created At', 'Updated At'] + symptom_labels.to_a.sort
     assessment_headers.each_with_index do |header, col|
       assert_equal(header, assessments.cell(1, col + 1), "For header: #{header} in Assessments")
     end
@@ -160,7 +160,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
     edit_histories = xlsx_histories.sheet('Edit Histories')
     histories = History.where(patient_id: patient_ids)
     assert_equal(histories.size, edit_histories.last_row - 1, 'Number of histories in Edit Histories')
-    history_headers = ['Patient ID', 'Comment', 'Created By', 'History Type', 'Created At', 'Updated At']
+    history_headers = ['Recipient ID', 'Comment', 'Created By', 'History Type', 'Created At', 'Updated At']
     history_headers.each_with_index do |header, col|
       assert_equal(header, edit_histories.cell(1, col + 1), "For header: #{header} in Edit Histories")
     end
