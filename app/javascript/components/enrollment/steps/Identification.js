@@ -295,7 +295,7 @@ class Identification extends React.Component {
                 </Form.Group>
                 <Form.Group as={Col} md="1"></Form.Group>
                 <Form.Group as={Col} controlId="sex" md="auto">
-                  <Form.Label className="nav-input-label">SEX AT BIRTH{schema?.fields?.sex?._exclusive?.required && ' *'}</Form.Label>
+                  <Form.Label className="nav-input-label">SEX{schema?.fields?.sex?._exclusive?.required && ' *'}</Form.Label>
                   <InfoTooltip tooltipTextKey="sexAtBirth" location="right"></InfoTooltip>
                   <Form.Control
                     isInvalid={this.state.errors['sex']}
@@ -304,10 +304,9 @@ class Identification extends React.Component {
                     className="form-square"
                     value={this.state.current.patient.sex || ''}
                     onChange={this.handleChange}>
-                    <option></option>
+                    <option>Unknown</option>
                     <option>Female</option>
                     <option>Male</option>
-                    <option>Unknown</option>
                   </Form.Control>
                   <Form.Control.Feedback className="d-block" type="invalid">
                     {this.state.errors['sex']}
@@ -402,11 +401,20 @@ class Identification extends React.Component {
                 <Form.Group as={Col} md="1"></Form.Group>
                 <Form.Group as={Col} md="8" controlId="ethnicity">
                   <Form.Label className="nav-input-label">ETHNICITY{schema?.fields?.ethnicity?._exclusive?.required && ' *'}</Form.Label>
-                  <Form.Control as="select" size="lg" className="form-square" value={this.state.current.patient.ethnicity || ''} onChange={this.handleChange}>
-                    <option></option>
+                  <Form.Control
+                    as="select"
+                    size="lg"
+                    isInvalid={this.state.errors['ethnicity']}
+                    className="form-square"
+                    value={this.state.current.patient.ethnicity || ''}
+                    onChange={this.handleChange}>
+                    <option>Unknown</option>
                     <option>Not Hispanic or Latino</option>
                     <option>Hispanic or Latino</option>
                   </Form.Control>
+                  <Form.Control.Feedback className="d-block" type="invalid">
+                    {this.state.errors['ethnicity']}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Form.Row>
               <Form.Row className="pt-3 ml-0">
@@ -570,6 +578,7 @@ const schema = yup.object().shape({
   age: yup.number().nullable(),
   sex: yup
     .string()
+    .required('Please indicate Sex')
     .max(200, 'Max length exceeded, please limit to 200 characters.')
     .nullable(),
   white: yup.boolean().nullable(),
@@ -580,6 +589,7 @@ const schema = yup.object().shape({
   other_race: yup.boolean().nullable(),
   ethnicity: yup
     .string()
+    .required('Please indicate Ethnicity')
     .max(200, 'Max length exceeded, please limit to 200 characters.')
     .nullable(),
   primary_language: yup
