@@ -434,7 +434,7 @@ class PatientsTable extends React.Component {
                 <Form.Row className="align-items-center">
                   {this.state.query.tab !== 'transferred_out' && (
                     <React.Fragment>
-                      <Col lg={17} md={15} className="my-1">
+                      <Col className="my-1">
                         <InputGroup size="sm">
                           <InputGroup.Prepend>
                             <InputGroup.Text className="rounded-0">
@@ -481,7 +481,7 @@ class PatientsTable extends React.Component {
                           </OverlayTrigger>
                         </InputGroup>
                       </Col>
-                      <Col lg={7} md={9} className="my-1">
+                      {/* <Col lg={7} md={9} className="my-1">
                         <InputGroup size="sm">
                           <InputGroup.Prepend>
                             <InputGroup.Text className="rounded-0">
@@ -529,7 +529,7 @@ class PatientsTable extends React.Component {
                             </Button>
                           </OverlayTrigger>
                         </InputGroup>
-                      </Col>
+                      </Col> */}
                     </React.Fragment>
                   )}
                 </Form.Row>

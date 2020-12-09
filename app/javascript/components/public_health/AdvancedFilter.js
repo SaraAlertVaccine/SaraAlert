@@ -30,7 +30,6 @@ class AdvancedFilter extends React.Component {
           description: 'Recipients who had a report created in the last 24 hours',
           type: 'boolean',
         },
-        { name: 'paused', title: 'Notifications Paused (Boolean)', description: 'Recipients who have paused notifications', type: 'boolean' },
         {
           name: 'preferred-contact-method',
           title: 'Preferred Reporting Method (Select)',
@@ -39,32 +38,12 @@ class AdvancedFilter extends React.Component {
           options: ['Unknown', 'E-mailed Web Link', 'SMS Texted Weblink', 'Telephone call', 'SMS Text-message', 'Opt-out', ''],
         },
         { name: 'latest-report', title: 'Latest Report (Date picker)', description: 'Recipients with latest report during specified date range', type: 'date' },
-        { name: 'hoh', title: 'Daily Reporters (Boolean)', description: 'Recipients that are a Head of Household or self-reporter', type: 'boolean' },
-        {
-          name: 'household-member',
-          title: 'Household Member (Boolean)',
-          description: 'Recipients that are in a household but not the Head of Household',
-          type: 'boolean',
-        },
         { name: 'enrolled', title: 'Enrolled (Date picker)', description: 'Recipients enrolled in system during specified date range', type: 'date' },
-        {
-          name: 'last-date-exposure',
-          title: 'Last date of exposure (Date picker)',
-          description: 'Recipients who have a last date of exposure during specified date range',
-          type: 'date',
-        },
         {
           name: 'symptom-onset',
           title: 'Symptom onset (Date picker)',
           description: 'Recipients who have a symptom onset date during specified date range',
           type: 'date',
-        },
-        { name: 'continous-exposure', title: 'Continuous Exposure (Boolean)', description: 'Recipients who have continuous exposure enabled', type: 'boolean' },
-        {
-          name: 'monitoring-status',
-          title: 'Active Monitoring (Boolean)',
-          description: 'Recipients who are currently under active monitoring',
-          type: 'boolean',
         },
         {
           name: 'primary-language',
@@ -77,17 +56,10 @@ class AdvancedFilter extends React.Component {
             })
             .concat(['']),
         },
-        { name: 'cohort', title: 'Common Exposure Cohort Name (Text)', description: 'Recipient common exposure cohort name or description', type: 'search' },
         {
           name: 'address-usa',
           title: 'Address (within USA) (Text)',
           description: 'Recipient Address 1, Town/City, State, Address 2, Zip, or County within USA',
-          type: 'search',
-        },
-        {
-          name: 'address-foreign',
-          title: 'Address (outside USA) (Text)',
-          description: 'Recipient Address 1, Town/City, Country, Address 2, Postal Code, Address 3 or State/Province (outside USA)',
           type: 'search',
         },
         {
@@ -107,28 +79,7 @@ class AdvancedFilter extends React.Component {
         { name: 'first-name', title: 'Name (First) (Text)', description: 'Recipient first name', type: 'search' },
         { name: 'middle-name', title: 'Name (Middle) (Text)', description: 'Recipient middle name', type: 'search' },
         { name: 'last-name', title: 'Name (Last) (Text)', description: 'Recipient last name', type: 'search' },
-        {
-          name: 'monitoring-plan',
-          title: 'Monitoring Plan (Select)',
-          description: 'Recipient monitoring plan',
-          type: 'option',
-          options: [
-            'None',
-            'Daily active monitoring',
-            'Self-monitoring with public health supervision',
-            'Self-monitoring with delegated supervision',
-            'Self-observation',
-            '',
-          ],
-        },
         { name: 'never-responded', title: 'Never Reported (Boolean)', description: 'Recipients who have no reports', type: 'boolean' },
-        {
-          name: 'risk-exposure',
-          title: 'Exposure Risk Assessment (Select)',
-          description: 'Recipient risk exposure risk assessment',
-          type: 'option',
-          options: ['High', 'Medium', 'Low', 'No Identified Risk', ''],
-        },
         { name: 'require-interpretation', title: 'Requires Interpretation (Boolean)', description: 'Recipients who require interpretation', type: 'boolean' },
         {
           name: 'preferred-contact-time',
@@ -655,9 +606,7 @@ class AdvancedFilter extends React.Component {
             </Row>
           </Modal.Body>
           <Modal.Footer className="justify-unset">
-            <p className="lead mr-auto">
-              Filter will be applied to the line lists in the <u>{this.props.workflow}</u> workflow until reset.
-            </p>
+            <p className="lead mr-auto">Filter will be applied to the line lists in the vaccine workflow until reset.</p>
             <Button
               variant="secondary btn-square"
               onClick={() => {

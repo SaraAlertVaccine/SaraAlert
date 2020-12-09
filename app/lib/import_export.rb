@@ -4,7 +4,7 @@
 module ImportExport # rubocop:todo Metrics/ModuleLength
   include ValidationHelper
 
-  LINELIST_HEADERS = ['Patient ID', 'Recipient', 'Jurisdiction', 'Assigned User', 'State/Local ID', 'Sex', 'Date of Birth', 'End of Monitoring', 'Risk Level',
+  LINELIST_HEADERS = ['Recipient ID', 'Recipient', 'Jurisdiction', 'Assigned User', 'State/Local ID', 'Sex', 'Date of Birth', 'End of Monitoring', 'Risk Level',
                       'Monitoring Plan', 'Latest Report', 'Transferred At', 'Reason For Closure', 'Latest Public Health Action', 'Status', 'Closed At',
                       'Transferred From', 'Transferred To', 'Expected Purge Date', 'Symptom Onset', 'Extended Isolation'].freeze
 
@@ -32,7 +32,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
                            'Lab 2 Specimen Collection Date', 'Lab 2 Report Date', 'Lab 2 Result', 'Full Assigned Jurisdiction Path', 'Assigned User',
                            'Gender Identity', 'Sexual Orientation'].freeze
 
-  MONITOREES_LIST_HEADERS = ['Patient ID'] + COMPREHENSIVE_HEADERS + ['Extended Isolation Date'].freeze
+  MONITOREES_LIST_HEADERS = ['Recipient ID'] + COMPREHENSIVE_HEADERS + ['Extended Isolation Date'].freeze
 
   EPI_X_HEADERS = ['Local-ID', 'Flight No', 'Date of notice', 'MDH Assignee', 'DGMQ ID', 'CARE ID', 'CARE Cell Number', 'Language', 'Arrival Date and Time',
                    'Arrival City', 'Last Name', 'First Name', 'Date of Birth', 'Gender', 'Passport Country', 'Passport Number', 'Permanent Street Address',
@@ -130,7 +130,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
       p.workbook.add_worksheet(name: 'Assessments') do |sheet|
         # headers and all unique symptoms
         symptom_labels = patients.joins(assessments: [{ reported_condition: :symptoms }]).select('symptoms.label').distinct.pluck('symptoms.label').sort
-        sheet.add_row ['Patient ID', 'Symptomatic', 'Who Reported', 'Created At', 'Updated At'] + symptom_labels.to_a.sort
+        sheet.add_row ['Recipient ID', 'Symptomatic', 'Who Reported', 'Created At', 'Updated At'] + symptom_labels.to_a.sort
 
         # assessments sorted by patients
         patients.find_in_batches(batch_size: 500) do |patients_group|
@@ -160,7 +160,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
       end
       # p.workbook.add_worksheet(name: 'Lab Results') do |sheet|
       #   labs = Laboratory.where(patient_id: patients.pluck(:id))
-      #   lab_headers = ['Patient ID', 'Lab Type', 'Specimen Collection Date', 'Report Date', 'Result Date', 'Created At', 'Updated At']
+      #   lab_headers = ['Recipient ID', 'Lab Type', 'Specimen Collection Date', 'Report Date', 'Result Date', 'Created At', 'Updated At']
       #   sheet.add_row lab_headers
       #   labs.find_each(batch_size: 500) do |lab|
       #     sheet.add_row lab.details.values, { types: Array.new(lab_headers.length, :string) }
@@ -168,7 +168,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
       # end
       p.workbook.add_worksheet(name: 'Edit Histories') do |sheet|
         histories = History.where(patient_id: patients.pluck(:id))
-        history_headers = ['Patient ID', 'Comment', 'Created By', 'History Type', 'Created At', 'Updated At']
+        history_headers = ['Recipient ID', 'Comment', 'Created By', 'History Type', 'Created At', 'Updated At']
         sheet.add_row history_headers
         histories.find_each(batch_size: 500) do |history|
           sheet.add_row history.details.values, { types: Array.new(history_headers.length, :string) }
@@ -177,7 +177,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
       p.workbook.add_worksheet(name: 'Dosages') do |sheet|
         dosages = Dosage.where(patient_id: patients.pluck(:id))
         dosages_headers = [
-          'Patient ID', 'Dose Number', 'CVX', 'Manufacturer', 'Expriation Date', 'Lot Number', 'Date Administered', 'Sending Organization',
+          'Recipient ID', 'Dose Number', 'CVX', 'Manufacturer', 'Expriation Date', 'Lot Number', 'Date Administered', 'Sending Organization',
           'Route of Administration', 'Administrator Suffix', 'Vaccination Site on Body', 'Created At', 'Updated At'
         ]
         sheet.add_row dosages_headers
@@ -213,7 +213,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
       p.workbook.add_worksheet(name: 'Assessments') do |sheet|
         # headers and all unique symptoms
         symptom_labels = patients.joins(assessments: [{ reported_condition: :symptoms }]).select('symptoms.label').distinct.pluck('symptoms.label').sort
-        sheet.add_row ['Patient ID', 'Symptomatic', 'Who Reported', 'Created At', 'Updated At'] + symptom_labels.to_a.sort
+        sheet.add_row ['Recipient ID', 'Symptomatic', 'Who Reported', 'Created At', 'Updated At'] + symptom_labels.to_a.sort
 
         # assessments sorted by patients
         patients.find_in_batches(batch_size: 500) do |patients_group|
@@ -249,7 +249,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
     Axlsx::Package.new do |p|
       p.workbook.add_worksheet(name: 'Lab Results') do |sheet|
         labs = Laboratory.where(patient_id: patients.pluck(:id))
-        lab_headers = ['Patient ID', 'Lab Type', 'Specimen Collection Date', 'Report Date', 'Result Date', 'Created At', 'Updated At']
+        lab_headers = ['Recipient ID', 'Lab Type', 'Specimen Collection Date', 'Report Date', 'Result Date', 'Created At', 'Updated At']
         sheet.add_row lab_headers
         labs.find_each(batch_size: 500) do |lab|
           sheet.add_row lab.details.values, { types: Array.new(lab_headers.length, :string) }
@@ -263,7 +263,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
     Axlsx::Package.new do |p|
       p.workbook.add_worksheet(name: 'Edit Histories') do |sheet|
         histories = History.where(patient_id: patients.pluck(:id))
-        history_headers = ['Patient ID', 'Comment', 'Created By', 'History Type', 'Created At', 'Updated At']
+        history_headers = ['Recipient ID', 'Comment', 'Created By', 'History Type', 'Created At', 'Updated At']
         sheet.add_row history_headers
         histories.find_each(batch_size: 500) do |history|
           sheet.add_row history.details.values, { types: Array.new(history_headers.length, :string) }
@@ -278,7 +278,7 @@ module ImportExport # rubocop:todo Metrics/ModuleLength
       p.workbook.add_worksheet(name: 'Dosages') do |sheet|
         dosages = Dosage.where(patient_id: patients.pluck(:id))
         dosages_headers = [
-          'Patient ID', 'Dose Number', 'CVX', 'Manufacturer', 'Expriation Date', 'Lot Number', 'Date Administered', 'Sending Organization',
+          'Recipient ID', 'Dose Number', 'CVX', 'Manufacturer', 'Expriation Date', 'Lot Number', 'Date Administered', 'Sending Organization',
           'Route of Administration', 'Administrator Suffix', 'Vaccination Site on Body', 'Created At', 'Updated At'
         ]
         sheet.add_row dosages_headers
