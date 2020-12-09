@@ -203,7 +203,7 @@ class PatientMailer < ApplicationMailer
     patient.update(last_assessment_reminder_sent: DateTime.now)
   rescue Twilio::REST::RestError => e
     Rails.logger.warn e.error_message
-    History.report_reminder(patient: patient, comment: "#{ADMIN_OPTIONS['app_name']} failed to call monitoree at #{patient.primary_telephone}.")
+    History.report_reminder(patient: patient, comment: "#{ADMIN_OPTIONS['app_name']} failed to call recipient at #{patient.primary_telephone}.")
     patient.update(last_assessment_reminder_sent: DateTime.now)
   end
 
@@ -238,9 +238,9 @@ class PatientMailer < ApplicationMailer
 
   def add_success_history(patient, parent)
     comment = if patient == parent
-                "#{ADMIN_OPTIONS['app_name']} sent a report reminder to this monitoree via #{parent.preferred_contact_method}."
+                "#{ADMIN_OPTIONS['app_name']} sent a report reminder to this recipient via #{parent.preferred_contact_method}."
               else
-                "#{ADMIN_OPTIONS['app_name']} sent a report reminder to this monitoree's HoH via #{parent.preferred_contact_method}."
+                "#{ADMIN_OPTIONS['app_name']} sent a report reminder to this recipient's HoH via #{parent.preferred_contact_method}."
               end
     History.report_reminder(patient: patient, comment: comment)
   end
@@ -252,7 +252,7 @@ class PatientMailer < ApplicationMailer
 
   def add_fail_history_blank_field(patient, type)
     History.report_reminder(patient: patient,
-                            comment: "#{ADMIN_OPTIONS['app_name']} could not send a report reminder to this monitoree via \
-                                     #{patient.preferred_contact_method}, because the monitoree #{type} was blank.")
+                            comment: "#{ADMIN_OPTIONS['app_name']} could not send a report reminder to this recipient via \
+                                     #{patient.preferred_contact_method}, because the recipient #{type} was blank.")
   end
 end

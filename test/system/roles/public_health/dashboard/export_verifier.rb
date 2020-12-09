@@ -15,7 +15,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
   def verify_line_list_csv(user_label, workflow)
     current_user = @@system_test_utils.get_user(user_label)
     download_file(current_user, "csv_#{workflow}")
-    csv = get_csv("Sara-Alert-Linelist-#{workflow == :isolation ? 'Isolation' : 'Exposure'}-????-??-??T??_??_?????_??-?.csv")
+    csv = get_csv("VACCS-Linelist-#{workflow == :isolation ? 'Isolation' : 'Exposure'}-????-??-??T??_??_?????_??-?.csv")
     patients = current_user.jurisdiction.all_patients.where(isolation: workflow == :isolation).order(:id)
     verify_line_list_export(csv, LINELIST_HEADERS, patients)
   end
@@ -23,7 +23,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
   def verify_sara_alert_format(user_label, workflow)
     current_user = @@system_test_utils.get_user(user_label)
     download_file(current_user, "sara_format_#{workflow}")
-    xlsx = get_xlsx("Sara-Alert-Format-#{workflow == :isolation ? 'Isolation' : 'Exposure'}-????-??-??T??_??_?????_??-?.xlsx")
+    xlsx = get_xlsx("VACCS-Format-#{workflow == :isolation ? 'Isolation' : 'Exposure'}-????-??-??T??_??_?????_??-?.xlsx")
     patients = current_user.jurisdiction.all_patients.where(isolation: workflow == :isolation).order(:id)
     verify_sara_alert_format_export(xlsx, patients)
   end
@@ -31,7 +31,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
   def verify_excel_purge_eligible_monitorees(user_label)
     current_user = @@system_test_utils.get_user(user_label)
     download_comprehensive_export_files(current_user, 'full_history_purgeable')
-    xlsx_monitorees = get_xlsx('Sara-Alert-Purge-Eligible-Export-Monitorees-????-??-??T??_??_?????_??-?.xlsx')
+    xlsx_monitorees = get_xlsx('Sara-Alert-Purge-Eligible-Export-Recipients-????-??-??T??_??_?????_??-?.xlsx')
     xlsx_assessments = get_xlsx('Sara-Alert-Purge-Eligible-Export-Assessments-????-??-??T??_??_?????_??-?.xlsx')
     xlsx_lab_results = get_xlsx('Sara-Alert-Purge-Eligible-Export-Lab-Results-????-??-??T??_??_?????_??-?.xlsx')
     xlsx_histories = get_xlsx('Sara-Alert-Purge-Eligible-Export-Histories-????-??-??T??_??_?????_??-?.xlsx')
@@ -42,7 +42,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
   def verify_excel_all_monitorees(user_label)
     current_user = @@system_test_utils.get_user(user_label)
     download_comprehensive_export_files(current_user, 'full_history_all')
-    xlsx_monitorees = get_xlsx('Sara-Alert-Full-Export-Monitorees-????-??-??T??_??_?????_??-?.xlsx')
+    xlsx_monitorees = get_xlsx('Sara-Alert-Full-Export-Recipients-????-??-??T??_??_?????_??-?.xlsx')
     xlsx_assessments = get_xlsx('Sara-Alert-Full-Export-Assessments-????-??-??T??_??_?????_??-?.xlsx')
     xlsx_lab_results = get_xlsx('Sara-Alert-Full-Export-Lab-Results-????-??-??T??_??_?????_??-?.xlsx')
     xlsx_histories = get_xlsx('Sara-Alert-Full-Export-Histories-????-??-??T??_??_?????_??-?.xlsx')
@@ -51,7 +51,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
   end
 
   def verify_excel_single_monitoree(patient_id)
-    xlsx = get_xlsx("Sara-Alert-Monitoree-Export-#{patient_id}-????-??-??T??_??_?????_??.xlsx")
+    xlsx = get_xlsx("VACCS-Recipient-Export-#{patient_id}-????-??-??T??_??_?????_??.xlsx")
     patients = Patient.where(id: patient_id)
     verify_excel_export(xlsx, xlsx, xlsx, xlsx, patients)
   end
@@ -86,7 +86,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
   end
 
   def verify_sara_alert_format_export(xlsx, patients)
-    monitorees = xlsx.sheet('Monitorees')
+    monitorees = xlsx.sheet('Recipients')
     assert_equal(patients.size, monitorees.last_row - 1, 'Number of patients')
     COMPREHENSIVE_HEADERS.each_with_index do |header, col|
       assert_equal(header, monitorees.cell(1, col + 1), "For header: #{header}")
@@ -107,21 +107,21 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
   end
 
   def verify_excel_export(xlsx_monitorees, xlsx_assessments, xlsx_lab_results, xlsx_histories, patients)
-    monitorees_list = xlsx_monitorees.sheet('Monitorees List')
-    assert_equal(patients.size, monitorees_list.last_row - 1, 'Number of patients in Monitorees List')
+    monitorees_list = xlsx_monitorees.sheet('Recipients List')
+    assert_equal(patients.size, monitorees_list.last_row - 1, 'Number of patients in Recipients List')
     MONITOREES_LIST_HEADERS.each_with_index do |header, col|
-      assert_equal(header, monitorees_list.cell(1, col + 1), "For header: #{header} in Monitorees List")
+      assert_equal(header, monitorees_list.cell(1, col + 1), "For header: #{header} in Recipients List")
     end
     patients.each_with_index do |patient, row|
       details = { patient_id: patient.id }.merge(patient.comprehensive_details)
       details.keys.each_with_index do |field, col|
         cell_value = monitorees_list.cell(row + 2, col + 1)
         if field == :status
-          assert_equal(patient.status&.to_s&.humanize&.downcase, cell_value, "For field: #{field} in Monitorees List")
+          assert_equal(patient.status&.to_s&.humanize&.downcase, cell_value, "For field: #{field} in Recipients List")
         elsif %i[primary_telephone secondary_telephone].include?(field)
-          assert_equal(format_phone_number(details[field]).to_s, cell_value || '', "For field: #{field} in Monitorees List")
+          assert_equal(format_phone_number(details[field]).to_s, cell_value || '', "For field: #{field} in Recipients List")
         else
-          assert_equal(details[field].to_s, cell_value || '', "For field: #{field} in Monitorees List")
+          assert_equal(details[field].to_s, cell_value || '', "For field: #{field} in Recipients List")
         end
       end
     end
@@ -135,7 +135,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
                             .distinct
                             .pluck('symptoms.label')
                             .sort
-    assessment_headers = ['Patient ID', 'Symptomatic', 'Who Reported', 'Created At', 'Updated At'] + symptom_labels.to_a.sort
+    assessment_headers = ['Recipient ID', 'Symptomatic', 'Who Reported', 'Created At', 'Updated At'] + symptom_labels.to_a.sort
     assessment_headers.each_with_index do |header, col|
       assert_equal(header, assessments.cell(1, col + 1), "For header: #{header} in Assessments")
     end
@@ -160,7 +160,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
     edit_histories = xlsx_histories.sheet('Edit Histories')
     histories = History.where(patient_id: patient_ids)
     assert_equal(histories.size, edit_histories.last_row - 1, 'Number of histories in Edit Histories')
-    history_headers = ['Patient ID', 'Comment', 'Created By', 'History Type', 'Created At', 'Updated At']
+    history_headers = ['Recipient ID', 'Comment', 'Created By', 'History Type', 'Created At', 'Updated At']
     history_headers.each_with_index do |header, col|
       assert_equal(header, edit_histories.cell(1, col + 1), "For header: #{header} in Edit Histories")
     end

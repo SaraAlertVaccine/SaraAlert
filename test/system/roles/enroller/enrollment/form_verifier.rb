@@ -12,7 +12,7 @@ class EnrollmentFormVerifier < ApplicationSystemTestCase
   @@system_test_utils = SystemTestUtils.new(nil)
 
   def verify_form_data_after_navigation(monitoree)
-    click_link 'Enroll New Monitoree'
+    click_link 'Enroll New Recipient'
     @@enrollment_form_steps.steps.each_key do |step|
       @@enrollment_form.populate_enrollment_step(step, monitoree[step.to_s])
       @@system_test_utils.go_to_prev_page

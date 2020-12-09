@@ -206,7 +206,7 @@ class Fhir::R4::ApiController < ActionController::API
       resource.send_enrollment_notification if resource.self_reporter_or_proxy?
 
       # Create a history for the enrollment
-      History.enrollment(patient: resource, created_by: resource.creator&.email, comment: 'Monitoree enrolled via API.')
+      History.enrollment(patient: resource, created_by: resource.creator&.email, comment: 'Recipient enrolled via API.')
     end
     status_created(resource.as_fhir) && return
   rescue StandardError

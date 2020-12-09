@@ -151,6 +151,11 @@ class Patient < ApplicationRecord
     dosages.order(date_given: :desc).first
   end
 
+
+  def latest_dose1
+    dosages.where(dose_number: 1).order(date_given: :desc).first
+  end 
+
   # Patients who are eligible for reminders
   # TODO: Right now we're going to just assume that you just need a dosage. So we'll do a simple join
   scope :reminder_eligible, lambda {
@@ -468,7 +473,8 @@ class Patient < ApplicationRecord
   def second_dose_eligible?
     dosage = latest_dosage
     return false if dosage.nil?
-    (dosage.dose_number == 1) && ((Time.now.getlocal(address_timezone_offset) - 21.days).to_date >= dosage.date_given)
+    return false if dosage.dose_number.nil? || dosage&.date_given.nil?
+    (dosage&.dose_number == 1) && ((Time.now.getlocal(address_timezone_offset) - 21.days).to_date >= dosage&.date_given)
   end
 
   # Gets the current date in the patient's timezone
@@ -612,12 +618,17 @@ class Patient < ApplicationRecord
   end
 
   # Single place for calculating the end of monitoring date for this subject.
+  # TODO: For now, end of monitoring will be a year away from Dose 2
   def end_of_monitoring
-    return 'Continuous Exposure' if continuous_exposure
-    return (last_date_of_exposure + ADMIN_OPTIONS['monitoring_period_days'].days)&.to_s if last_date_of_exposure.present?
+    return nil if latest_dosage.nil?
+    return (latest_dosage&.date_given + 1.year) if latest_dosage&.dose_number == 2
 
-    # Check for created_at is necessary here because custom as_json is automatically called when enrolling a new patient, which calls this method indirectly.
-    return (created_at.to_date + ADMIN_OPTIONS['monitoring_period_days'].days)&.to_s if created_at.present?
+    # --- Previous definition
+    # return 'Continuous Exposure' if continuous_exposure
+    # return (last_date_of_exposure + ADMIN_OPTIONS['monitoring_period_days'].days)&.to_s if last_date_of_exposure.present?
+
+    # # Check for created_at is necessary here because custom as_json is automatically called when enrolling a new patient, which calls this method indirectly.
+    # return (created_at.to_date + ADMIN_OPTIONS['monitoring_period_days'].days)&.to_s if created_at.present?
   end
 
   # Date when patient is expected to be purged
@@ -789,14 +800,14 @@ class Patient < ApplicationRecord
     # Can't send messages to monitorees that are purged (this should never actually show up)
     if purged
       eligible = false
-      messages << { message: 'Monitoree was purged', datetime: nil }
+      messages << { message: 'Recipient was purged', datetime: nil }
     end
 
     # Can't send to household members
     if id != responder_id
       eligible = false
       household = true
-      messages << { message: 'Monitoree is within a household, so the HoH will receive notifications instead', datetime: nil }
+      messages << { message: 'Recipient is within a household, so the HoH will receive notifications instead', datetime: nil }
     end
 
     # Can't send messages to monitorees that are on the closed line list and have no active dependents.
@@ -805,20 +816,20 @@ class Patient < ApplicationRecord
 
       # If this person has dependents (is a HoH)
       is_hoh = dependents_exclude_self.exists?
-      message = "Monitoree is not currently being monitored #{is_hoh ? 'and has no actively monitored household members' : ''}"
+      message = "Recipient is not currently being monitored #{is_hoh ? 'and has no actively monitored household members' : ''}"
       messages << { message: message, datetime: nil }
     end
 
     # Can't send messages if notifications are paused
     if pause_notifications
       eligible = false
-      messages << { message: 'Monitoree\'s notifications are paused', datetime: nil }
+      messages << { message: 'Recipient\'s notifications are paused', datetime: nil }
     end
 
     # Has an ineligible preferred contact method
     if ['Unknown', 'Opt-out', '', nil].include?(preferred_contact_method)
       eligible = false
-      messages << { message: "Monitoree has an ineligible preferred contact method (#{preferred_contact_method || 'Missing'})", datetime: nil }
+      messages << { message: "Recipient has an ineligible preferred contact method (#{preferred_contact_method || 'Missing'})", datetime: nil }
     end
 
     # Exposure workflow specific conditions
@@ -828,7 +839,7 @@ class Patient < ApplicationRecord
       no_active_dependents = !active_dependents_exclude_self.exists?
       if start_of_exposure < reporting_period && !continuous_exposure && no_active_dependents
         eligible = false
-        messages << { message: "Monitoree\'s monitoring period has elapsed and continuous exposure is not enabled", datetime: nil }
+        messages << { message: "Recipient\'s monitoring period has elapsed and continuous exposure is not enabled", datetime: nil }
       end
     end
 
@@ -836,14 +847,14 @@ class Patient < ApplicationRecord
     if !last_assessment_reminder_sent.nil? && last_assessment_reminder_sent >= 12.hours.ago
       eligible = false
       sent = true
-      messages << { message: 'Monitoree has been contacted recently', datetime: last_assessment_reminder_sent }
+      messages << { message: 'Recipient has been contacted recently', datetime: last_assessment_reminder_sent }
     end
 
     # Has already reported today
     if !latest_assessment_at.nil? && latest_assessment_at >= report_cutoff_time
       eligible = false
       reported = true
-      messages << { message: 'Monitoree has already reported today', datetime: latest_assessment_at }
+      messages << { message: 'Recipient has already reported today', datetime: latest_assessment_at }
     end
 
     # Rough estimate of next contact time
@@ -972,7 +983,7 @@ class Patient < ApplicationRecord
     return if diffs.length.zero?
 
     pretty_diff = diffs.collect { |d| "#{d[:attribute].to_s.humanize} (\"#{d[:before]}\" to \"#{d[:after]}\")" }
-    comment = is_api_edit ? 'Monitoree record edited via API. ' : 'User edited a monitoree record. '
+    comment = is_api_edit ? 'Recipient record edited via API. ' : 'User edited a recipient record. '
     comment += "Changes were: #{pretty_diff.join(', ')}."
     History.record_edit(patient: patient_after, created_by: user_email, comment: comment)
   end

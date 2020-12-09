@@ -18,7 +18,7 @@ class Patient extends React.Component {
 
   render() {
     if (!this.props.details) {
-      return <React.Fragment>No monitoree details to show.</React.Fragment>;
+      return <React.Fragment>No recipient details to show.</React.Fragment>;
     }
     return (
       <React.Fragment>
@@ -87,7 +87,7 @@ class Patient extends React.Component {
                 <br />
               </Col>
               <Col className="text-truncate">
-                <span className="font-weight-normal">Birth Sex:</span>{' '}
+                <span className="font-weight-normal">Sex:</span>{' '}
                 <span className="font-weight-light">{`${this.props.details.sex ? this.props.details.sex : ''}`}</span>
                 <br />
                 <span className="font-weight-normal">Gender Identity:</span>{' '}

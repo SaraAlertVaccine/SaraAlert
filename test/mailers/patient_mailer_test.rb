@@ -215,7 +215,7 @@ class PatientMailerTest < ActionMailer::TestCase
         assert_not_nil @patient.last_assessment_reminder_sent
         @patient.reload
         assert_equal 'Report Reminder', @patient.histories.first.history_type
-        assert_equal "Sara Alert sent a report reminder to this monitoree via #{@patient.preferred_contact_method}.", @patient.histories.first.comment
+        assert_equal "Sara Alert sent a report reminder to this recipient via #{@patient.preferred_contact_method}.", @patient.histories.first.comment
       end
     end
   end
@@ -227,7 +227,7 @@ class PatientMailerTest < ActionMailer::TestCase
         PatientMailer.send(mthd, @patient).deliver_now
         @patient.reload
         assert_equal 'Report Reminder', @patient.histories.first.history_type
-        assert_includes @patient.histories.first.comment, 'Sara Alert could not send a report reminder to this monitoree via'
+        assert_includes @patient.histories.first.comment, 'Sara Alert could not send a report reminder to this recipient via'
         assert_includes @patient.histories.first.comment, @patient.preferred_contact_method
       end
     end
@@ -263,7 +263,7 @@ class PatientMailerTest < ActionMailer::TestCase
         PatientMailer.send(mthd, @patient).deliver_now
         @patient.reload
         assert_equal 'Report Reminder', @patient.histories.first.history_type
-        assert_includes @patient.histories.first.comment, "Sara Alert sent a report reminder to this monitoree via #{@patient.preferred_contact_method}."
+        assert_includes @patient.histories.first.comment, "Sara Alert sent a report reminder to this recipient via #{@patient.preferred_contact_method}."
         assert_not_nil @patient.last_assessment_reminder_sent
       end
     end
@@ -364,7 +364,7 @@ class PatientMailerTest < ActionMailer::TestCase
       @patient.reload
       assert_not_nil @patient.last_assessment_reminder_sent
       assert_equal 'Report Reminder', @patient.histories.first.history_type
-      assert_includes @patient.histories.first.comment, "Sara Alert sent a report reminder to this monitoree via #{@patient.preferred_contact_method}."
+      assert_includes @patient.histories.first.comment, "Sara Alert sent a report reminder to this recipient via #{@patient.preferred_contact_method}."
     end
   end
 

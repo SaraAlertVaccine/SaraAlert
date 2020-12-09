@@ -37,27 +37,18 @@ class PatientsTable extends React.Component {
     this.advancedFilterUpdate = this.advancedFilterUpdate.bind(this);
     this.state = {
       table: {
+        // Monitoree, Dose 1 Administration Date, Dose 2 appointment date, Dose 2 Administration date, Jurisdiction, Date of Birth, End of Monitoring, Latest Report, Status
         colData: [
-          { field: 'name', label: 'Monitoree', isSortable: true, tooltip: null, filter: this.linkPatient },
+          { field: 'name', label: 'Recipient', isSortable: true, tooltip: null, filter: this.linkPatient },
+          { field: 'dose1_date', label: 'Dose 1 Administration Date', isSortable: true, tooltip: null, filter: this.formatDate },
+          { field: 'dose2_app', label: 'Dose 2 Appointment Date', isSortable: true, tooltip: null, filter: this.formatDate },
+          { field: 'dose2_date', label: 'Dose 2 Administration Date', isSortable: true, tooltip: null, filter: this.formatDate },
           { field: 'jurisdiction', label: 'Jurisdiction', isSortable: true, tooltip: null },
-          { field: 'transferred_from', label: 'From Jurisdiction', isSortable: true, tooltip: null },
-          { field: 'transferred_to', label: 'To Jurisdiction', isSortable: true, tooltip: null },
-          { field: 'assigned_user', label: 'Assigned User', isSortable: true, tooltip: null },
-          { field: 'state_local_id', label: 'State/Local ID', isSortable: true, tooltip: null },
           { field: 'dob', label: 'Date of Birth', isSortable: true, tooltip: null, filter: this.formatDate },
-          { field: 'end_of_monitoring', label: 'End of Monitoring', isSortable: true, tooltip: null, filter: this.formatEndOfMonitoring },
-          { field: 'extended_isolation', label: 'Extended Isolation To', isSortable: true, tooltip: 'extendedIsolation', filter: this.formatDate },
-          { field: 'symptom_onset', label: 'Symptom Onset', isSortable: true, tooltip: null, filter: this.formatDate },
-          { field: 'risk_level', label: 'Risk Level', isSortable: true, tooltip: null },
-          { field: 'monitoring_plan', label: 'Monitoring Plan', isSortable: true, tooltip: null },
-          { field: 'public_health_action', label: 'Latest Public Health Action', isSortable: true, tooltip: null },
-          { field: 'expected_purge_date', label: 'Eligible For Purge After', isSortable: true, tooltip: 'purgeDate', filter: this.formatTimestamp },
-          { field: 'reason_for_closure', label: 'Reason for Closure', isSortable: true, tooltip: null },
-          { field: 'closed_at', label: 'Closed At', isSortable: true, tooltip: null, filter: this.formatTimestamp },
-          { field: 'transferred_at', label: 'Transferred At', isSortable: true, tooltip: null, filter: this.formatTimestamp },
+          { field: 'end_of_monitoring', label: 'End of Monitoring', isSortable: true, tooltip: null, filter: this.formatDate },
           { field: 'latest_report', label: 'Latest Report', isSortable: true, tooltip: null, filter: this.formatTimestamp },
-          { field: 'status', label: 'Status', isSortable: false, tooltip: null },
-          { field: 'report_eligibility', label: '', isSortable: false, tooltip: null, filter: this.createEligibilityTooltip, icon: 'far fa-comment' },
+          { field: 'status', label: 'Status', isSortable: true, tooltip: null },
+          // { field: 'report_eligibility', label: '', isSortable: false, tooltip: null, filter: this.createEligibilityTooltip, icon: 'far fa-comment' },
         ],
         displayedColData: [],
         rowData: [],
@@ -371,7 +362,7 @@ class PatientsTable extends React.Component {
             </Badge>
           </span>
           <ReactTooltip id={`${id}-hoh`} multiline={true} place="right" type="dark" effect="solid" className="tooltip-container">
-            <span>Monitoree is Head of Household that reports on behalf of household members</span>
+            <span>Recipient is Head of Household that reports on behalf of household members</span>
           </ReactTooltip>
           <a href={`/patients/${id}`}>{name}</a>
         </div>
@@ -389,12 +380,12 @@ class PatientsTable extends React.Component {
     return date ? moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY') : '';
   }
 
-  formatEndOfMonitoring(endOfMonitoring) {
-    if (endOfMonitoring === 'Continuous Exposure') {
-      return 'Continuous Exposure';
-    }
-    return moment(endOfMonitoring, 'YYYY-MM-DD').format('MM/DD/YYYY');
-  }
+  // formatEndOfMonitoring(endOfMonitoring) {
+  //   if (endOfMonitoring === 'Continuous Exposure') {
+  //     return 'Continuous Exposure';
+  //   }
+  //   return moment(endOfMonitoring, 'YYYY-MM-DD').format('MM/DD/YYYY');
+  // }
 
   createEligibilityTooltip(reportEligibility, patientId) {
     return <EligibilityTooltip id={patientId} report_eligibility={reportEligibility} inline={false} />;
@@ -443,7 +434,7 @@ class PatientsTable extends React.Component {
                 <Form.Row className="align-items-center">
                   {this.state.query.tab !== 'transferred_out' && (
                     <React.Fragment>
-                      <Col lg={17} md={15} className="my-1">
+                      <Col className="my-1">
                         <InputGroup size="sm">
                           <InputGroup.Prepend>
                             <InputGroup.Text className="rounded-0">
@@ -490,7 +481,7 @@ class PatientsTable extends React.Component {
                           </OverlayTrigger>
                         </InputGroup>
                       </Col>
-                      <Col lg={7} md={9} className="my-1">
+                      {/* <Col lg={7} md={9} className="my-1">
                         <InputGroup size="sm">
                           <InputGroup.Prepend>
                             <InputGroup.Text className="rounded-0">
@@ -516,7 +507,7 @@ class PatientsTable extends React.Component {
                             })}
                           </datalist>
                           <OverlayTrigger
-                            overlay={<Tooltip>Search for {this.props.workflow === 'exposure' ? 'monitorees' : 'cases'} with any or no assigned user</Tooltip>}>
+                            overlay={<Tooltip>Search for {this.props.workflow === 'exposure' ? 'recipients' : 'cases'} with any or no assigned user</Tooltip>}>
                             <Button
                               id="allAssignedUsers"
                               size="sm"
@@ -527,7 +518,7 @@ class PatientsTable extends React.Component {
                             </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
-                            overlay={<Tooltip>Search for {this.props.workflow === 'exposure' ? 'monitorees' : 'cases'} with no assigned user</Tooltip>}>
+                            overlay={<Tooltip>Search for {this.props.workflow === 'exposure' ? 'recipients' : 'cases'} with no assigned user</Tooltip>}>
                             <Button
                               id="noAssignedUser"
                               size="sm"
@@ -538,13 +529,13 @@ class PatientsTable extends React.Component {
                             </Button>
                           </OverlayTrigger>
                         </InputGroup>
-                      </Col>
+                      </Col> */}
                     </React.Fragment>
                   )}
                 </Form.Row>
                 <InputGroup size="sm" className="d-flex justify-content-between">
                   <InputGroup.Prepend>
-                    <OverlayTrigger overlay={<Tooltip>Search by monitoree name, date of birth, state/local id, cdc id, or nndss/case id</Tooltip>}>
+                    <OverlayTrigger overlay={<Tooltip>Search by recipient name, date of birth, state/local id, cdc id, or nndss/case id</Tooltip>}>
                       <InputGroup.Text className="rounded-0">
                         <i className="fas fa-search"></i>
                         <span className="ml-1">Search</span>

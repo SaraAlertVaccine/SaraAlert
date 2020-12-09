@@ -10,7 +10,7 @@ exports[`MonitoreeFlow Properly renders 1`] = `
       as="h5"
       className="text-left"
     >
-      Monitoree Flow Over Time
+      Recipient Flow Over Time
     </CardHeader>
     <CardBody
       className="card-body"
@@ -31,17 +31,17 @@ exports[`MonitoreeFlow Properly renders 1`] = `
               <th
                 className="py-0"
               >
-                 Last 24 Hours 
+                 Last 24 Hours
               </th>
               <th
                 className="py-0"
               >
-                 Last 14 Days 
+                 Last 14 Days
               </th>
               <th
                 className="py-0"
               >
-                 Total 
+                 Total
               </th>
             </tr>
           </thead>
@@ -60,7 +60,7 @@ exports[`MonitoreeFlow Properly renders 1`] = `
                 <u>
                   INCOMING
                 </u>
-                 
+
               </td>
             </tr>
             <tr>
@@ -109,7 +109,7 @@ exports[`MonitoreeFlow Properly renders 1`] = `
                 <u>
                   OUTGOING
                 </u>
-                 
+
               </td>
             </tr>
             <tr

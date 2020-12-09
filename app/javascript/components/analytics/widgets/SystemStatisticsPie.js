@@ -36,7 +36,7 @@ class SystemStatisticsPie extends React.Component {
           <Card.Body className="pb-1">
             <Row className="text-center">
               <Col className="">
-                <h4 className="mb-0"> Total Monitorees </h4>
+                <h4 className="mb-0"> Total Recipients </h4>
                 <div style={{ width: '100%', height: 250 }} className="recharts-wrapper">
                   <ResponsiveContainer>
                     <PieChart onMouseEnter={this.onPieEnter}>

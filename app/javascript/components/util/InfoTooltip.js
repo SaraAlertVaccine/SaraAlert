@@ -7,7 +7,7 @@ const TOOLTIP_TEXT = {
   // MONITOREE DETAILS
   preferredContactTime: (
     <div>
-      The monitoree will be sent a reminder as soon as they move to non-reporting. If monitorees home address state is left blank, the Eastern time zone is used
+      The recipient will be sent a reminder as soon as they move to non-reporting. If recipients home address state is left blank, the Eastern time zone is used
       for preferred contact time by default. If preferred contact time is left blank, reminders will be sent during the afternoon contact times listed below.
     </div>
   ),
@@ -16,21 +16,21 @@ const TOOLTIP_TEXT = {
 
   primaryLanguage: (
     <div>
-      <i>Primary Language</i> is used to determine the translations for what the monitoree sees/hears. If a language is not fully supported, a warning to users
+      <i>Primary Language</i> is used to determine the translations for what the recipient sees/hears. If a language is not fully supported, a warning to users
       will appear.
     </div>
   ),
 
   secondaryLanguage: (
     <div>
-      <i>Secondary Language</i> is not used to determine which language the system sends messages to the monitoree in. Information in this field can be used to
+      <i>Secondary Language</i> is not used to determine which language the system sends messages to the recipient in. Information in this field can be used to
       inform interpretation needs.
     </div>
   ),
 
   sexAtBirth: (
     <div>
-      This is the monitoree&apos;s legal sex, sometimes referred to as biological sex. Ask the monitoree &quot;What sex was originally listed on your birth
+      This is the recipient&apos;s legal sex, sometimes referred to as biological sex. Ask the recipient &quot;What sex was originally listed on your birth
       certificate?&quot;
     </div>
   ),
@@ -38,7 +38,7 @@ const TOOLTIP_TEXT = {
   sexualOrientation: (
     <div>
       Allows collection of information to help address potential health disparities and identify any specific health care needs. Describes who the person is
-      attracted to. Assure the monitoree that the information will be kept confidential. Ask the monitoree &quot;Do you think of yourself as...&quot; and
+      attracted to. Assure the recipient that the information will be kept confidential. Ask the recipient &quot;Do you think of yourself as...&quot; and
       provide the options for sexual orientation that are listed.
     </div>
   ),
@@ -46,7 +46,7 @@ const TOOLTIP_TEXT = {
   genderIdentity: (
     <div>
       Allows collection of information to help address potential health disparities and identify any specific health care needs. Relates to a person’s internal
-      sense of their gender. Assure the monitoree that the information will be kept confidential. Ask the monitoree &quot;What gender do you identify
+      sense of their gender. Assure the recipient that the information will be kept confidential. Ask the recipient &quot;What gender do you identify
       with...&quot; and provide the options for gender identity that are listed.
     </div>
   ),
@@ -70,14 +70,14 @@ const TOOLTIP_TEXT = {
   exposureRiskAssessment: (
     <div>
       Used to prioritize responses to symptomatic and non-reporting individuals. This element does not impact the type or frequency of messages sent by the
-      system to monitorees.
+      system to recipients.
     </div>
   ),
 
   monitoringPlan: (
     <div>
       Used to prioritize responses to symptomatic and non-reporting individuals in the exposure workflow. This element does not impact the type or frequency of
-      messages sent by the system to monitorees.
+      messages sent by the system to recipients.
     </div>
   ),
 
@@ -87,13 +87,13 @@ const TOOLTIP_TEXT = {
       <ul className="mb-0">
         <li>
           {' '}
-          For monitorees currently in the Exposure Workflow: Selecting Confirmed or Probable will prompt the option to move the monitoree into the Isolation
-          Workflow or to end monitoring. Selecting Suspect, Unknown, or Not a Case will not change the monitoree&apos;s workflow.{' '}
+          For recipient currently in the Exposure Workflow: Selecting Confirmed or Probable will prompt the option to move the recipient into the Isolation
+          Workflow or to end monitoring. Selecting Suspect, Unknown, or Not a Case will not change the recipient&apos;s workflow.{' '}
         </li>
         <li>
           {' '}
-          For monitorees currently in the Isolation Workflow: Selecting Suspect, Unknown, or Not a Case will move the monitoree to the exposure workflow.
-          Selecting Confirmed or Probable will not change the monitoree&apos;s workflow.{' '}
+          For recipients currently in the Isolation Workflow: Selecting Suspect, Unknown, or Not a Case will move the recipient to the exposure workflow.
+          Selecting Confirmed or Probable will not change the recipient&apos;s workflow.{' '}
         </li>
       </ul>
     </div>
@@ -108,32 +108,32 @@ const TOOLTIP_TEXT = {
 
   latestPublicHealthActionInIsolation: (
     <div>
-      Used to note the public health recommendation provided to a monitoree. In the isolation workflow, this element does not impact the line list on which this
+      Used to note the public health recommendation provided to a recipient. In the isolation workflow, this element does not impact the line list on which this
       record appears.
     </div>
   ),
 
   assignedUser: (
-    <div> Used to identify the user or group within a jurisdiction responsible for monitoring a monitoree (Values: 1-9999 for each jurisdiction). </div>
+    <div> Used to identify the user or group within a jurisdiction responsible for monitoring a recipient (Values: 1-9999 for each jurisdiction). </div>
   ),
 
   assignedJurisdictionCanTransfer: (
     <div>
-      The jurisdiction to which the monitoree is assigned. Because of the role you have been assigned, this field can be used to transfer records both within
+      The jurisdiction to which the recipient is assigned. Because of the role you have been assigned, this field can be used to transfer records both within
       and outside of your assigned jurisdiction hierarchy.
     </div>
   ),
 
   assignedJurisdictionCannotTransfer: (
     <div>
-      The jurisdiction to which the monitoree is assigned. Because of the role you have been assigned, this field can only be used to move records within your
+      The jurisdiction to which the recipient is assigned. Because of the role you have been assigned, this field can only be used to move records within your
       assigned jurisdiction hierarchy.
     </div>
   ),
 
   continuousExposure: (
     <div>
-      Allows a user to indicate that a monitoree has an ongoing exposure to one or more cases. If checked, the monitoring period will be extended indefinitely
+      Allows a user to indicate that a recipient has an ongoing exposure to one or more cases. If checked, the monitoring period will be extended indefinitely
       until unchecked or the <i>Last Date of Exposure</i> is updated.
     </div>
   ),
@@ -144,7 +144,7 @@ const TOOLTIP_TEXT = {
     <div>
       The “Needs Review” column tells you which reports the system considers as symptomatic (red highlight). The “Review” and “Mark All As Reviewed” functions
       allow a user to tell the system not to consider that report as symptomatic. This indicates that the disease of interest is not suspected after review of
-      the monitoree&apos;s symptom report(s).
+      the recipient&apos;s symptom report(s).
       <br></br>
       The system will automatically generate the{' '}
       <i>
@@ -168,7 +168,7 @@ const TOOLTIP_TEXT = {
       <i>
         <b>Symptom Onset</b>
       </i>{' '}
-      date should only be entered by a user in the exposure workflow if the monitoree is under investigation for the disease of interest and the monitoree
+      date should only be entered by a user in the exposure workflow if the recipient is under investigation for the disease of interest and the recipient
       indicates their symptom onset date differs from what is available in the reports table. If a user entered a symptom onset date, the field will need to be
       manually cleared by a user to move the record off of the <i>Symptomatic</i> line list.
       <br></br>
@@ -196,7 +196,7 @@ const TOOLTIP_TEXT = {
       <i>
         <b>Symptom Onset</b>
       </i>{' '}
-      date. This allows the system to place a monitoree on the appropriate monitoring line list in the exposure workflow based on the symptom reports received.{' '}
+      date. This allows the system to place a recipient on the appropriate monitoring line list in the exposure workflow based on the symptom reports received.{' '}
     </div>
   ),
 
@@ -216,7 +216,7 @@ const TOOLTIP_TEXT = {
   ),
   // REQUIRES REVIEW RECOVERY LOGIC
   asymptomaticNonTestBased: (
-    <div>At least 10 days have passed since the specimen collection date of a positive laboratory test and the monitoree has never reported symptoms.</div>
+    <div>At least 10 days have passed since the specimen collection date of a positive laboratory test and the recipient has never reported symptoms.</div>
   ),
 
   symptomaticNonTestBased: (
@@ -261,37 +261,37 @@ const TOOLTIP_TEXT = {
   // EXPOSURE WORKFLOW LINE LIST DEFINITIONS
   exposure_symptomatic: (
     <div>
-      Monitorees on this list require public health follow-up to determine if disease is suspected. Follow-up should be based on current guidelines and
+      Recipients on this list require public health follow-up to determine if disease is suspected. Follow-up should be based on current guidelines and
       available resources.
     </div>
   ),
 
   exposure_followup: (
     <div>
-      Monitorees on this list require public health follow-up to determine if disease is suspected. Follow-up should be based on current guidelines and
+      Recipients on this list require public health follow-up to determine if disease is suspected. Follow-up should be based on current guidelines and
       available resources.
     </div>
   ),
 
   exposure_nonReporting: (
     <div>
-      Monitorees on this list require public health follow-up to collect missing symptom report(s). Follow-up with these monitorees should be based on current
+      Recipients on this list require public health follow-up to collect missing symptom report(s). Follow-up with these recipients should be based on current
       guidelines and available resources.
     </div>
   ),
 
-  exposure_asymptomatic: <div>Monitorees on this list do not require public health follow-up unless otherwise indicated.</div>,
+  exposure_asymptomatic: <div>Recipients on this list do not require public health follow-up unless otherwise indicated.</div>,
 
   exposure_under_investigation: (
     <div>
-      A ‘Latest Public Health Action’ other than “None” has been documented in the monitoree’s record. Monitorees on this list do not receive daily reminder
+      A ‘Latest Public Health Action’ other than “None” has been documented in the recipient’s record. Recipients on this list do not receive daily reminder
       notifications because they are already being contacted by public health.
     </div>
   ),
 
   exposure_closed: (
     <div>
-      Monitorees on this list do not receive daily reminder notifications. Records on this list are accessible by users until the expected purge date. Your
+      Recipients on this list do not receive daily reminder notifications. Records on this list are accessible by users until the expected purge date. Your
       local administrator receives a weekly email notification about records eligible for purge and will coordinate with a public health user to export records
       for local retention before purge (if necessary).
     </div>
@@ -309,12 +309,12 @@ const TOOLTIP_TEXT = {
 
   isolation_nonReporting: (
     <div>
-      Monitorees on this list require public health follow-up to collect missing symptom report(s). Follow-up with these cases should be based on current
+      Recipients on this list require public health follow-up to collect missing symptom report(s). Follow-up with these cases should be based on current
       guidelines and available resources.
     </div>
   ),
 
-  isolation_reporting: <div>Monitorees on this list do not require public health follow-up unless otherwise indicated.</div>,
+  isolation_reporting: <div>Recipients on this list do not require public health follow-up unless otherwise indicated.</div>,
 
   isolation_closed: (
     <div>
@@ -329,7 +329,7 @@ const TOOLTIP_TEXT = {
     <div>
       {' '}
       In order to minimize the amount of identifiable information stored on the production servers, the application will purge identifiers in records for which
-      there have been no updates for a defined time period, provided that monitoree is no longer being actively monitored. An update includes any action on the
+      there have been no updates for a defined time period, provided that recipient is no longer being actively monitored. An update includes any action on the
       record, including adding comments or updating any fields. Local administrators are sent weekly email reminders about records that meet this definition.
       See User Guide for list of fields that are not purged for use in the analytics summary.{' '}
     </div>

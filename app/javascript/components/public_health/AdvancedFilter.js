@@ -21,55 +21,34 @@ class AdvancedFilter extends React.Component {
         {
           name: 'sent-today',
           title: 'Sent Notification in last 24 hours (Boolean)',
-          description: 'Monitorees who have been sent a notification in the last 24 hours',
+          description: 'Recipients who have been sent a notification in the last 24 hours',
           type: 'boolean',
         },
         {
           name: 'responded-today',
           title: 'Reported in last 24 hours (Boolean)',
-          description: 'Monitorees who had a report created in the last 24 hours',
+          description: 'Recipients who had a report created in the last 24 hours',
           type: 'boolean',
         },
-        { name: 'paused', title: 'Notifications Paused (Boolean)', description: 'Monitorees who have paused notifications', type: 'boolean' },
         {
           name: 'preferred-contact-method',
           title: 'Preferred Reporting Method (Select)',
-          description: 'Monitorees preferred reporting method',
+          description: 'Recipients preferred reporting method',
           type: 'option',
           options: ['Unknown', 'E-mailed Web Link', 'SMS Texted Weblink', 'Telephone call', 'SMS Text-message', 'Opt-out', ''],
         },
-        { name: 'latest-report', title: 'Latest Report (Date picker)', description: 'Monitorees with latest report during specified date range', type: 'date' },
-        { name: 'hoh', title: 'Daily Reporters (Boolean)', description: 'Monitorees that are a Head of Household or self-reporter', type: 'boolean' },
-        {
-          name: 'household-member',
-          title: 'Household Member (Boolean)',
-          description: 'Monitorees that are in a household but not the Head of Household',
-          type: 'boolean',
-        },
-        { name: 'enrolled', title: 'Enrolled (Date picker)', description: 'Monitorees enrolled in system during specified date range', type: 'date' },
-        {
-          name: 'last-date-exposure',
-          title: 'Last date of exposure (Date picker)',
-          description: 'Monitorees who have a last date of exposure during specified date range',
-          type: 'date',
-        },
+        { name: 'latest-report', title: 'Latest Report (Date picker)', description: 'Recipients with latest report during specified date range', type: 'date' },
+        { name: 'enrolled', title: 'Enrolled (Date picker)', description: 'Recipients enrolled in system during specified date range', type: 'date' },
         {
           name: 'symptom-onset',
           title: 'Symptom onset (Date picker)',
-          description: 'Monitorees who have a symptom onset date during specified date range',
+          description: 'Recipients who have a symptom onset date during specified date range',
           type: 'date',
-        },
-        { name: 'continous-exposure', title: 'Continuous Exposure (Boolean)', description: 'Monitorees who have continuous exposure enabled', type: 'boolean' },
-        {
-          name: 'monitoring-status',
-          title: 'Active Monitoring (Boolean)',
-          description: 'Monitorees who are currently under active monitoring',
-          type: 'boolean',
         },
         {
           name: 'primary-language',
           title: 'Primary Language (Select)',
-          description: 'Monitoree primary language',
+          description: 'Recipient primary language',
           type: 'option',
           options: supportedLanguages.languages
             .map(lang => {
@@ -77,63 +56,35 @@ class AdvancedFilter extends React.Component {
             })
             .concat(['']),
         },
-        { name: 'cohort', title: 'Common Exposure Cohort Name (Text)', description: 'Monitoree common exposure cohort name or description', type: 'search' },
         {
           name: 'address-usa',
           title: 'Address (within USA) (Text)',
-          description: 'Monitoree Address 1, Town/City, State, Address 2, Zip, or County within USA',
-          type: 'search',
-        },
-        {
-          name: 'address-foreign',
-          title: 'Address (outside USA) (Text)',
-          description: 'Monitoree Address 1, Town/City, Country, Address 2, Postal Code, Address 3 or State/Province (outside USA)',
+          description: 'Recipient Address 1, Town/City, State, Address 2, Zip, or County within USA',
           type: 'search',
         },
         {
           name: 'telephone-number',
           title: 'Telephone Number (Exact Match) (Text)',
-          description: 'Monitorees with specified 10 digit telephone number',
+          description: 'Recipients with specified 10 digit telephone number',
           type: 'search',
         },
         {
           name: 'telephone-number-partial',
           title: 'Telephone Number (Contains) (Text)',
-          description: 'Monitorees with a telephone number that contains specified digits',
+          description: 'Recipients with a telephone number that contains specified digits',
           type: 'search',
         },
-        { name: 'email', title: 'Email (Text)', description: 'Monitoree email address', type: 'search' },
-        { name: 'sara-id', title: this.props.appName + ' ID (Text)', description: 'Monitoree ' + this.props.appName + 'ID', type: 'search' },
-        { name: 'first-name', title: 'Name (First) (Text)', description: 'Monitoree first name', type: 'search' },
-        { name: 'middle-name', title: 'Name (Middle) (Text)', description: 'Monitoree middle name', type: 'search' },
-        { name: 'last-name', title: 'Name (Last) (Text)', description: 'Monitoree last name', type: 'search' },
-        {
-          name: 'monitoring-plan',
-          title: 'Monitoring Plan (Select)',
-          description: 'Monitoree monitoring plan',
-          type: 'option',
-          options: [
-            'None',
-            'Daily active monitoring',
-            'Self-monitoring with public health supervision',
-            'Self-monitoring with delegated supervision',
-            'Self-observation',
-            '',
-          ],
-        },
-        { name: 'never-responded', title: 'Never Reported (Boolean)', description: 'Monitorees who have no reports', type: 'boolean' },
-        {
-          name: 'risk-exposure',
-          title: 'Exposure Risk Assessment (Select)',
-          description: 'Monitoree risk exposure risk assessment',
-          type: 'option',
-          options: ['High', 'Medium', 'Low', 'No Identified Risk', ''],
-        },
-        { name: 'require-interpretation', title: 'Requires Interpretation (Boolean)', description: 'Monitorees who require interpretation', type: 'boolean' },
+        { name: 'email', title: 'Email (Text)', description: 'Recipient email address', type: 'search' },
+        { name: 'sara-id', title: this.props.appName + ' ID (Text)', description: 'Recipient ' + this.props.appName + 'ID', type: 'search' },
+        { name: 'first-name', title: 'Name (First) (Text)', description: 'Recipient first name', type: 'search' },
+        { name: 'middle-name', title: 'Name (Middle) (Text)', description: 'Recipient middle name', type: 'search' },
+        { name: 'last-name', title: 'Name (Last) (Text)', description: 'Recipient last name', type: 'search' },
+        { name: 'never-responded', title: 'Never Reported (Boolean)', description: 'Recipients who have no reports', type: 'boolean' },
+        { name: 'require-interpretation', title: 'Requires Interpretation (Boolean)', description: 'Recipients who require interpretation', type: 'boolean' },
         {
           name: 'preferred-contact-time',
           title: 'Preferred Contact Time (Select)',
-          description: 'Monitoree preferred contact time',
+          description: 'Recipient preferred contact time',
           type: 'option',
           options: ['Morning', 'Afternoon', 'Evening', ''],
         },
@@ -655,9 +606,7 @@ class AdvancedFilter extends React.Component {
             </Row>
           </Modal.Body>
           <Modal.Footer className="justify-unset">
-            <p className="lead mr-auto">
-              Filter will be applied to the line lists in the <u>{this.props.workflow}</u> workflow until reset.
-            </p>
+            <p className="lead mr-auto">Filter will be applied to the line lists in the vaccine workflow until reset.</p>
             <Button
               variant="secondary btn-square"
               onClick={() => {
@@ -668,7 +617,7 @@ class AdvancedFilter extends React.Component {
           </Modal.Footer>
         </Modal>
         {this.renderFilterNameModal()}
-        <OverlayTrigger overlay={<Tooltip>Find monitorees that meet specified parameters within current workflow</Tooltip>}>
+        <OverlayTrigger overlay={<Tooltip>Find recipients that meet specified parameters within current workflow</Tooltip>}>
           <Button
             size="sm"
             className="ml-2"

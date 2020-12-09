@@ -25,7 +25,7 @@ class PatientPage extends React.Component {
             onClick={() => {
               this.setState({ hideBody: !this.state.hideBody });
             }}>
-            Monitoree Details {this.props.patient.user_defined_id ? `(ID: ${this.props.patient.user_defined_id})` : ''}{' '}
+            Recipient Details {this.props.patient.user_defined_id ? `(ID: ${this.props.patient.user_defined_id})` : ''}{' '}
             {this.props.patient.id && <a href={window.BASE_PATH + '/patients/' + this.props.patient.id + '/edit'}>(edit details)</a>}
             <span className="float-right collapse-hover">
               <i className="fas fa-bars"></i>

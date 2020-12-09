@@ -16,7 +16,7 @@ class PublicHealthPatientPageReportsVerifier < ApplicationSystemTestCase
   end
 
   def verify_new_report(assessment)
-    assert page.has_content?('Monitoree'), @@system_test_utils.get_err_msg('Reports', 'Reporter', 'Monitoree')
+    assert page.has_content?('Recipient'), @@system_test_utils.get_err_msg('Reports', 'Reporter', 'Recipient')
     verify_symptoms(assessment['symptoms'])
   end
 

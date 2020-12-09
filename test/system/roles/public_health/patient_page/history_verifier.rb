@@ -58,7 +58,7 @@ class PublicHealthPatientPageHistoryVerifier < ApplicationSystemTestCase
   end
 
   def verify_pause_notifications(user_label, pause_notifications)
-    verify_historical_event(user_label, 'Monitoring Change', ["User #{pause_notifications ? 'paused' : 'resumed'} notifications for this monitoree"])
+    verify_historical_event(user_label, 'Monitoring Change', ["User #{pause_notifications ? 'paused' : 'resumed'} notifications for this recipient"])
   end
 
   def verify_comment(user_label, comment)

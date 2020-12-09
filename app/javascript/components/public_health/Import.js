@@ -132,10 +132,10 @@ class Import extends React.Component {
     this.setState({ acceptedAllStarted: true }, async () => {
       let duplicateCount = this.state.patients.filter(pat => pat.duplicate_data.is_duplicate).length;
       let duplicatePrompt =
-        duplicateCount != 0 ? `Include the ${duplicateCount} potential duplicate ${this.props.workflow === 'exposure' ? 'monitorees' : 'cases'}` : undefined;
+        duplicateCount != 0 ? `Include the ${duplicateCount} potential duplicate ${this.props.workflow === 'exposure' ? 'recipients' : 'cases'}` : undefined;
       if (
         await confirmDialog(confirmText, {
-          title: this.props.workflow === 'exposure' ? 'Import Monitorees' : 'Import Cases',
+          title: this.props.workflow === 'exposure' ? 'Import Recipients' : 'Import Cases',
           extraOption: duplicatePrompt,
           extraOptionChange: this.handleExtraOptionToggle,
         })
@@ -152,7 +152,7 @@ class Import extends React.Component {
    * @param {Object} dupFieldData - Data concerning the possible duplicates types and the specific fields in them.
    */
   getDuplicateWarningText = dupFieldData => {
-    let text = `Warning: This ${this.props.workflow === 'exposure' ? 'monitoree' : 'case'} already appears to exist in the system! `;
+    let text = `Warning: This ${this.props.workflow === 'exposure' ? 'recipient' : 'case'} already appears to exist in the system! `;
 
     for (const fieldData of dupFieldData) {
       text += `There ${fieldData.count > 1 ? `are ${fieldData.count} records` : 'is 1 record'}  with matching values in the following field(s): `;
@@ -194,7 +194,7 @@ class Import extends React.Component {
       errorWord = 'errors';
     }
 
-    const heading = `${_.capitalize(errorWord)}: The following ${errorWord} ${prevent} this monitoree from being imported:`;
+    const heading = `${_.capitalize(errorWord)}: The following ${errorWord} ${prevent} this recipient from being imported:`;
 
     return (
       <Alert variant="danger">
@@ -231,7 +231,7 @@ class Import extends React.Component {
         {this.state.errors.length == 0 && (
           <div className="mx-3 mt-1 mb-2">
             <h5>
-              {`Please review the ${this.props.workflow === 'exposure' ? 'monitoree' : 'case'} records that are about to be imported.
+              {`Please review the ${this.props.workflow === 'exposure' ? 'recipient' : 'case'} records that are about to be imported.
               You can individually accept or reject each record below.
               You can also choose to import all unique records or all records (including duplicates) by clicking the 'Import All' button.`}
             </h5>
@@ -275,12 +275,12 @@ class Import extends React.Component {
                       <Alert variant="info">
                         Note:
                         {patient.jurisdiction_path && (
-                          <span>{` This ${this.props.workflow === 'exposure' ? 'monitoree' : 'case'} will be imported into '${
+                          <span>{` This ${this.props.workflow === 'exposure' ? 'recipient' : 'case'} will be imported into '${
                             patient.jurisdiction_path
                           }'.`}</span>
                         )}
                         {patient.assigned_user && (
-                          <span>{` This ${this.props.workflow === 'exposure' ? 'monitoree' : 'case'} will be assigned to user '${
+                          <span>{` This ${this.props.workflow === 'exposure' ? 'recipient' : 'case'} will be assigned to user '${
                             patient.assigned_user
                           }'.`}</span>
                         )}

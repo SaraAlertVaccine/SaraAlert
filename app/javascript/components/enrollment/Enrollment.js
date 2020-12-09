@@ -24,7 +24,7 @@ class Enrollment extends React.Component {
       index: this.props.editMode ? 3 : 0,
       direction: null,
       enrollmentState: {
-        patient: pickBy(this.props.patient, identity),
+        patient: { sex: 'Unknown', ethnicity: 'Unknown', ...pickBy(this.props.patient, identity) },
         propagatedFields: {},
         isolation: !!this.props.patient.isolation,
       },
@@ -93,7 +93,7 @@ class Enrollment extends React.Component {
     data.patient.secondary_telephone = data.patient.secondary_telephone
       ? phoneUtil.format(phoneUtil.parse(data.patient.secondary_telephone, 'US'), PNF.E164)
       : data.patient.secondary_telephone;
-    const message = this.props.editMode ? 'Monitoree Successfully Updated.' : 'Monitoree Successfully Saved.';
+    const message = this.props.editMode ? 'Recipient Successfully Updated.' : 'Recipient Successfully Saved.';
     if (this.props.parent_id) {
       data['responder_id'] = this.props.parent_id;
     }

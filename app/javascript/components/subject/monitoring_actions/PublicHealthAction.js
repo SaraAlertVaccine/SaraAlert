@@ -86,10 +86,10 @@ class PublicHealthAction extends React.Component {
             )}
             {this.props.patient.isolation && this.props.patient.monitoring && <b> This will not impact the line list on which this record appears.</b>}
             {!this.props.patient.isolation && this.props.patient.monitoring && this.state.public_health_action === 'None' && (
-              <b> The monitoree will be moved back into the primary status line lists.</b>
+              <b> The recipient will be moved back into the primary status line lists.</b>
             )}
             {!this.props.patient.isolation && this.props.patient.monitoring && this.state.public_health_action !== 'None' && (
-              <b> The monitoree will be moved into the PUI line list.</b>
+              <b> The recipient will be moved into the PUI line list.</b>
             )}
           </p>
           {this.props.has_dependents && (
@@ -101,7 +101,7 @@ class PublicHealthAction extends React.Component {
                   className="mb-1"
                   name="apply_to_household"
                   id="apply_to_household_no"
-                  label="This monitoree only"
+                  label="This recipient only"
                   onChange={this.handleApplyHouseholdChange}
                   checked={!this.state.apply_to_household}
                 />
@@ -110,7 +110,7 @@ class PublicHealthAction extends React.Component {
                   className="mb-3"
                   name="apply_to_household"
                   id="apply_to_household_yes"
-                  label="This monitoree and all household members"
+                  label="This recipient and all household members"
                   onChange={this.handleApplyHouseholdChange}
                   checked={this.state.apply_to_household}
                 />

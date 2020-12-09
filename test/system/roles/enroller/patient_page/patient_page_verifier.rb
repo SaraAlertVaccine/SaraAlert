@@ -33,17 +33,17 @@ class EnrollerPatientPageVerifier < ApplicationSystemTestCase
     fields.each do |field|
       if data[field[:id]] && field[:info_page]
         if %w[text select date].include?(field[:type])
-          assert page.has_content?(data[field[:id]]), @@system_test_utils.get_err_msg('Monitoree details', field[:id], data[field[:id]])
+          assert page.has_content?(data[field[:id]]), @@system_test_utils.get_err_msg('Recipient details', field[:id], data[field[:id]])
         elsif field[:type] == 'phone'
           phone = format_phone_number(data[field[:id]])
-          assert page.has_content?(phone), @@system_test_utils.get_err_msg('Monitoree details', field[:id], phone)
+          assert page.has_content?(phone), @@system_test_utils.get_err_msg('Recipient details', field[:id], phone)
         elsif field[:type] == 'age'
           age = @@system_test_utils.calculate_age(data[field[:id]])
-          assert page.has_content?(age), @@system_test_utils.get_err_msg('Monitoree details', field[:id], age)
+          assert page.has_content?(age), @@system_test_utils.get_err_msg('Recipient details', field[:id], age)
         elsif field[:type] == 'race'
-          assert page.has_content?(field[:info_page]), @@system_test_utils.get_err_msg('Monitoree details', field[:info_page], 'present')
+          assert page.has_content?(field[:info_page]), @@system_test_utils.get_err_msg('Recipient details', field[:info_page], 'present')
         elsif field[:type] == 'checkbox' || field[:type] == 'risk_factor'
-          assert page.has_content?(field[:label]), @@system_test_utils.get_err_msg('Monitoree details', field[:label], 'present')
+          assert page.has_content?(field[:label]), @@system_test_utils.get_err_msg('Recipient details', field[:label], 'present')
         end
       end
     end
