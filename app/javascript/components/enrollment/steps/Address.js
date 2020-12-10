@@ -102,7 +102,7 @@ class Address extends React.Component {
     return (
       <React.Fragment>
         <Card className="mx-2 card-square">
-          <Card.Header as="h5">Monitoree Address</Card.Header>
+          <Card.Header as="h5">Recipient Address</Card.Header>
           <Card.Body>
             <Tabs
               defaultActiveKey={this.state.selectedTab}
