@@ -157,7 +157,7 @@ class ImportController < ApplicationController
     return value unless VALIDATION[field]
 
     # TODO: Un-comment when required fields are to be checked upon import
-    # value = validate_required_field(field, value, row_ind) if VALIDATION[field][:checks].include?(:required)
+    value = validate_required_field(field, value, row_ind) if VALIDATION[field][:checks].include?(:required)
     value = validate_enum_field(field, value, row_ind) if VALIDATION[field][:checks].include?(:enum)
     value = validate_bool_field(field, value, row_ind) if VALIDATION[field][:checks].include?(:bool)
     value = validate_date_field(field, value, row_ind) if VALIDATION[field][:checks].include?(:date)
