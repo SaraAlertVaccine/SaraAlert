@@ -22,17 +22,17 @@ class DosagesController < ApplicationController
     dosage.update(dosage_params)
     dosage.save
     History.vaccine_dosage_edit(patient: params.permit(:patient_id)[:patient_id],
-                            created_by: current_user.email,
-                            comment: "User edited a vaccine dosage (ID: #{dosage.id}).")
+                                created_by: current_user.email,
+                                comment: "User edited a vaccine dosage (ID: #{dosage.id}).")
   end
 
   private
 
   def dosage_params
     params.permit(
-        :cvx, :manufacturer, :expiration_date, :lot_number, :date_given, :sending_org,
-        :admin_route, :admin_suffix, :admin_site, :dose_number,
-        :facility_name, :facility_type, :facility_address
-      )
+      :cvx, :manufacturer, :expiration_date, :lot_number, :date_given, :sending_org,
+      :admin_route, :admin_suffix, :admin_site, :dose_number,
+      :facility_name, :facility_type, :facility_address
+    )
   end
 end

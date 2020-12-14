@@ -151,10 +151,9 @@ class Patient < ApplicationRecord
     dosages.order(date_given: :desc).first
   end
 
-
   def latest_dose1
     dosages.where(dose_number: 1).order(date_given: :desc).first
-  end 
+  end
 
   # Patients who are eligible for reminders
   # TODO: Right now we're going to just assume that you just need a dosage. So we'll do a simple join
@@ -300,7 +299,7 @@ class Patient < ApplicationRecord
       .distinct
   }
 
-  # TODO - Change this to be "vaccine" workflow
+  # TODO: - Change this to be "vaccine" workflow
   # Any individual who has any "follow up" assessments(exposure workflow only)
   scope :exposure_followup, lambda {
     where(isolation: false).followup.distinct
@@ -474,6 +473,7 @@ class Patient < ApplicationRecord
     dosage = latest_dosage
     return false if dosage.nil?
     return false if dosage.dose_number.nil? || dosage&.date_given.nil?
+
     (dosage&.dose_number == 1) && ((Time.now.getlocal(address_timezone_offset) - 21.days).to_date >= dosage&.date_given)
   end
 
@@ -674,7 +674,6 @@ class Patient < ApplicationRecord
     # Don't send assessments until the user has at least one dose
     return if latest_dosage.nil?
 
-
     # start_of_exposure = last_date_of_exposure || created_at
     # return unless (monitoring && start_of_exposure >= ADMIN_OPTIONS['monitoring_period_days'].days.ago.beginning_of_day) ||
     #               (monitoring && isolation) ||
@@ -700,11 +699,12 @@ class Patient < ApplicationRecord
       when 1
         return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7 == 0)
       when 2
-        return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7 == 0 && difference / 7 < 6 && difference / 7 > 0 ) || ((difference % 30 == 0 && (difference / 30 == 6 || difference / 30 == 12 )))
+        unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7 == 0 && difference / 7 < 6 && difference / 7 > 0) || ((difference % 30 == 0 && (difference / 30 == 6 || difference / 30 == 12)))
+          return
+        end
       else
         return
       end
-
 
       # These are the hours that we consider to be morning, afternoon and evening
       morning = (8..12)
