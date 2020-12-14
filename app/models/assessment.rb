@@ -44,7 +44,7 @@ class Assessment < ApplicationRecord
       symptom_passes = symptom_passes_threshold(reported_symptom.name, threshold_symptom)
       follow_up_symptoms += 1 if symptom_severity == 1 && symptom_passes
     end
-    follow_up_symptoms > 0
+    follow_up_symptoms.positive?
   end
 
   # symptom_passes_threshold will return true if the REQUIRED symptom with the given name in the reported condition
