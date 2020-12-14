@@ -75,6 +75,10 @@ class Assessment < ApplicationRecord
       return reported_symptom.value != threshold_symptom.value if threshold_operator == 'not equal'
       # Bool symptom threshold_operator will fall back to equal
       return true if reported_symptom.value == threshold_symptom.value
+    when 'TextSymptom'
+      return reported_symptom.value&.strip != threshold_symptom.value if threshold_operator == 'not equal'
+      # Text symptom threshold_operator will fall back to equal
+      return true if reported_symptom.value&.strip == threshold_symptom.value
     end
     false
   end

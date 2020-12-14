@@ -12,7 +12,7 @@ class Symptom < ApplicationRecord
   end
 
   def self.valid_types
-    %w[FloatSymptom BoolSymptom IntegerSymptom]
+    %w[FloatSymptom BoolSymptom IntegerSymptom TextSymptom]
   end
 
   validates :type, inclusion: valid_types, presence: true
@@ -34,6 +34,9 @@ class Symptom < ApplicationRecord
         I18n.t("assessments.symptoms.#{name}.name", locale: lang),
         I18n.t("assessments.threshold-op.#{threshold_operator.parameterize}", locale: lang), value
       ].to_sentence(words_connector: ' ', last_word_connector: ' ').humanize
+    when 'TextSymptom'
+      return "Experience #{I18n.t("assessments.symptoms.#{name}.name", locale: lang)}" if threshold_operator.downcase == 'not equal'
+      "Not experience #{I18n.t("assessments.symptoms.#{name}.name", locale: lang)}"
     end
   end
 
@@ -51,6 +54,8 @@ class Symptom < ApplicationRecord
       int_value
     when 'FloatSymptom'
       float_value
+    when 'TextSymptom'
+      text_value
     end
   end
 

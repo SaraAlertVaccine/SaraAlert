@@ -438,6 +438,7 @@ ActiveRecord::Schema.define(version: 2020_12_01_172200) do
     t.string "threshold_operator", default: "Less Than"
     t.integer "group", default: 1
     t.integer "severity"
+    t.string "text_value"
     t.index ["condition_id"], name: "index_symptoms_on_condition_id"
     t.index ["name", "bool_value", "condition_id"], name: "symptoms_index_chain_1"
   end
