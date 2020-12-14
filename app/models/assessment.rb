@@ -173,8 +173,8 @@ class Assessment < ApplicationRecord
       new_severe_symptom_onset = patient.assessments.where(severe: true).minimum(:created_at)&.to_date
       unless new_severe_symptom_onset == patient[:severe_symptom_onset]
         comment = if !patient[:severe_symptom_onset].nil? && !new_severe_symptom_onset.nil?
-                    "System changed severe symptom onset date from #{patient[:severe_symptom_onset].strftime('%m/%d/%Y')} to #{new_severe_symptom_onset.strftime('%m/%d/%Y')}
-                      because a report meeting the 'needs follow up' logic was created or updated."
+                    "System changed severe symptom onset date from #{patient[:severe_symptom_onset].strftime('%m/%d/%Y')} to
+                    #{new_severe_symptom_onset.strftime('%m/%d/%Y')} because a report meeting the 'needs follow up' logic was created or updated."
                   elsif patient[:severe_symptom_onset].nil? && !new_severe_symptom_onset.nil?
                     "System changed severe symptom onset date from blank to #{new_severe_symptom_onset.strftime('%m/%d/%Y')}
                       because a report meeting the 'needs follow up' logic was created or updated."
@@ -217,16 +217,17 @@ class Assessment < ApplicationRecord
       )
     end
 
-    if patient.severe_symptom_onset.nil?
-      new_severe_symptom_onset = patient.assessments.where.not(id: id).where(severe: true).minimum(:created_at)
-      unless new_severe_symptom_onset == patient[:severe_symptom_onset] || !new_severe_symptom_onset.nil?
-        comment = "System cleared severe symptom onset date from #{patient[:severe_symptom_onset].strftime('%m/%d/%Y')} to blank because a 'needs follow up' report was removed."
-        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: comment)
-      end
-      patient.update(
-        severe_symptom_onset: new_severe_symptom_onset,
-        latest_assessment_at: patient.assessments.where.not(id: id).maximum(:created_at)
-      )
+    return unless patient.severe_symptom_onset.nil?
+
+    new_severe_symptom_onset = patient.assessments.where.not(id: id).where(severe: true).minimum(:created_at)
+    unless new_severe_symptom_onset == patient[:severe_symptom_onset] || !new_severe_symptom_onset.nil?
+      comment = "System cleared severe symptom onset date from #{patient[:severe_symptom_onset].strftime('%m/%d/%Y')} to
+                  blank because a 'needs follow up' report was removed."
+      History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: comment)
     end
+    patient.update(
+      severe_symptom_onset: new_severe_symptom_onset,
+      latest_assessment_at: patient.assessments.where.not(id: id).maximum(:created_at)
+    )
   end
 end

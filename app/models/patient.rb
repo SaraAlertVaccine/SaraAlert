@@ -2,6 +2,7 @@
 
 require 'chronic'
 
+# rubocop:disable Metrics/ClassLength
 # Patient: patient model
 class Patient < ApplicationRecord
   include PatientHelper
@@ -621,7 +622,7 @@ class Patient < ApplicationRecord
   # TODO: For now, end of monitoring will be a year away from Dose 2
   def end_of_monitoring
     return nil if latest_dosage.nil?
-    return (latest_dosage&.date_given + 1.year) if latest_dosage&.dose_number == 2
+    return (latest_dosage.date_given + 1.year) if latest_dosage&.dose_number == 2
 
     # --- Previous definition
     # return 'Continuous Exposure' if continuous_exposure
@@ -686,7 +687,7 @@ class Patient < ApplicationRecord
       hour = Time.now.getlocal(address_timezone_offset).hour
 
       now_date = Time.now.getlocal(address_timezone_offset).to_date
-      dose_date = latest_dosage&.date_given&.to_date || latest_dosage&.created_at.to_date
+      dose_date = latest_dosage.date_given&.to_date || latest_dosage.created_at.to_date
       difference = (now_date - dose_date).to_i
       # Determine if this is an appropriate day to send
       # Daily questionnaire sent daily for 7 days after administration of Dose 1;
@@ -699,7 +700,9 @@ class Patient < ApplicationRecord
       when 1
         return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7).zero?
       when 2
-        unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || ((difference % 7).zero? && difference / 7 < 6 && (difference / 7).positive?) || (((difference % 30).zero? && (difference / 30 == 6 || difference / 30 == 12)))
+        unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) ||
+               ((difference % 7).zero? && difference / 7 < 6 && (difference / 7).positive?) ||
+               (((difference % 30).zero? && (difference / 30 == 6 || difference / 30 == 12)))
           return
         end
       else
@@ -1040,3 +1043,4 @@ class Patient < ApplicationRecord
     token
   end
 end
+# rubocop:enable Metrics/ClassLength
