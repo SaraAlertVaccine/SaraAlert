@@ -158,6 +158,7 @@ class PublicHealthController < ApplicationController
 
     # Satisfy brakeman with additional sanitation logic
     dir = direction == 'asc' ? 'asc' : 'desc'
+    reporting_period = ADMIN_OPTIONS['reporting_period_minutes'].to_i.to_s
 
     case order
     when 'name'
@@ -203,7 +204,7 @@ class PublicHealthController < ApplicationController
       # Case determination -> closed, followup, symptomatic, reviewed, non-reporting
       patients = patients.order('CASE WHEN monitoring != true THEN 0 WHEN severe_symptom_onset IS NOT NULL THEN 1 WHEN symptom_onset IS NOT NULL then 4 WHEN
                                 latest_assessment_at IS NOT NULL and latest_assessment_at >= DATE_SUB(DATE(NOW()), INTERVAL ' +
-                                ADMIN_OPTIONS['reporting_period_minutes'].to_s + ' MINUTE) THEN 3 ELSE 2 END ' + dir)
+                                reporting_period + ' MINUTE) THEN 3 ELSE 2 END ' + dir)
     when 'dose1_date'
       patients = patients.select('patients.*, dosages.dose_number, MAX(dosages.date_given)').joins('LEFT JOIN dosages ON patients.id = dosages.patient_id')
                          .group('patients.id, dosages.dose_number').having('dosages.dose_number = 1 OR dosages.dose_number IS NULL')
