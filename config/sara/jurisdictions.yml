@@ -1,5 +1,5 @@
 # For usage instructions see /config/sara/README.md
-'688':
+'USA':
   symptoms:
     'Chills':
       value: true
@@ -90,11 +90,4 @@
   # Jurisdictions follow a hierarchy, the hierarchy is defined by nesting jurisdictions
   # in the children: field
   children:
-    'State 1':
-      children:
-        'County 1':
-        'County 2':
-    'State 2':
-      children:
-        'County 3':
-        'County 4':
+    '688':

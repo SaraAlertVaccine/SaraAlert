@@ -16,7 +16,7 @@ const requiredStrings = [
   'LAST NAME *',
   'DATE OF BIRTH *',
   'AGE',
-  'SEX AT BIRTH',
+  'SEX',
   'GENDER IDENTITY',
   'SEXUAL ORIENTATION',
   'RACE (SELECT ALL THAT APPLY)',
