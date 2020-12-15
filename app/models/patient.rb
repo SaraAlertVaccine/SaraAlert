@@ -2,6 +2,7 @@
 
 require 'chronic'
 
+# rubocop:disable Metrics/ClassLength
 # Patient: patient model
 class Patient < ApplicationRecord
   include PatientHelper
@@ -151,10 +152,9 @@ class Patient < ApplicationRecord
     dosages.order(date_given: :desc).first
   end
 
-
   def latest_dose1
     dosages.where(dose_number: 1).order(date_given: :desc).first
-  end 
+  end
 
   # Patients who are eligible for reminders
   # TODO: Right now we're going to just assume that you just need a dosage. So we'll do a simple join
@@ -300,7 +300,7 @@ class Patient < ApplicationRecord
       .distinct
   }
 
-  # TODO - Change this to be "vaccine" workflow
+  # TODO: - Change this to be "vaccine" workflow
   # Any individual who has any "follow up" assessments(exposure workflow only)
   scope :exposure_followup, lambda {
     where(isolation: false).followup.distinct
@@ -474,6 +474,7 @@ class Patient < ApplicationRecord
     dosage = latest_dosage
     return false if dosage.nil?
     return false if dosage.dose_number.nil? || dosage&.date_given.nil?
+
     (dosage&.dose_number == 1) && ((Time.now.getlocal(address_timezone_offset) - 21.days).to_date >= dosage&.date_given)
   end
 
@@ -621,7 +622,7 @@ class Patient < ApplicationRecord
   # TODO: For now, end of monitoring will be a year away from Dose 2
   def end_of_monitoring
     return nil if latest_dosage.nil?
-    return (latest_dosage&.date_given + 1.year) if latest_dosage&.dose_number == 2
+    return (latest_dosage.date_given + 1.year) if latest_dosage&.dose_number == 2
 
     # --- Previous definition
     # return 'Continuous Exposure' if continuous_exposure
@@ -674,7 +675,6 @@ class Patient < ApplicationRecord
     # Don't send assessments until the user has at least one dose
     return if latest_dosage.nil?
 
-
     # start_of_exposure = last_date_of_exposure || created_at
     # return unless (monitoring && start_of_exposure >= ADMIN_OPTIONS['monitoring_period_days'].days.ago.beginning_of_day) ||
     #               (monitoring && isolation) ||
@@ -687,7 +687,7 @@ class Patient < ApplicationRecord
       hour = Time.now.getlocal(address_timezone_offset).hour
 
       now_date = Time.now.getlocal(address_timezone_offset).to_date
-      dose_date = latest_dosage&.date_given&.to_date || latest_dosage&.created_at.to_date
+      dose_date = latest_dosage.date_given&.to_date || latest_dosage.created_at.to_date
       difference = (now_date - dose_date).to_i
       # Determine if this is an appropriate day to send
       # Daily questionnaire sent daily for 7 days after administration of Dose 1;
@@ -698,13 +698,16 @@ class Patient < ApplicationRecord
       # Questionnaires will be sent to Recipient once at the 6 and 12 months marks.
       case latest_dosage&.dose_number
       when 1
-        return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7 == 0)
+        return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7).zero?
       when 2
-        return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7 == 0 && difference / 7 < 6 && difference / 7 > 0 ) || ((difference % 30 == 0 && (difference / 30 == 6 || difference / 30 == 12 )))
+        unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) ||
+               ((difference % 7).zero? && difference / 7 < 6 && (difference / 7).positive?) ||
+               (((difference % 30).zero? && (difference / 30 == 6 || difference / 30 == 12)))
+          return
+        end
       else
         return
       end
-
 
       # These are the hours that we consider to be morning, afternoon and evening
       morning = (8..12)
@@ -1040,3 +1043,4 @@ class Patient < ApplicationRecord
     token
   end
 end
+# rubocop:enable Metrics/ClassLength

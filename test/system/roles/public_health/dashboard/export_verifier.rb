@@ -106,7 +106,7 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
     end
   end
 
-  def verify_excel_export(xlsx_monitorees, xlsx_assessments, xlsx_lab_results, xlsx_histories, patients)
+  def verify_excel_export(xlsx_monitorees, xlsx_assessments, _xlsx_lab_results, xlsx_histories, patients)
     monitorees_list = xlsx_monitorees.sheet('Recipients List')
     assert_equal(patients.size, monitorees_list.last_row - 1, 'Number of patients in Recipients List')
     MONITOREES_LIST_HEADERS.each_with_index do |header, col|
@@ -154,8 +154,6 @@ class PublicHealthMonitoringExportVerifier < ApplicationSystemTestCase
                 assessment_row += 1
               end
             end
-
-
 
     edit_histories = xlsx_histories.sheet('Edit Histories')
     histories = History.where(patient_id: patient_ids)

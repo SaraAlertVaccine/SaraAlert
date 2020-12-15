@@ -4,12 +4,12 @@ require 'chronic'
 
 # UserMailer: mailers for users
 class UserMailer < ApplicationMailer
-
   def assessment_job_email(sent, not_sent, eligible)
     @sent = sent
     @not_sent = not_sent
     @eligible = eligible
-    mail(to: ADMIN_OPTIONS['job_run_email'], subject: "#{ADMIN_OPTIONS['app_name']} Send Assessments Job Results (#{ActionMailer::Base.default_url_options[:host]})")
+    mail(to: ADMIN_OPTIONS['job_run_email'],
+         subject: "#{ADMIN_OPTIONS['app_name']} Send Assessments Job Results (#{ActionMailer::Base.default_url_options[:host]})")
   end
 
   def purge_job_email(purged, not_purged, eligible)
@@ -23,14 +23,16 @@ class UserMailer < ApplicationMailer
     @total_before = total_before
     @eligible = eligible
     @total_after = total_after
-    mail(to: ADMIN_OPTIONS['job_run_email'], subject: "#{ADMIN_OPTIONS['app_name']} JWT Identifier Purge Job Results (#{ActionMailer::Base.default_url_options[:host]})")
+    mail(to: ADMIN_OPTIONS['job_run_email'],
+         subject: "#{ADMIN_OPTIONS['app_name']} JWT Identifier Purge Job Results (#{ActionMailer::Base.default_url_options[:host]})")
   end
 
   def send_purge_warnings_job_email(sent, not_sent, eligible)
     @sent = sent
     @not_sent = not_sent
     @eligible = eligible
-    mail(to: ADMIN_OPTIONS['job_run_email'], subject: "#{ADMIN_OPTIONS['app_name']} Send Purge Warnings Job Results (#{ActionMailer::Base.default_url_options[:host]})")
+    mail(to: ADMIN_OPTIONS['job_run_email'],
+         subject: "#{ADMIN_OPTIONS['app_name']} Send Purge Warnings Job Results (#{ActionMailer::Base.default_url_options[:host]})")
   end
 
   def close_job_email(closed, not_closed, eligible)
@@ -44,7 +46,8 @@ class UserMailer < ApplicationMailer
     @cached = cached
     @not_cached = not_cached
     @eligible = eligible
-    mail(to: ADMIN_OPTIONS['job_run_email'], subject: "#{ADMIN_OPTIONS['app_name']} Cache Analytics Job Results (#{ActionMailer::Base.default_url_options[:host]})")
+    mail(to: ADMIN_OPTIONS['job_run_email'],
+         subject: "#{ADMIN_OPTIONS['app_name']} Cache Analytics Job Results (#{ActionMailer::Base.default_url_options[:host]})")
   end
 
   def download_email(user, export_type, lookups, batch_size)

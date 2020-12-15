@@ -124,7 +124,6 @@ class PublicHealthController < ApplicationController
     return current_user.jurisdiction.transferred_in_patients.where(isolation: workflow == :isolation) if tab == :transferred_in
     return current_user.jurisdiction.transferred_out_patients.where(isolation: workflow == :isolation) if tab == :transferred_out
 
-
     if workflow == :exposure
       return current_user.viewable_patients.exposure_followup if tab == :followup
       return current_user.viewable_patients.exposure_symptomatic if tab == :symptomatic
@@ -159,6 +158,7 @@ class PublicHealthController < ApplicationController
 
     # Satisfy brakeman with additional sanitation logic
     dir = direction == 'asc' ? 'asc' : 'desc'
+    reporting_period = ADMIN_OPTIONS['reporting_period_minutes'].to_i.to_s
 
     case order
     when 'name'
@@ -202,12 +202,19 @@ class PublicHealthController < ApplicationController
     when 'status'
       # For alphabetical sorting: closed 0, followup 1, non-reporting 2, reviewed 3, symptomatic 4
       # Case determination -> closed, followup, symptomatic, reviewed, non-reporting
-      patients = patients.order('CASE WHEN monitoring != true THEN 0 WHEN severe_symptom_onset IS NOT NULL THEN 1 WHEN symptom_onset IS NOT NULL then 4 WHEN latest_assessment_at IS NOT NULL and latest_assessment_at >= DATE_SUB(DATE(NOW()), INTERVAL ' + ADMIN_OPTIONS['reporting_period_minutes'].to_s + ' MINUTE) THEN 3 ELSE 2 END ' + dir)
+      patients = patients.order('CASE WHEN monitoring != true THEN 0 WHEN severe_symptom_onset IS NOT NULL THEN 1 WHEN symptom_onset IS NOT NULL then 4 WHEN
+                                latest_assessment_at IS NOT NULL and latest_assessment_at >= DATE_SUB(DATE(NOW()), INTERVAL ' +
+                                reporting_period + ' MINUTE) THEN 3 ELSE 2 END ' + dir)
     when 'dose1_date'
-      patients = patients.select("patients.*, dosages.dose_number, MAX(dosages.date_given)").joins('LEFT JOIN dosages ON patients.id = dosages.patient_id').group("patients.id, dosages.dose_number").having("dosages.dose_number = 1 OR dosages.dose_number IS NULL").order("CASE WHEN MAX(dosages.date_given) IS NULL THEN 1 ELSE 0 END, MAX(dosages.date_given) " + dir)
+      patients = patients.select('patients.*, dosages.dose_number, MAX(dosages.date_given)').joins('LEFT JOIN dosages ON patients.id = dosages.patient_id')
+                         .group('patients.id, dosages.dose_number').having('dosages.dose_number = 1 OR dosages.dose_number IS NULL')
+                         .order('CASE WHEN MAX(dosages.date_given) IS NULL THEN 1 ELSE 0 END, MAX(dosages.date_given) ' + dir)
     when 'dose2_date'
       # Assumes that you shouldn't have a dose 1 administered after a dose 2
-      patients = patients.select("patients.*, dosages.dose_number, MAX(dosages.date_given)").joins('LEFT JOIN dosages ON patients.id = dosages.patient_id').group("patients.id, dosages.dose_number").order("CASE WHEN dosages.dose_number IS NULL THEN 1 ELSE 0 END, dosages.dose_number DESC, CASE WHEN MAX(dosages.date_given) IS NULL THEN 1 ELSE 0 END, MAX(dosages.date_given) " + dir)
+      patients = patients.select('patients.*, dosages.dose_number, MAX(dosages.date_given)').joins('LEFT JOIN dosages ON patients.id = dosages.patient_id')
+                         .group('patients.id, dosages.dose_number')
+                         .order('CASE WHEN dosages.dose_number IS NULL THEN 1 ELSE 0 END, dosages.dose_number DESC, CASE WHEN MAX(dosages.date_given) IS NULL
+                                 THEN 1 ELSE 0 END, MAX(dosages.date_given) ' + dir)
     end
 
     patients
@@ -223,7 +230,6 @@ class PublicHealthController < ApplicationController
                else
                  patients.joins(:jurisdiction)
                end
-    
 
     # only select patient fields necessary to generate linelists
     patients = patients.select('patients.id, patients.first_name, patients.last_name, patients.user_defined_id_statelocal, patients.symptom_onset, '\

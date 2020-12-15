@@ -2,7 +2,6 @@
 
 # PatientMailer: mailers for monitorees
 class PatientMailer < ApplicationMailer
-
   def enrollment_email(patient)
     return if patient&.email.blank?
 
