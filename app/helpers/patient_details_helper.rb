@@ -12,7 +12,7 @@ module PatientDetailsHelper # rubocop:todo Metrics/ModuleLength
       return :exposure_under_investigation if public_health_action != 'None'
       return :exposure_symptomatic unless symptom_onset.nil?
       return :exposure_reviewed if (!latest_assessment_at.nil? && latest_assessment_at >= ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago) ||
-      (!created_at.nil? && created_at >= ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago)
+                                   (!created_at.nil? && created_at >= ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago)
 
       return :exposure_non_reporting
     end
@@ -52,7 +52,7 @@ module PatientDetailsHelper # rubocop:todo Metrics/ModuleLength
       transferred_to: latest_transfer&.to_path || '',
       expected_purge_date: updated_at.nil? ? '' : ((updated_at + ADMIN_OPTIONS['purgeable_after'].minutes)&.rfc2822 || ''),
       extended_isolation: extended_isolation || '',
-      dose1_date: latest_dose1&.date_given|| '',
+      dose1_date: latest_dose1&.date_given || '',
       dose2_date: latest_dosage&.dose_number == 2 ? latest_dosage.date_given : '',
       dose2_app: '' # Blank for now, until we know how this is defined
 
@@ -73,7 +73,7 @@ module PatientDetailsHelper # rubocop:todo Metrics/ModuleLength
       american_indian_or_alaska_native: american_indian_or_alaska_native || false,
       asian: asian || false,
       native_hawaiian_or_other_pacific_islander: native_hawaiian_or_other_pacific_islander || false,
-      other_race: other_race || false, 
+      other_race: other_race || false,
       ethnicity: ethnicity || '',
       primary_language: primary_language || '',
       secondary_language: secondary_language || '',

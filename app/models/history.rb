@@ -73,7 +73,8 @@ class History < ApplicationRecord
     create_history(patient, created_by, HISTORY_TYPES[:monitoring_change], comment)
   end
 
-  def self.monitoree_data_downloaded(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'User downloaded recipient\'s data in Excel Export.')
+  def self.monitoree_data_downloaded(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System",
+                                     comment: 'User downloaded recipient\'s data in Excel Export.')
     create_history(patient, created_by, HISTORY_TYPES[:monitoree_data_downloaded], comment)
   end
 
@@ -109,7 +110,8 @@ class History < ApplicationRecord
     create_history(patient, created_by, HISTORY_TYPES[:contact_attempt], comment)
   end
 
-  def self.welcome_message_sent(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: "Initial #{ADMIN_OPTIONS['app_name']} welcome message was sent.")
+  def self.welcome_message_sent(patient: nil, created_by: "#{ADMIN_OPTIONS['app_name']} System",
+                                comment: "Initial #{ADMIN_OPTIONS['app_name']} welcome message was sent.")
     create_history(patient, created_by, HISTORY_TYPES[:welcome_message_sent], comment)
   end
 

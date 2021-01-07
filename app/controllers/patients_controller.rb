@@ -320,8 +320,8 @@ class PatientsController < ApplicationController
     if params.permit(:apply_to_household_cm_exp_only)[:apply_to_household_cm_exp_only] && params[:apply_to_household_cm_exp_only_date].present?
       # Only update dependents (not including the HoH) in exposure with continuoous exposure is turned on
       (current_user.get_patient(patient.responder_id)&.dependents_exclude_self&.where(continuous_exposure: true, isolation: false) || []).uniq.each do |member|
-        History.monitoring_change(patient: member, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: "User updated Monitoring Status for another member in this
-        recipient's household and chose to update Last Date of Exposure for household members so System changed Last Date of Exposure from
+        History.monitoring_change(patient: member, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: "User updated Monitoring Status for another
+        member in this recipient's household and chose to update Last Date of Exposure for household members so System changed Last Date of Exposure from
         #{member[:last_date_of_exposure] ? member[:last_date_of_exposure].to_date.strftime('%m/%d/%Y') : 'blank'} to
         #{params[:apply_to_household_cm_exp_only_date].to_date.strftime('%m/%d/%Y')} and turned OFF Continuous Exposure.")
 
@@ -368,8 +368,8 @@ class PatientsController < ApplicationController
     # If the monitoree record was closed, set continuous exposure to be false and set the closed at time.
     if params_to_update.include?(:monitoring) && params.require(:patient).permit(:monitoring)[:monitoring] != patient.monitoring && patient.monitoring
       if patient[:continuous_exposure]
-        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'System turned off Continuous Exposure because the record was
-        moved to the closed line list.')
+        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'System turned off Continuous Exposure because
+        the record was moved to the closed line list.')
       end
       patient.continuous_exposure = false
       patient.closed_at = DateTime.now
@@ -390,8 +390,8 @@ class PatientsController < ApplicationController
       params_to_update << :extended_isolation
       params[:patient][:extended_isolation] = nil
       unless patient[:extended_isolation].nil?
-        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'System cleared Extended Isolation Date because recipient was
-        moved from isolation to exposure workflow.')
+        History.monitoring_change(patient: patient, created_by: "#{ADMIN_OPTIONS['app_name']} System", comment: 'System cleared Extended Isolation Date because
+        recipient was moved from isolation to exposure workflow.')
       end
     end
 
