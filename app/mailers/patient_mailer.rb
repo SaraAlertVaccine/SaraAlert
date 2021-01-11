@@ -23,11 +23,6 @@ class PatientMailer < ApplicationMailer
     return if patient&.primary_telephone.blank?
 
     lang = patient.select_language || 'en'
-    # url = new_patient_assessment_jurisdiction_lang_initials_url(patient.submission_token,
-    #                                                             patient.jurisdiction.unique_identifier,
-    #                                                             lang&.to_s || 'en',
-    #                                                             patient&.initials_age)
-    # contents = "#{I18n.t('assessments.sms.weblink.intro', locale: lang)} #{patient&.initials_age('-')}: #{url}"
     contents = "#{I18n.t('assessments.sms.enrollment.info1', locale: lang)} #{I18n.t('assessments.sms.enrollment.weblink.info2', locale: lang)}"
     account_sid = ENV['TWILLIO_API_ACCOUNT']
     auth_token = ENV['TWILLIO_API_KEY']
