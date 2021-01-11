@@ -2,6 +2,7 @@
 
 # PatientMailer: mailers for monitorees
 class PatientMailer < ApplicationMailer
+  # Inform the patient via email that they will receive notifications after vaccine.
   def enrollment_email(patient)
     return if patient&.email.blank?
 
@@ -17,15 +18,17 @@ class PatientMailer < ApplicationMailer
     History.welcome_message_sent(patient: patient)
   end
 
+  # Inform the patient via SMS that they will receive notifications after vaccine.
   def enrollment_sms_weblink(patient)
     return if patient&.primary_telephone.blank?
 
-    lang = patient.select_language
-    url = new_patient_assessment_jurisdiction_lang_initials_url(patient.submission_token,
-                                                                patient.jurisdiction.unique_identifier,
-                                                                lang&.to_s || 'en',
-                                                                patient&.initials_age)
-    contents = "#{I18n.t('assessments.sms.weblink.intro', locale: lang)} #{patient&.initials_age('-')}: #{url}"
+    lang = patient.select_language || 'en'
+    # url = new_patient_assessment_jurisdiction_lang_initials_url(patient.submission_token,
+    #                                                             patient.jurisdiction.unique_identifier,
+    #                                                             lang&.to_s || 'en',
+    #                                                             patient&.initials_age)
+    # contents = "#{I18n.t('assessments.sms.weblink.intro', locale: lang)} #{patient&.initials_age('-')}: #{url}"
+    contents = "#{I18n.t('assessments.sms.enrollment.info1', locale: lang)} #{I18n.t('assessments.sms.enrollment.weblink.info2', locale: lang)}"
     account_sid = ENV['TWILLIO_API_ACCOUNT']
     auth_token = ENV['TWILLIO_API_KEY']
     from = ENV['TWILLIO_SENDING_NUMBER']
@@ -41,11 +44,12 @@ class PatientMailer < ApplicationMailer
     patient.update(last_assessment_reminder_sent: DateTime.now)
   end
 
+  # Inform the user via SMS that they will receive notifications after vaccine.
   def enrollment_sms_text_based(patient)
     return if patient&.primary_telephone.blank?
 
-    lang = patient.select_language
-    contents = "#{I18n.t('assessments.sms.prompt.intro1', locale: lang)} #{patient&.initials_age('-')} #{I18n.t('assessments.sms.prompt.intro2', locale: lang)}"
+    lang = patient.select_language || 'en'
+    contents = "#{I18n.t('assessments.sms.enrollment.info1', locale: lang)} #{I18n.t('assessments.sms.enrollment.prompt.info2', locale: lang)}"
     account_sid = ENV['TWILLIO_API_ACCOUNT']
     auth_token = ENV['TWILLIO_API_KEY']
     from = ENV['TWILLIO_SENDING_NUMBER']
