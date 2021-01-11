@@ -34,7 +34,6 @@ class Patient < ApplicationRecord
                                                   'Deceased',
                                                   'Duplicate',
                                                   'Other',
-                                                  'Both doses completed',
                                                   'Person under investigation',
                                                   nil, ''] }
 
