@@ -152,7 +152,7 @@ en:
     phone:
       intro: 'Hello, this is VACCS, the automated public health assistant calling for your follow-up report.'
       try-again: "I'm sorry, I didn't quite get that. Let's try again."
-      thanks: 'Thank you for completing your follow up report! Goodbye.'
+      thanks: 'Thank you for completing your follow-up report! Goodbye.'
       age: 'Age'
       daily1: ' This is the report for: '
       daily2-p: ' Are any of these people '
