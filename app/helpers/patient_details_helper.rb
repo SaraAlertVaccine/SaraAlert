@@ -8,6 +8,7 @@ module PatientDetailsHelper # rubocop:todo Metrics/ModuleLength
     return :closed unless monitoring
 
     unless isolation
+      return :exposure_registered if latest_dosage.nil?
       return :exposure_follow_up unless severe_symptom_onset.nil?
       return :exposure_under_investigation if public_health_action != 'None'
       return :exposure_symptomatic unless symptom_onset.nil?

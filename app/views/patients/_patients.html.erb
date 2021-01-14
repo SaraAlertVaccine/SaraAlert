@@ -12,22 +12,13 @@
       </select>
     </label>
   </div>
-  <div class="col-sm-24 col-md-8 col-lg-6 text-right">
-    <label style="display:inline-flex;margin-bottom:0.25em">
-      <span style="white-space:nowrap;line-height:1.9;margin-right:0.375em">Assigned User:</span>
-      <select id="assigned_user" class="custom-select custom-select-sm form-control form-control-sm">
-        <option value="all">All</option>
-        <option value="none">None</option>
-      </select>
-    </label>
-  </div>
+  
 </div>
 <table class="patients_table table table-sm table-striped table-bordered table-hover" style="width:100%">
   <thead>
     <tr>
       <th class="DataTable-table-header">Recipient</th>
       <th class="DataTable-table-header">Jurisdiction</th>
-      <th class="DataTable-table-header">Assigned User</th>
       <th class="DataTable-table-header">State&#47;Local ID</th>
       <th class="DataTable-table-header">Sex</th>
       <th class="DataTable-table-header">Date of Birth</th>
@@ -41,7 +32,6 @@
       <tr>
         <td><%= link_to "#{patient.last_name}, #{patient.first_name}", patient, class: '' %></td>
         <td><%= patient.jurisdiction.name %></td>
-        <td><%= patient.assigned_user %></td>
         <td><%= patient.user_defined_id_statelocal.blank? ? '' : patient.user_defined_id_statelocal %></td>
         <td><%= patient.sex %></td>
         <td><%= patient.date_of_birth&.strftime('%m/%d/%Y') %></td>

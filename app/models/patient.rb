@@ -238,6 +238,7 @@ class Patient < ApplicationRecord
   # Any individual needing a follow up
   scope :followup, lambda {
     where(monitoring: true)
+      .joins(:dosages)
       .where(purged: false)
       .where(public_health_action: 'None')
       .where.not(severe_symptom_onset: nil)
@@ -247,6 +248,7 @@ class Patient < ApplicationRecord
   # Any individual who has any assessments still considered symptomatic (includes patients in both exposure & isolation workflows)
   scope :symptomatic, lambda {
     where(monitoring: true)
+      .joins(:dosages)
       .where(purged: false)
       .where(public_health_action: 'None')
       .where(severe_symptom_onset: nil)
@@ -257,12 +259,14 @@ class Patient < ApplicationRecord
   # Individuals who have reported recently and are not symptomatic (includes patients in both exposure & isolation workflows)
   scope :asymptomatic, lambda {
     where(monitoring: true)
+      .joins(:dosages)
       .where(purged: false)
       .where(public_health_action: 'None')
       .where(symptom_onset: nil)
       .where('latest_assessment_at >= ?', ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago)
       .or(
         where(monitoring: true)
+        .joins(:dosages)
         .where(purged: false)
         .where(public_health_action: 'None')
         .where(symptom_onset: nil)
@@ -274,6 +278,7 @@ class Patient < ApplicationRecord
   # Non reporting asymptomatic individuals (includes patients in both exposure & isolation workflows)
   scope :non_reporting, lambda {
     where(monitoring: true)
+      .joins(:dosages)
       .where(purged: false)
       .where(public_health_action: 'None')
       .where(symptom_onset: nil)
@@ -281,12 +286,22 @@ class Patient < ApplicationRecord
       .where('patients.created_at < ?', ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago)
       .or(
         where(monitoring: true)
+        .joins(:dosages)
         .where(purged: false)
         .where(public_health_action: 'None')
         .where(symptom_onset: nil)
         .where('latest_assessment_at < ?', ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago)
         .where('patients.created_at < ?', ADMIN_OPTIONS['reporting_period_minutes'].minutes.ago)
       )
+      .distinct
+  }
+
+  # Patients who haven't received a vaccine
+  scope :registered, lambda {
+    where(purged: false)
+      .where(monitoring: true)
+      .joins('LEFT JOIN dosages ON patients.id = dosages.patient_id')
+      .where('dosages.id IS NULL')
       .distinct
   }
 
@@ -317,6 +332,10 @@ class Patient < ApplicationRecord
   # Individuals who have reported recently and are not symptomatic (exposure workflow only)
   scope :exposure_asymptomatic, lambda {
     where(isolation: false).asymptomatic.distinct
+  }
+
+  scope :exposure_registered, lambda {
+    where(isolation: false).registered.distinct
   }
 
   # Individuals that meet the asymptomatic recovery definition (isolation workflow only)

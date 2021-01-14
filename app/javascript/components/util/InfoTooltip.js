@@ -261,15 +261,15 @@ const TOOLTIP_TEXT = {
   // EXPOSURE WORKFLOW LINE LIST DEFINITIONS
   exposure_symptomatic: (
     <div>
-      Recipients on this list require public health follow-up to determine if disease is suspected. Follow-up should be based on current guidelines and
-      available resources.
+      Recipients on this list are experiencing symptoms following receiving the vaccine. Follow-up should be based on current guidelines and available
+      resources.
     </div>
   ),
 
   exposure_followup: (
     <div>
-      Recipients on this list require public health follow-up to determine if disease is suspected. Follow-up should be based on current guidelines and
-      available resources.
+      Recipients on this list are experiencing severe adverse reactions following receiving the vaccine and require public health follow-up. Follow-up should be
+      based on current guidelines and available resources.
     </div>
   ),
 
@@ -281,6 +281,8 @@ const TOOLTIP_TEXT = {
   ),
 
   exposure_asymptomatic: <div>Recipients on this list do not require public health follow-up unless otherwise indicated.</div>,
+
+  exposure_registered: <div>Recipients on this list have not received a vaccine dosage yet.</div>,
 
   exposure_under_investigation: (
     <div>
