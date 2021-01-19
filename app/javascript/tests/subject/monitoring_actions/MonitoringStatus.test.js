@@ -13,7 +13,6 @@ const authyToken = 'Q1z4yZXLdN+tZod6dBSIlMbZ3yWAUFdY44U06QWffEP76nx1WGMHIz8rYxEU
 const monitoringStatusValues = [ 'Actively Monitoring', 'Not Monitoring' ];
 const monitoringReasons = [
   '--',
-  'Both doses completed',
   'Deceased',
   'Duplicate',
   'Person under investigation',

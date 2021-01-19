@@ -13,6 +13,10 @@ class EligibilityTooltip extends React.Component {
     return ts.isValid() ? ts.tz(moment.tz.guess()).format('MM/DD/YYYY HH:mm z') : '';
   }
 
+  formatDate(date) {
+    return date ? moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY') : '';
+  }
+
   formatEligibility(eligibility, id) {
     if (eligibility.household) {
       return (
@@ -47,7 +51,9 @@ class EligibilityTooltip extends React.Component {
           <ReactTooltip key={`re-tooltip${id}`} id={`re${id}`} multiline={true} type="dark" effect="solid" className="tooltip-container">
             <div>
               <p className="lead mb-0">Eligible for notifications:</p>
-              <span>{eligibility.messages[0].message}</span>
+              <span>
+                {eligibility.messages[0].message} {eligibility.messages[0].datetime ? ` ${this.formatDate(eligibility.messages[0].datetime)}` : ''}
+              </span>
             </div>
           </ReactTooltip>
         </React.Fragment>

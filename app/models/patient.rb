@@ -34,7 +34,6 @@ class Patient < ApplicationRecord
                                                   'Deceased',
                                                   'Duplicate',
                                                   'Other',
-                                                  'Both doses completed',
                                                   'Person under investigation',
                                                   nil, ''] }
 
@@ -592,7 +591,9 @@ class Patient < ApplicationRecord
   end
 
   # Get all dependents (including self if id = responder_id) that are being actively monitored, meaning:
-  # - not purged AND not closed (monitoring = true)
+  # - not purged
+  #  AND
+  # - not closed (monitoring = true) OR if they are closed, it's due to both doses completed (monitoring = false && monitoring_reason = 'Both doses completed')
   #  AND
   #    - in continuous exposure
   #     OR
@@ -603,7 +604,7 @@ class Patient < ApplicationRecord
   #    - within monitoring period based on creation date if no LDE specified
   def active_dependents
     monitoring_days_ago = ADMIN_OPTIONS['monitoring_period_days'].days.ago.beginning_of_day
-    dependents.where(purged: false, monitoring: true)
+    dependents.where(purged: false).where('monitoring = ? OR (monitoring = ? && monitoring_reason = ?)', true, false, 'Both doses completed')
               .where('isolation = ? OR continuous_exposure = ? OR last_date_of_exposure >= ? OR (last_date_of_exposure IS NULL AND created_at >= ?)',
                      true, true, monitoring_days_ago, monitoring_days_ago)
   end
@@ -659,6 +660,30 @@ class Patient < ApplicationRecord
     end
   end
 
+  # Determine if this is an appropriate day to send
+  # Daily questionnaire sent daily for 7 days after administration of Dose 1;
+  # Questionnaires will be sent to Recipient weekly until Dose 2 is administered
+  # Dose 2 is administered between 21 and 28 days after Dose 1 has been administered.
+  # Daily questionnaires sent daily for 7 days after dose 2
+  # Questionnaire sent Weekly for 6 weeks after daily Dose 2 questionnaires completed.
+  # Questionnaires will be sent to Recipient once at the 6 and 12 months marks.
+  def assessment_today?
+    return false if latest_dosage.nil?
+
+    now_date = Time.now.getlocal(address_timezone_offset).to_date
+    dose_date = latest_dosage.date_given&.to_date || latest_dosage.created_at.to_date
+    difference = (now_date - dose_date).to_i
+
+    case latest_dosage&.dose_number
+    when 1
+      (dose_date > (now_date - 7.days).to_date) || now_date.wday == dose_date.wday
+    when 2
+      (dose_date > (now_date - 7.days).to_date) ||
+        (now_date.wday == dose_date.wday && difference / 7 < 7 && (difference / 7).positive?) ||
+        [dose_date + 6.months, dose_date + 1.year].include?(now_date)
+    end
+  end
+
   # Send a daily assessment to this monitoree (if currently eligible). By setting send_now to true, an assessment
   # will be sent immediately without any consideration of the monitoree's preferred_contact_time.
   def send_assessment(send_now: false)
@@ -675,39 +700,15 @@ class Patient < ApplicationRecord
     # Don't send assessments until the user has at least one dose
     return if latest_dosage.nil?
 
-    # start_of_exposure = last_date_of_exposure || created_at
-    # return unless (monitoring && start_of_exposure >= ADMIN_OPTIONS['monitoring_period_days'].days.ago.beginning_of_day) ||
-    #               (monitoring && isolation) ||
-    #               (monitoring && continuous_exposure) ||
-    #               active_dependents_exclude_self.exists?
+    # Don't send assessments if the user is closed with a reason that is not both dosages completed
+    return if !monitoring && monitoring_reason != 'Both doses completed'
 
     # Determine if it is yet an appropriate time to send this person a message.
     unless send_now
       # Local "hour" (defaults to eastern if timezone cannot be determined)
       hour = Time.now.getlocal(address_timezone_offset).hour
 
-      now_date = Time.now.getlocal(address_timezone_offset).to_date
-      dose_date = latest_dosage.date_given&.to_date || latest_dosage.created_at.to_date
-      difference = (now_date - dose_date).to_i
-      # Determine if this is an appropriate day to send
-      # Daily questionnaire sent daily for 7 days after administration of Dose 1;
-      # Questionnaires will be sent to Recipient weekly until Dose 2 is administered
-      # Dose 2 is administered between 21 and 28 days after Dose 1 has been administered.
-      # Daily questionnaires sent daily for 7 days after dose 2
-      # Questionnaire sent Weekly for 6 weeks after daily Dose 2 questionnaires completed.
-      # Questionnaires will be sent to Recipient once at the 6 and 12 months marks.
-      case latest_dosage&.dose_number
-      when 1
-        return unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) || (difference % 7).zero?
-      when 2
-        unless (dose_date > (Time.now.getlocal(address_timezone_offset) - 7.days).to_date) ||
-               ((difference % 7).zero? && difference / 7 < 6 && (difference / 7).positive?) ||
-               (((difference % 30).zero? && (difference / 30 == 6 || difference / 30 == 12)))
-          return
-        end
-      else
-        return
-      end
+      return unless assessment_today?
 
       # These are the hours that we consider to be morning, afternoon and evening
       morning = (8..12)
@@ -791,7 +792,7 @@ class Patient < ApplicationRecord
   # a boolean result to switch on, and a tailored message useful for user interfaces.
   def report_eligibility
     report_cutoff_time = Time.now.getlocal('-04:00').beginning_of_day
-    reporting_period = (ADMIN_OPTIONS['monitoring_period_days'] + 1).days.ago
+    # reporting_period = (ADMIN_OPTIONS['monitoring_period_days'] + 1).days.ago
     eligible = true
     sent = false
     reported = false
@@ -814,7 +815,8 @@ class Patient < ApplicationRecord
     end
 
     # Can't send messages to monitorees that are on the closed line list and have no active dependents.
-    if !monitoring && active_dependents.empty?
+    # TODO: For now, we will allow notifications to those who has a reason of "Both doses completed"
+    if !monitoring && active_dependents.empty? && monitoring_reason != 'Both doses completed'
       eligible = false
 
       # If this person has dependents (is a HoH)
@@ -836,15 +838,16 @@ class Patient < ApplicationRecord
     end
 
     # Exposure workflow specific conditions
-    unless isolation
-      # Monitoring period has elapsed
-      start_of_exposure = last_date_of_exposure || created_at
-      no_active_dependents = !active_dependents_exclude_self.exists?
-      if start_of_exposure < reporting_period && !continuous_exposure && no_active_dependents
-        eligible = false
-        messages << { message: "Recipient\'s monitoring period has elapsed and continuous exposure is not enabled", datetime: nil }
-      end
-    end
+    # TODO: Removing this at the moment as we don't have concept of isolation
+    # unless isolation
+    #   # Monitoring period has elapsed
+    #   start_of_exposure = last_date_of_exposure || created_at
+    #   no_active_dependents = !active_dependents_exclude_self.exists?
+    #   if start_of_exposure < reporting_period && !continuous_exposure && no_active_dependents
+    #     eligible = false
+    #     messages << { message: "Recipient\'s monitoring period has elapsed and continuous exposure is not enabled", datetime: nil }
+    #   end
+    # end
 
     # Has already been contacted today
     if !last_assessment_reminder_sent.nil? && last_assessment_reminder_sent >= 12.hours.ago
@@ -860,21 +863,67 @@ class Patient < ApplicationRecord
       messages << { message: 'Recipient has already reported today', datetime: latest_assessment_at }
     end
 
+    # Hasn't received the vaccine
+    if latest_dosage.nil?
+      eligible = false
+      messages << { message: 'Recipient has not received a vaccine dosage yet' }
+    end
+
+    # Received Dose 2 over a year ago
+    if !latest_dosage.nil? && latest_dosage.dose_number == 2 && latest_dosage.date_given < 1.year.ago
+      eligible = false
+      messages << { message: 'Recipient has completed all of their assessments' }
+    end
+
     # Rough estimate of next contact time
     if eligible
-      messages << case preferred_contact_time
-                  when 'Morning'
-                    { message: '8:00 AM local time (Morning)', datetime: nil }
-                  when 'Afternoon'
-                    { message: '12:00 PM local time (Afternoon)', datetime: nil }
-                  when 'Evening'
-                    { message: '4:00 PM local time (Evening)', datetime: nil }
+      # Are they going to be contacted today?
+      messages << if assessment_today?
+                    case preferred_contact_time
+                    when 'Morning'
+                      { message: '8:00 AM local time (Morning)', datetime: nil }
+                    when 'Afternoon'
+                      { message: '12:00 PM local time (Afternoon)', datetime: nil }
+                    when 'Evening'
+                      { message: '4:00 PM local time (Evening)', datetime: nil }
+                    else
+                      { message: 'Today', datetime: nil }
+                    end
+                  # Okay, not today -- figure out what is the next date for them to be contacted
                   else
-                    { message: 'Today', datetime: nil }
+                    { message: 'Recipient will be contacted on ', datetime: next_assessment_date }
                   end
     end
 
     { eligible: eligible, sent: sent, reported: reported, messages: messages, household: household }
+  end
+
+  # When is the next time the patient should receive an assessment?
+  def next_assessment_date
+    return if latest_dosage.nil?
+
+    now_date = Time.now.getlocal(address_timezone_offset).to_date
+    dose_date = latest_dosage.date_given&.to_date || latest_dosage.created_at.to_date
+
+    # If it's today, just return today
+    return now_date.to_date if assessment_today?
+
+    # If it's dose 1, then we're always counting on weekly reminders
+    # If it's dose 2, then we're going to check if it's within the first 6 weeks
+    if latest_dosage.dose_number == 1 || latest_dosage.dose_number == 2 && now_date < dose_date + 6 * 7
+      day_of_week_dose = dose_date.wday
+      day_of_week_now = now_date.wday
+
+      # Normalize the difference
+      day_difference = (day_of_week_dose - day_of_week_now + 7) % 7
+      (now_date + day_difference).to_date
+    # If we're dose 2 but not within the first 6 weeks, we are waiting for the 6th month/12th month check in
+    elsif latest_dosage.dose_number == 2 && now_date < dose_date + 1.year
+      six_month = dose_date + 6.months
+      return six_month.to_date if (six_month - now_date).to_i.positive?
+
+      (dose_date + 1.year).to_date
+    end
   end
 
   # Returns a representative FHIR::Patient for an instance of a Sara Alert Patient. Uses US Core
