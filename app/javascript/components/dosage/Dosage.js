@@ -87,6 +87,28 @@ class Dosage extends React.Component {
       if (this.state.manufacturer == 'Moderna') {
         this.setState({ cvx: '207' }, this.validate());
       }
+
+      // TODO: For now, we'll work with the given list, but this should most likely
+      // be tied to another "facility" concept
+      if (this.state.facility_name == 'Washington DC VA Medical Center') {
+        this.setState({ facility_type: 'Hospital', facility_address: '50 Irving St. NW Washington, DC 20422 District of Columbia' }, this.validate());
+      }
+
+      if (this.state.facility_name == 'Concord Hospital') {
+        this.setState({ facility_type: 'Hospital', facility_address: '250 Pleasant St., Concord, NH 03301' }, this.validate());
+      }
+
+      if (this.state.facility_name == 'Costco') {
+        this.setState({ facility_type: 'Other', facility_address: '19040 E Valley View Pkwy., Independence, MO 64055' }, this.validate());
+      }
+
+      if (this.state.facility_name == 'CVS') {
+        this.setState({ facility_type: 'Pharmacy', facility_address: '1410 Crabb River Rd., Richmond, TX 77469' }, this.validate());
+      }
+
+      if (this.state.facility_name == 'La Palma Intercommunity Hospital') {
+        this.setState({ facility_type: 'Hospital', facility_address: '7901 Walker St., La Palma, CA 90623' }, this.validate());
+      }
     });
   }
 
@@ -141,8 +163,13 @@ class Dosage extends React.Component {
               <Form.Group as={Col}>
                 <Form.Label className="nav-input-label">Facility Name*</Form.Label>
                 <Form.Control as="select" className="form-control-lg" id="facility_name" onChange={this.handleChange} value={this.state.facility_name}>
+                  {/* TODO: Working with given list for now  */}
                   <option disabled></option>
                   <option>Washington DC VA Medical Center</option>
+                  <option>Concord Hospital</option>
+                  <option>Costco</option>
+                  <option>CVS</option>
+                  <option>La Palma Intercommunity Hospital</option>
                 </Form.Control>
               </Form.Group>
             </Row>
@@ -154,6 +181,7 @@ class Dosage extends React.Component {
                   <option>Hospital</option>
                   <option>CBOC</option>
                   <option>Mobile Clinic</option>
+                  <option>Pharmacy</option>
                   <option>Other</option>
                 </Form.Control>
               </Form.Group>
