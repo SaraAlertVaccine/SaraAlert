@@ -48,7 +48,7 @@ class PatientsTable extends React.Component {
           { field: 'end_of_monitoring', label: 'End of Monitoring', isSortable: true, tooltip: null, filter: this.formatDate },
           { field: 'latest_report', label: 'Latest Report', isSortable: true, tooltip: null, filter: this.formatTimestamp },
           { field: 'status', label: 'Status', isSortable: true, tooltip: null },
-          // { field: 'report_eligibility', label: '', isSortable: false, tooltip: null, filter: this.createEligibilityTooltip, icon: 'far fa-comment' },
+          { field: 'report_eligibility', label: '', isSortable: false, tooltip: null, filter: this.createEligibilityTooltip, icon: 'far fa-comment' },
         ],
         displayedColData: [],
         rowData: [],

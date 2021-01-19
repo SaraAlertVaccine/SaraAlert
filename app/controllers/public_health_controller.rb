@@ -15,7 +15,7 @@ class PublicHealthController < ApplicationController
     # Validate tab param
     tab = permitted_params.require(:tab).to_sym
     if workflow == :exposure
-      return head :bad_request unless %i[all followup symptomatic non_reporting asymptomatic pui closed transferred_in transferred_out].include?(tab)
+      return head :bad_request unless %i[all followup symptomatic non_reporting asymptomatic registered pui closed transferred_in transferred_out].include?(tab)
     else
       return head :bad_request unless %i[all requiring_review non_reporting reporting closed transferred_in transferred_out].include?(tab)
     end
@@ -105,7 +105,7 @@ class PublicHealthController < ApplicationController
     # Validate tab param
     tab = params.require(:tab).to_sym
     if workflow == :exposure
-      return head :bad_request unless %i[all followup symptomatic non_reporting asymptomatic pui closed transferred_in transferred_out].include?(tab)
+      return head :bad_request unless %i[all followup symptomatic non_reporting asymptomatic registered pui closed transferred_in transferred_out].include?(tab)
     else
       return head :bad_request unless %i[all requiring_review non_reporting reporting closed transferred_in transferred_out].include?(tab)
     end
@@ -129,6 +129,7 @@ class PublicHealthController < ApplicationController
       return current_user.viewable_patients.exposure_symptomatic if tab == :symptomatic
       return current_user.viewable_patients.exposure_non_reporting if tab == :non_reporting
       return current_user.viewable_patients.exposure_asymptomatic if tab == :asymptomatic
+      return current_user.viewable_patients.exposure_registered if tab == :registered
       return current_user.viewable_patients.exposure_under_investigation if tab == :pui
     else
       return current_user.viewable_patients.isolation_requiring_review if tab == :requiring_review
@@ -200,11 +201,14 @@ class PublicHealthController < ApplicationController
     when 'latest_report'
       patients = patients.order('CASE WHEN latest_assessment_at IS NULL THEN 1 ELSE 0 END, latest_assessment_at ' + dir)
     when 'status'
-      # For alphabetical sorting: closed 0, followup 1, non-reporting 2, reviewed 3, symptomatic 4
-      # Case determination -> closed, followup, symptomatic, reviewed, non-reporting
-      patients = patients.order('CASE WHEN monitoring != true THEN 0 WHEN severe_symptom_onset IS NOT NULL THEN 1 WHEN symptom_onset IS NOT NULL then 4 WHEN
-                                latest_assessment_at IS NOT NULL and latest_assessment_at >= DATE_SUB(DATE(NOW()), INTERVAL ' +
-                                reporting_period + ' MINUTE) THEN 3 ELSE 2 END ' + dir)
+      # For alphabetical sorting: closed 0, followup 1, non-reporting 2, registered 3, reviewed 4, symptomatic 5
+      # Case determination -> closed, followup, symptomatic, registered, reviewed, non-reporting
+      patients = patients.select('patients.*, MAX(dosages.date_given)').joins('LEFT JOIN dosages ON patients.id = dosages.patient_id')
+                         .group('patients.id')
+                         .order('CASE WHEN monitoring != true THEN 0 WHEN MAX(dosages.date_given) IS NULL THEN 3 WHEN severe_symptom_onset IS NOT NULL THEN 1
+                                WHEN symptom_onset IS NOT NULL then 5 WHEN latest_assessment_at IS NOT NULL and latest_assessment_at >= DATE_SUB(UTC_TIMESTAMP()
+                                , INTERVAL ' + reporting_period + ' MINUTE) THEN 4 WHEN patients.created_at is NOT NULL and patients.created_at >=
+                                DATE_SUB(UTC_TIMESTAMP(), INTERVAL ' + reporting_period + ' MINUTE) THEN 4 ELSE 2 END ' + dir)
     when 'dose1_date'
       patients = patients.select('patients.*, dosages.dose_number, MAX(dosages.date_given)').joins('LEFT JOIN dosages ON patients.id = dosages.patient_id')
                          .group('patients.id, dosages.dose_number').having('dosages.dose_number = 1 OR dosages.dose_number IS NULL')
@@ -282,18 +286,19 @@ class PublicHealthController < ApplicationController
   end
 
   def linelist_specific_fields(workflow, tab)
-    return %i[jurisdiction assigned_user expected_purge_date reason_for_closure closed_at dose1_date dose2_date dose2_app] if tab == :closed
+    return %i[jurisdiction expected_purge_date reason_for_closure closed_at dose1_date dose2_date dose2_app] if tab == :closed
 
     if workflow == :isolation
-      return %i[jurisdiction assigned_user extended_isolation symptom_onset monitoring_plan latest_report status report_eligibility] if tab == :all
+      return %i[jurisdiction extended_isolation symptom_onset monitoring_plan latest_report status report_eligibility] if tab == :all
       return %i[transferred_from monitoring_plan transferred_at] if tab == :transferred_in
       return %i[transferred_to monitoring_plan transferred_at] if tab == :transferred_out
 
-      return %i[jurisdiction assigned_user extended_isolation symptom_onset monitoring_plan latest_report report_eligibility]
+      return %i[jurisdiction extended_isolation symptom_onset monitoring_plan latest_report report_eligibility]
     end
 
     return %i[jurisdiction end_of_monitoring latest_report status report_eligibility dose1_date dose2_date dose2_app] if tab == :all
-    return %i[jurisdiction assigned_user end_of_monitoring risk_level public_health_action latest_report report_eligibility] if tab == :pui
+    return %i[jurisdiction] if tab == :registered
+    return %i[jurisdiction end_of_monitoring risk_level public_health_action latest_report report_eligibility] if tab == :pui
     return %i[transferred_from end_of_monitoring risk_level monitoring_plan transferred_at] if tab == :transferred_in
     return %i[transferred_to end_of_monitoring risk_level monitoring_plan transferred_at] if tab == :transferred_out
 

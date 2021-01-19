@@ -13,7 +13,7 @@ class CloseRecords extends React.Component {
       apply_to_household: false,
       loading: false,
       monitoring: false,
-      monitoring_reasons: ['Both doses completed', 'Deceased', 'Duplicate', 'Person under investigation', 'Other'],
+      monitoring_reasons: ['Deceased', 'Duplicate', 'Person under investigation', 'Other'],
       monitoring_reason: '',
       reasoning: '',
     };
