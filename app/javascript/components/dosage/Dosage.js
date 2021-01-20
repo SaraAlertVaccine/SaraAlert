@@ -80,16 +80,23 @@ class Dosage extends React.Component {
   };
 
   handleChange(event) {
-    this.setState({ [event.target.id]: event.target.value }, () => {
-      if (this.state.manufacturer == 'Pfizer') {
-        this.setState({ cvx: '208' }, this.validate());
-      }
-      if (this.state.manufacturer == 'Moderna') {
-        this.setState({ cvx: '207' }, this.validate());
-      }
+    let key = event.target.id;
+    this.setState({ [key]: event.target.value }, () => {
+      this.handleAutoSelect(key);
+    });
+  }
 
-      // TODO: For now, we'll work with the given list, but this should most likely
-      // be tied to another "facility" concept
+  handleAutoSelect = id => {
+    if (this.state.manufacturer == 'Pfizer') {
+      this.setState({ cvx: '208' }, this.validate());
+    }
+    if (this.state.manufacturer == 'Moderna') {
+      this.setState({ cvx: '207' }, this.validate());
+    }
+
+    // TODO: For now, we'll work with the given list, but this should most likely
+    // be tied to another "facility" concept
+    if (id == 'facility_name') {
       if (this.state.facility_name == 'Washington DC VA Medical Center') {
         this.setState({ facility_type: 'Hospital', facility_address: '50 Irving St. NW Washington, DC 20422 District of Columbia' }, this.validate());
       }
@@ -109,8 +116,8 @@ class Dosage extends React.Component {
       if (this.state.facility_name == 'La Palma Intercommunity Hospital') {
         this.setState({ facility_type: 'Hospital', facility_address: '7901 Walker St., La Palma, CA 90623' }, this.validate());
       }
-    });
-  }
+    }
+  };
 
   handleDateChange(field, date) {
     this.setState({ [field]: date }, () => {
